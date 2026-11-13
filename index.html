@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIxNjkyNTM1NzI2NzkzMjQwMDc4OCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2I4Yzg2YmQxOWFjMTk5NzZfaW5kZXguaHRtbC01ODUifSwiZXhwIjoxNzk0NTk4NjA5LCJpYXQiOjE3OTQ1OTUwMDksImFsZyI6IlJTMjU2In0.ktOIM4xJZfgcqgQ2BW3a7jXNzVq4fNXmxt56-XXphAbsh5tpyWABi-z7FUfhsqNoddSdiVjvuiwydZXpZLGbB3yVp59EWi0CbMJBOvFVU7iMLX_qIxbWRfHVwePCtb0fFa545BqC3VTOfWWvaydfGPjSzt6JxDH-jCxxhWy2QAL_y8YYkm2UUWhOuNrkryZln814L9kxgFGrMlqbnIiuvpW57Rl6lscp3se8kFblrMEzmEdflZC0QYzcY3bdDDyChCSJT36a06iEYZ6_k5lnk7Ua-SJBQ8568LqbXWEgJBsqblByxII2XAGIZqLkfROFkkQzIZQHSA4G4VAgoAd6VA","c_b8c86bd19ac19976_index.html-585")</script><script data-bard-client-injected="true">
+  document.addEventListener('input', (event) => {
+    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
+      const clonedDoc = document.cloneNode(true);
+      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
+      injectedScripts.forEach(el => el.remove());
+      window.parent.postMessage({
+        type: 'inlineEdit',
+        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
+      }, '*');
+    }
+  });
+</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
+</script><script data-bard-client-injected="true">(function() {
+  const SCROLL_KEYS = new Set([
+    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
+    ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End',
+  ]);
+  const HORIZONTAL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
+
+  function isTextEntryTarget(target) {
+    if (!target) return false;
+    const tagName = target.tagName;
+    return tagName === 'INPUT' || tagName === 'TEXTAREA' ||
+        tagName === 'SELECT' || target.isContentEditable === true;
+  }
+
+  // An element absorbs the key only if it both overflows on the axis being
+  // scrolled and is configured to scroll on that axis. The cheap dimension
+  // test runs first because getComputedStyle forces a style recalc, and this
+  // runs on every keypress. Each axis is read from its own longhand: the
+  // 'overflow' shorthand serializes as two values when the axes differ, which
+  // is the common 'overflow-x: hidden; overflow-y: auto' pane.
+  function canScroll(node, horizontal) {
+    const overflows = horizontal ? node.scrollWidth > node.clientWidth
+                                 : node.scrollHeight > node.clientHeight;
+    if (!overflows) return false;
+    const style = window.getComputedStyle(node);
+    const overflow = horizontal ? style.overflowX : style.overflowY;
+    return overflow === 'auto' || overflow === 'scroll';
+  }
+
+  // Walks up from the event target so nested scrollers keep their behavior.
+  // <body> is included because pages that pin the root height make it the
+  // scroll container.
+  function hasScrollableAncestor(target, horizontal) {
+    let node = target;
+    while (node && node !== document.documentElement) {
+      if (canScroll(node, horizontal)) return true;
+      node = node.parentElement;
+    }
+    return false;
+  }
+
+  function rootCanScroll(horizontal) {
+    const scroller = document.scrollingElement || document.documentElement;
+    if (!scroller) return false;
+    // Tolerate a pixel of rounding so subpixel layouts do not look scrollable.
+    return horizontal ? scroller.scrollWidth > window.innerWidth + 1
+                      : scroller.scrollHeight > window.innerHeight + 1;
+  }
+
+  window.addEventListener('keydown', function(event) {
+    if (!SCROLL_KEYS.has(event.key)) return;
+    if (event.defaultPrevented) return;
+    // Alt and Meta turn arrows into browser history navigation, and Ctrl is
+    // reserved for shortcuts, so none of them are scroll intent.
+    if (event.altKey || event.metaKey || event.ctrlKey) return;
+
+    const target = event.target;
+    if (isTextEntryTarget(target)) return;
+
+    // Anything that can still absorb the scroll gets to keep it.
+    const horizontal = HORIZONTAL_KEYS.has(event.key);
+    if (rootCanScroll(horizontal)) return;
+    if (hasScrollableAncestor(target, horizontal)) return;
+
+    event.preventDefault();
+  }, {capture: true, passive: false});
+})();</script><script data-bard-client-injected="true">(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script data-bard-client-injected="true">
+let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function requestMediaPermissions(constraints) {
+    const mediaPromiseId = nextMediaPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingMediaResolvers[mediaPromiseId] = (granted) => {
+        delete pendingMediaResolvers[mediaPromiseId];
+        resolve(granted);
+      };
+    });
+
+    window.parent.postMessage({
+      type: 'requestMediaPermission',
+      constraints: constraints,
+      promiseId: mediaPromiseId,
+    }, '*');
+
+    return promise;
+  }
+
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          return requestMediaPermissions(constraints).then((granted) => {
+            if (granted) {
+              if (originalGetUserMedia) {
+                return originalGetUserMedia(constraints);
+              } else {
+                throw new Error("Original getUserMedia not available.");
+              }
+            } else {
+              throw new DOMException('Permission denied', 'NotAllowedError');
+            }
+          });
+        },
+        writable: false,
+        configurable: false
+      });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  function interceptSpeechRecognition() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      return;
+    }
+
+    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const SpeechRecognitionWrapper = function(...args) {
+      const recognizer = new OriginalSpeechRecognition(...args);
+      const originalStart = recognizer.start.bind(recognizer);
+
+      recognizer.start = function() {
+        requestMediaPermissions({ audio: true }).then(granted => {
+          if (granted) {
+            originalStart();
+          } else {
+            const errorEvent = new SpeechRecognitionErrorEvent('error');
+            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
+            recognizer.dispatchEvent(errorEvent);
+          }
+        });
+      };
+
+      return recognizer;
+    };
+
+    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
+    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
+
+    if (window.SpeechRecognition) {
+      window.SpeechRecognition = SpeechRecognitionWrapper;
+    }
+    if (window.webkitSpeechRecognition) {
+      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    }
+  }
+
+  interceptSpeechRecognition();
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
+function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
+
+ Copyright The Closure Library Authors.
+ SPDX-License-Identifier: Apache-2.0
+*/
+function A(b,d){function e(){}e.prototype=d.prototype;b.j=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
+let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
+null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.i="";var l=0,t=null,r=null,q=[],F=new TextEncoder,G=new TextDecoder;
+c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*16|0;return(f===
+"x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;(g=t)==null||g.postMessage(a)}};
+Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
+(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
+url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
+</script><script data-bard-client-injected="true">((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
+  function normalizeSlug(str) {
+    try {
+      return str
+        .trim()
+        .toLowerCase()
+        .replace(/[^p{L}p{N}s_-]/gu, '')
+        .replace(/s+/g, '-');
+    } catch (e) {
+      return str
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9s_-]/g, '')
+        .replace(/s+/g, '-');
+    }
+  }
+
+  function findTargetElement(hash) {
+    if (!hash || hash === '#') {
+      return null;
+    }
+    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
+    let decodedId = rawId;
+    try {
+      decodedId = decodeURIComponent(rawId);
+    } catch (e) {
+      // Ignore URI malformed errors.
+    }
+
+    // 1. Direct ID match (raw and decoded).
+    let target = document.getElementById(rawId) || document.getElementById(decodedId);
+    if (target) {
+      return target;
+    }
+
+    // 2. Name attribute match (<a name="...">).
+    try {
+      if (typeof CSS !== 'undefined' && CSS.escape) {
+        target =
+          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
+          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
+      } else {
+        const namedElements = document.getElementsByName(rawId);
+        if (namedElements && namedElements.length > 0) {
+          return namedElements[0];
+        }
+      }
+    } catch (e) {
+      // Ignore querySelector syntax errors.
+    }
+    if (target) {
+      return target;
+    }
+
+    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
+    const targetSlug = normalizeSlug(decodedId);
+    if (targetSlug) {
+      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
+        if (normalizeSlug(heading.textContent || '') === targetSlug) {
+          return heading;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  document.addEventListener('click', function(event) {
+    const target = event.target;
+    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
+    if (!anchor) {
+      return;
+    }
+
+    const href = anchor.getAttribute('href');
+    if (
+      !href ||
+      href.trim().toLowerCase().startsWith('javascript:') ||
+      anchor.hasAttribute('download')
+    ) {
+      return;
+    }
+
+    // Check if the link is an in-page hash / anchor link.
+    if (href.startsWith('#')) {
+      event.preventDefault();
+      const targetElement = findTargetElement(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+      return;
+    }
+
+    // Check if the URL has the same origin/pathname but with a hash.
+    try {
+      const url = new URL(anchor.href, window.location.href);
+      if (
+        url.hash &&
+        url.origin === window.location.origin &&
+        url.pathname === window.location.pathname
+      ) {
+        event.preventDefault();
+        const targetElement = findTargetElement(url.hash);
+        if (targetElement) {
+          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+        return;
+      }
+    } catch (e) {
+      // Fall through if URL parsing fails.
+    }
+
+    // For all external or full navigation links, prevent iframe-level navigation
+    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
+    // safely in a new tab/window.
+    if (anchor.target !== '_blank') {
+      event.preventDefault();
+      window.open(anchor.href, '_blank', 'noopener,noreferrer');
+    }
+  }, {capture: true});
+})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
+</script><script data-bard-client-injected="true">(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script></head><body><div class="flex items-center gap-2">
+          <button type="button" onclick="downloadSiteHtmlFile()" class="hidden sm:inline-flex px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-xs font-bold transition-all">
+            ⬇ Baixar HTML
+          </button>
+          <button type="button" onclick="handleInstallPWA()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition-all">
+            📲 Instalar App
+          </button>
+          <button type="button" onclick="toggleBenchAccess()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-extrabold transition-all">
+            🔒 <span id="toggle-mode-label">Bancada OS</span>
+          </button>
+        </div>
+      
+    
+<!-- ... existing code ... -->
+      <div class="space-y-3 text-xs text-slate-300 bg-slateDark-950 p-4 rounded-xl border border-slate-800 mb-4">
+        <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito e selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</p>
+        <p><strong class="text-cyan-400">iPhone (Safari):</strong> Toque no botão <strong>Compartilhar (□↑)</strong> na barra inferior e escolha <strong>"Adicionar à Tela de Início"</strong>.</p>
+        <p class="pt-2 border-t border-slate-800"><strong class="text-emerald-400">Publicar Online (GitHub / Netlify):</strong> Clique no botão verde abaixo para baixar o arquivo <code class="text-cyan-300">index.html</code> pronto para publicar gratuitamente.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <button type="button" onclick="downloadSiteHtmlFile()" class="py-3 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs">
+          ⬇ Baixar index.html
+        </button>
+        <button type="button" onclick="closePwaModal()" class="py-3 px-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs">
+          Entendi
+        </button>
+      </div>
+    
+  
+<!-- ... existing code ... -->
+  <script>
+    // Número oficial de WhatsApp da LABTECH_MSI (formato internacional sem '+' ou espaços)
+    const LABTECH_WHATSAPP_NUMBER = '5584991216849';
+    const STORAGE_KEY_ORDERS = 'labtech_msi_orders_v1';
+    const STORAGE_KEY_FINANCE = 'labtech_msi_finance_v1';
+    const STORAGE_KEY_CATALOG = 'labtech_msi_catalog_v1';
+    const STORAGE_KEY_PIN = 'labtech_msi_bench_pin';
+
+    let deferredPwaPrompt = null;
+    let isBenchAuthenticated = false;
+    let currentAppMode = 'client';
+
+    // ---------------------------------------------------------------------
+    // Exportação Direta do Arquivo index.html Pronto para GitHub / Netlify
+    // ---------------------------------------------------------------------
+    function downloadSiteHtmlFile() {
+      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ---------------------------------------------------------------------
+    // Gerenciamento de Dados (OS, Financeiro, Catálogo, PIN & Modais)
+    // ---------------------------------------------------------------------
+    function getBenchPin() {
+      return localStorage.getItem(STORAGE_KEY_PIN) || '1234';
+    }
+
+    function getBenchOrders() {
+      const raw = localStorage.getItem(STORAGE_KEY_ORDERS);
+      if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+      }
+      const defaults = [
+        {
+          id: 'OS-2026-101',
+          clientName: 'Mariana Souza',
+          clientPhone: '(84) 99812-3456',
+          deviceType: 'Notebook',
+          deviceModel: 'Dell Inspiron 15 3520',
+          serial: 'SN849201',
+          accessories: 'Carregador original',
+          defect: 'Não liga, LED de carga piscando 3 vezes.',
+          diagnosis: 'Curto na linha primária de 19V reparado + limpeza térmica completa.',
+          status: 'Pronto',
+          price: 280.00,
+          createdAt: '12/11/2026 09:30'
+        },
+        {
+          id: 'OS-2026-102',
+          clientName: 'João Pedro Lima',
+          clientPhone: '(84) 99445-7788',
+          deviceType: 'Console / Game',
+          deviceModel: 'PlayStation 5 Slim',
+          serial: 'PS5-9921',
+          accessories: 'Cabo de força',
+          defect: 'Sem sinal de vídeo na TV após queda de energia.',
+          diagnosis: 'Porta HDMI danificada e CI encoder HDMI em curto. Peça em trânsito.',
+          status: 'Aguardando Peça',
+          price: 350.00,
+          createdAt: '12/11/2026 14:15'
+        },
+        {
+          id: 'OS-2026-103',
+          clientName: 'Fernanda Costa',
+          clientPhone: '(84) 99102-8899',
+          deviceType: 'Smartphone',
+          deviceModel: 'iPhone 13 128GB',
+          serial: 'IMEI-35489',
+          accessories: 'Capa transparente',
+          defect: 'Não carrega no cabo e esquenta próximo à câmera.',
+          diagnosis: 'Em análise microscópica do circuito Tristar/Hydra.',
+          status: 'Em Análise',
+          price: 240.00,
+          createdAt: '13/11/2026 10:05'
+        }
+      ];
+      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(defaults));
+      return defaults;
+    }
+
+    function saveBenchOrders(orders) {
+      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
+      renderBenchOrders();
+      updateDashboardOverview();
+      searchCustomerOS();
+    }
+
+    function getFinanceEntries() {
+      const raw = localStorage.getItem(STORAGE_KEY_FINANCE);
+      if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+      }
+      const defaults = [
+        { id: 'FIN-1', type: 'entrada', desc: 'Reparo Placa Notebook OS-2026-101', category: 'Mão de Obra / OS', amount: 280.00, date: '12/11/2026' },
+        { id: 'FIN-2', type: 'saida', desc: 'Compra Conector HDMI PS5 + Fluxo Amtech', category: 'Peças & Componentes', amount: 85.00, date: '12/11/2026' }
+      ];
+      localStorage.setItem(STORAGE_KEY_FINANCE, JSON.stringify(defaults));
+      return defaults;
+    }
+
+    function saveFinanceEntries(entries) {
+      localStorage.setItem(STORAGE_KEY_FINANCE, JSON.stringify(entries));
+      renderFinanceList();
+      updateDashboardOverview();
+    }
+
+    function getCatalogItems() {
+      const raw = localStorage.getItem(STORAGE_KEY_CATALOG);
+      if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+      }
+      const defaults = [
+        { id: 'CAT-1', name: 'Limpeza Química + Pasta Térmica Prata', group: 'Notebook / PC', price: 120.00, sla: '24h úteis' },
+        { id: 'CAT-2', name: 'Troca de Conector HDMI PS5 / Xbox', group: 'Consoles', price: 320.00, sla: '48h úteis' },
+        { id: 'CAT-3', name: 'Reparo Circuito de Carga / Microsoldagem', group: 'Smartphones', price: 240.00, sla: '24h a 48h' },
+        { id: 'CAT-4', name: 'Regravação de BIOS + Diagnóstico Placa', group: 'Placas / Microsoldagem', price: 180.00, sla: '24h úteis' }
+      ];
+      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(defaults));
+      return defaults;
+    }
+
+    function saveCatalogItems(items) {
+      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(items));
+      renderCatalogList();
+    }
+
+    function getStatusBadgeClasses(status) {
+      switch (status) {
+        case 'Pronto': return 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300';
+        case 'Entregue': return 'bg-slate-700/40 border-slate-600 text-slate-300';
+        case 'Aguardando Peça': return 'bg-amber-500/15 border-amber-400/40 text-amber-300';
+        case 'Orçamento Enviado': return 'bg-purple-500/15 border-purple-400/40 text-purple-300';
+        case 'Em Reparo': return 'bg-cyan-500/15 border-cyan-400/40 text-cyan-300';
+        default: return 'bg-sky-500/15 border-sky-400/40 text-sky-300';
+      }
+    }
+
+    function handleInstallPWA() {
+      if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt = null;
+      } else {
+        document.getElementById('pwa-install-modal')?.classList.remove('hidden');
+      }
+    }
+    function closePwaModal() { document.getElementById('pwa-install-modal')?.classList.add('hidden'); }
+    function closePinModal() { document.getElementById('pin-modal')?.classList.add('hidden'); }
+    function openChangePinModal() { document.getElementById('change-pin-modal')?.classList.remove('hidden'); }
+    function closeChangePinModal() { document.getElementById('change-pin-modal')?.classList.add('hidden'); }
+    function closeReceiptModal() { document.getElementById('receipt-modal')?.classList.add('hidden'); }
+
+    function toggleBenchAccess() {
+      if (currentAppMode === 'bench') {
+        switchAppMode('client');
+        return;
+      }
+      if (isBenchAuthenticated) {
+        switchAppMode('bench');
+      } else {
+        document.getElementById('pin-error')?.classList.add('hidden');
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-modal')?.classList.remove('hidden');
+        setTimeout(() => document.getElementById('pin-input')?.focus(), 100);
+      }
+    }
+
+    function switchAppMode(mode) {
+      currentAppMode = mode;
+      const clientView = document.getElementById('client-app-view');
+      const benchView = document.getElementById('bench-app-view');
+      const label = document.getElementById('toggle-mode-label');
+
+      if (mode === 'bench') {
+        clientView?.classList.add('hidden');
+        benchView?.classList.remove('hidden');
+        if (label) label.textContent = 'Modo Cliente';
+        resetBenchForm();
+        renderBenchOrders();
+        renderFinanceList();
+        renderCatalogList();
+        updateDashboardOverview();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        benchView?.classList.add('hidden');
+        clientView?.classList.remove('hidden');
+        if (label) label.textContent = 'Bancada OS';
+      }
+    }
+
+    function switchDashboardTab(tabName) {
+      const tabs = ['overview', 'orders', 'finance', 'catalog'];
+      tabs.forEach(t => {
+        const panel = document.getElementById(`dash-tab-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          panel?.classList.remove('hidden');
+          if (btn) btn.className = 'flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all bg-cyan-500 text-slate-950';
+        } else {
+          panel?.classList.add('hidden');
+          if (btn) btn.className = 'flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white hover:bg-slateDark-800';
+        }
+      });
+    }
+
+    function resetBenchForm() {
+      const form = document.getElementById('bench-os-form');
+      if (form) form.reset();
+      document.getElementById('editing-os-id').value = '';
+      document.getElementById('os-form-title').querySelector('span:last-child').textContent = 'Nova Ordem de Serviço';
+      document.getElementById('os-cancel-edit-btn')?.classList.add('hidden');
+      const orders = getBenchOrders();
+      const nextNum = 101 + orders.length + Math.floor(Math.random() * 10);
+      document.getElementById('os-number-badge').textContent = `OS-${new Date().getFullYear()}-${nextNum}`;
+    }
+
+    function editBenchOrder(id) {
+      const order = getBenchOrders().find(o => o.id === id);
+      if (!order) return;
+      document.getElementById('editing-os-id').value = order.id;
+      document.getElementById('os-number-badge').textContent = order.id;
+      document.getElementById('os-form-title').querySelector('span:last-child').textContent = `Editando ${order.id}`;
+      document.getElementById('os-client-name').value = order.clientName;
+      document.getElementById('os-client-phone').value = order.clientPhone;
+      document.getElementById('os-device-type').value = order.deviceType;
+      document.getElementById('os-device-model').value = order.deviceModel;
+      document.getElementById('os-serial').value = order.serial || '';
+      document.getElementById('os-accessories').value = order.accessories || '';
+      document.getElementById('os-defect').value = order.defect;
+      document.getElementById('os-diagnosis').value = order.diagnosis || '';
+      document.getElementById('os-status').value = order.status;
+      document.getElementById('os-price').value = order.price || 0;
+      document.getElementById('os-cancel-edit-btn')?.classList.remove('hidden');
+    }
+
+    function quickUpdateOrderStatus(id, newStatus) {
+      const orders = getBenchOrders();
+      const idx = orders.findIndex(o => o.id === id);
+      if (idx !== -1) {
+        orders[idx].status = newStatus;
+        saveBenchOrders(orders);
+      }
+    }
+
+    function openReceiptModal(id) {
+      const order = getBenchOrders().find(o => o.id === id);
+      if (!order) return;
+      const text =
+`🔧 *COMPROVANTE DE ORDEM DE SERVIÇO - LABTECH_MSI*
+━━━━━━━━━━━━━━━━━━━━━━
+📋 *OS:* ${order.id}
+📅 *Entrada:* ${order.createdAt}
+📌 *Status:* ${order.status}
+
+👤 *Cliente:* ${order.clientName}
+💻 *Equipamento:* ${order.deviceType} - ${order.deviceModel}
+⚠️ *Defeito:* ${order.defect}
+🔬 *Laudo Técnico:* ${order.diagnosis || 'Em análise na bancada'}
+💰 *Valor:* R$ ${Number(order.price || 0).toFixed(2).replace('.', ',')}
+🔑 *Chave PIX:* (84) 99121-6849
+━━━━━━━━━━━━━━━━━━━━━━
+LABTECH_MSI • Ceará-Mirim/RN • @labtechmsicm`;
+
+      document.getElementById('print-os-area').textContent = text;
+      const phoneDigits = (order.clientPhone || '').replace(/\D/g, '');
+      const waTarget = phoneDigits.length >= 10 ? `55${phoneDigits}` : LABTECH_WHATSAPP_NUMBER;
+      document.getElementById('receipt-whatsapp-link').href = `https://wa.me/${waTarget}?text=${encodeURIComponent(text)}`;
+      document.getElementById('receipt-modal')?.classList.remove('hidden');
+    }
+
+    function renderBenchOrders() {
+      const container = document.getElementById('bench-orders-list');
+      if (!container) return;
+      const query = (document.getElementById('os-search-input')?.value || '').toLowerCase();
+      const filterStatus = document.getElementById('os-filter-status')?.value || 'TODOS';
+
+      const orders = getBenchOrders().filter(o => {
+        const matchQuery = !query || o.id.toLowerCase().includes(query) || o.clientName.toLowerCase().includes(query) || o.deviceModel.toLowerCase().includes(query);
+        const matchStatus = filterStatus === 'TODOS' || o.status === filterStatus;
+        return matchQuery && matchStatus;
+      });
+
+      if (!orders.length) {
+        container.innerHTML = `<div class="glass-card rounded-2xl p-6 text-center text-xs text-slate-400">Nenhuma Ordem de Serviço encontrada com esse filtro.</div>`;
+        return;
+      }
+
+      container.innerHTML = orders.map(o => `
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="font-mono text-xs text-cyan-400 font-bold">${o.id}</span>
+              <h4 class="text-base font-bold text-white">${o.deviceType} • ${o.deviceModel}</h4>
+              <p class="text-xs text-slate-400">Cliente: <strong class="text-slate-200">${o.clientName}</strong> (${o.clientPhone})</p>
+            </div>
+            <span class="px-3 py-1 rounded-full border text-xs font-bold ${getStatusBadgeClasses(o.status)}">${o.status}</span>
+          </div>
+          <p class="text-xs text-slate-300 bg-slateDark-950/80 p-3 rounded-xl border border-slate-800"><strong>Defeito:</strong> ${o.defect}</p>
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <span class="font-mono text-sm font-extrabold text-emerald-400">R$ ${Number(o.price || 0).toFixed(2).replace('.', ',')}</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="quickUpdateOrderStatus('${o.id}', 'Pronto')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-semibold">Marcar Pronto</button>
+              <button type="button" onclick="editBenchOrder('${o.id}')" class="px-2.5 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 text-cyan-300 text-xs font-semibold">Editar</button>
+              <button type="button" onclick="openReceiptModal('${o.id}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-semibold">Comprovante / WA</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderFinanceList() {
+      const container = document.getElementById('finance-list');
+      if (!container) return;
+      const entries = getFinanceEntries();
+      let balance = 0;
+      entries.forEach(e => { balance += e.type === 'entrada' ? Number(e.amount) : -Number(e.amount); });
+
+      const badge = document.getElementById('finance-balance-badge');
+      if (badge) badge.textContent = `Saldo: R$ ${balance.toFixed(2).replace('.', ',')}`;
+
+      container.innerHTML = entries.map(e => `
+        <div class="p-3.5 rounded-xl bg-slateDark-950/90 border border-slate-800 flex items-center justify-between gap-3">
+          <div>
+            <p class="text-xs font-bold text-white">${e.desc}</p>
+            <span class="text-[11px] text-slate-400">${e.category} • ${e.date}</span>
+          </div>
+          <span class="font-mono text-xs font-extrabold ${e.type === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">
+            ${e.type === 'entrada' ? '+' : '-'} R$ ${Number(e.amount).toFixed(2).replace('.', ',')}
+          </span>
+        </div>
+      `).join('');
+    }
+
+    function useCatalogInOrder(id) {
+      const item = getCatalogItems().find(c => c.id === id);
+      if (!item) return;
+      switchDashboardTab('orders');
+      resetBenchForm();
+      document.getElementById('os-defect').value = item.name;
+      document.getElementById('os-price').value = item.price;
+    }
+
+    function renderCatalogList() {
+      const container = document.getElementById('catalog-list');
+      if (!container) return;
+      const items = getCatalogItems();
+      container.innerHTML = items.map(item => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 flex flex-col justify-between gap-3">
+          <div>
+            <span class="text-[10px] font-mono text-cyan-400 uppercase">${item.group} • Prazo: ${item.sla}</span>
+            <h4 class="text-sm font-bold text-white mt-1">${item.name}</h4>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+            <span class="font-mono text-sm font-extrabold text-emerald-400">R$ ${Number(item.price).toFixed(2).replace('.', ',')}</span>
+            <button type="button" onclick="useCatalogInOrder('${item.id}')" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 text-xs font-bold transition-all">
+              Usar na OS
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateDashboardOverview() {
+      const orders = getBenchOrders();
+      const finance = getFinanceEntries();
+
+      const active = orders.filter(o => o.status !== 'Entregue');
+      const analise = orders.filter(o => ['Em Análise', 'Em Reparo', 'Orçamento Enviado'].includes(o.status));
+      const peca = orders.filter(o => o.status === 'Aguardando Peça');
+      const pronto = orders.filter(o => o.status === 'Pronto');
+      const benchTotal = active.reduce((sum, o) => sum + Number(o.price || 0), 0);
+
+      const totalIn = finance.filter(f => f.type === 'entrada').reduce((s, f) => s + Number(f.amount), 0);
+      const totalOut = finance.filter(f => f.type === 'saida').reduce((s, f) => s + Number(f.amount), 0);
+      const net = totalIn - totalOut;
+      const ticket = orders.length ? (orders.reduce((s, o) => s + Number(o.price || 0), 0) / orders.length) : 0;
+
+      if (document.getElementById('kpi-total')) document.getElementById('kpi-total').textContent = active.length;
+      if (document.getElementById('kpi-analise')) document.getElementById('kpi-analise').textContent = analise.length;
+      if (document.getElementById('kpi-peca')) document.getElementById('kpi-peca').textContent = peca.length;
+      if (document.getElementById('kpi-pronto')) document.getElementById('kpi-pronto').textContent = pronto.length;
+      if (document.getElementById('kpi-saldo-liquido')) document.getElementById('kpi-saldo-liquido').textContent = `R$ ${net.toFixed(2).replace('.', ',')}`;
+      if (document.getElementById('kpi-valor-sub')) document.getElementById('kpi-valor-sub').textContent = `Em bancada: R$ ${benchTotal.toFixed(2).replace('.', ',')}`;
+
+      if (document.getElementById('ov-total-in')) document.getElementById('ov-total-in').textContent = `R$ ${totalIn.toFixed(2).replace('.', ',')}`;
+      if (document.getElementById('ov-total-out')) document.getElementById('ov-total-out').textContent = `R$ ${totalOut.toFixed(2).replace('.', ',')}`;
+      if (document.getElementById('ov-ticket-medio')) document.getElementById('ov-ticket-medio').textContent = `R$ ${ticket.toFixed(2).replace('.', ',')}`;
+
+      const margin = totalIn > 0 ? Math.max(0, Math.round(((totalIn - totalOut) / totalIn) * 100)) : 0;
+      if (document.getElementById('ov-margin-percent')) document.getElementById('ov-margin-percent').textContent = `${margin}%`;
+      if (document.getElementById('ov-bar-in')) document.getElementById('ov-bar-in').style.width = `${margin}%`;
+      if (document.getElementById('ov-bar-out')) document.getElementById('ov-bar-out').style.width = `${100 - margin}%`;
+
+      const distEl = document.getElementById('chart-device-distribution');
+      if (distEl) {
+        const counts = {};
+        orders.forEach(o => { counts[o.deviceType] = (counts[o.deviceType] || 0) + 1; });
+        const entries = Object.entries(counts);
+        distEl.innerHTML = entries.map(([cat, count]) => {
+          const pct = Math.round((count / Math.max(1, orders.length)) * 100);
+          return `
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">${cat}</span>
+                <span class="font-mono text-cyan-400">${count} OS (${pct}%)</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const prioEl = document.getElementById('overview-priority-list');
+      if (prioEl) {
+        prioEl.innerHTML = active.slice(0, 3).map(o => `
+          <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="font-mono text-xs text-cyan-400 font-bold">${o.id}</span>
+              <span class="text-[11px] font-bold text-emerald-400">${o.status}</span>
+            </div>
+            <p class="text-sm font-bold text-white">${o.deviceModel}</p>
+            <p class="text-xs text-slate-400">${o.clientName} • R$ ${Number(o.price || 0).toFixed(2).replace('.', ',')}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    // ---------------------------------------------------------------------
+    // Chatbot Interativo de Triagem Técnica LABTECH_MSI
+    // ---------------------------------------------------------------------
+    let botState = { step: 'inicio', equipamento: '', sintoma: '', modelo: '' };
+
+    function toggleChatbotWidget(forceOpen) {
+      const win = document.getElementById('chatbot-window');
+      if (!win) return;
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : win.classList.contains('hidden');
+      if (shouldOpen) {
+        win.classList.remove('hidden');
+        if (!document.getElementById('chatbot-messages')?.children.length) {
+          resetChatbot();
+        }
+      } else {
+        win.classList.add('hidden');
+      }
+    }
+
+    function appendBotMsg(sender, text, waLink) {
+      const box = document.getElementById('chatbot-messages');
+      if (!box) return;
+      const isBot = sender === 'bot';
+      const wrapper = document.createElement('div');
+      wrapper.className = isBot ? 'flex justify-start' : 'flex justify-end';
+      wrapper.innerHTML = `
+        <div class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${isBot ? 'bg-slateDark-850 border border-slate-700 text-slate-200' : 'bg-cyan-500 text-slate-950 font-semibold'}">
+          <div class="whitespace-pre-line">${text}</div>
+          ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener noreferrer" class="mt-2.5 block w-full py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-center">Enviar Triagem no WhatsApp</a>` : ''}
+        </div>
+      `;
+      box.appendChild(wrapper);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setBotQuickReplies(options) {
+      const box = document.getElementById('chatbot-quick-replies');
+      if (!box) return;
+      box.innerHTML = options.map(opt => `
+        <button type="button" onclick="handleBotInput('${opt.replace(/'/g, "\\'")}')"
+          class="px-2.5 py-1.5 rounded-lg bg-slateDark-800 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-semibold transition-all">
+          ${opt}
+        </button>
+      `).join('');
+    }
+
+    function resetChatbot() {
+      botState = { step: 'equipamento', equipamento: '', sintoma: '', modelo: '' };
+      const box = document.getElementById('chatbot-messages');
+      if (box) box.innerHTML = '';
+      appendBotMsg('bot', 'Olá! Sou o assistente técnico da LABTECH_MSI (Ceará-Mirim/RN). Qual equipamento precisa de atendimento hoje?');
+      setBotQuickReplies(['Notebook / PC', 'Smartphone', 'Console / Game', 'Placa de Vídeo', 'Garantia & Prazo']);
+    }
+
+    function handleBotInput(rawText) {
+      const text = (rawText || '').trim();
+      if (!text) return;
+      appendBotMsg('user', text);
+
+      if (text.toLowerCase().includes('garantia') || text.toLowerCase().includes('prazo')) {
+        appendBotMsg('bot', '🛡️ Todos os serviços da LABTECH_MSI possuem garantia de 90 dias.\n⏱️ O diagnóstico técnico leva em média 24h úteis.\n📍 Atendimento em Ceará-Mirim/RN • WhatsApp: (84) 99121-6849.');
+        setBotQuickReplies(['Iniciar Triagem de Aparelho']);
+        return;
+      }
+
+      if (text === 'Iniciar Triagem de Aparelho') {
+        resetChatbot();
+        return;
+      }
+
+      if (botState.step === 'equipamento') {
+        botState.equipamento = text;
+        botState.step = 'sintoma';
+        appendBotMsg('bot', `Certo! Equipamento: ${text}.\nQual é o sintoma principal apresentado?`);
+        setBotQuickReplies(['Não liga / Sem imagem', 'Superaquecimento / Limpeza', 'Conector / Tela quebrada', 'Lentidão / Formatação']);
+      } else if (botState.step === 'sintoma') {
+        botState.sintoma = text;
+        botState.step = 'modelo';
+        appendBotMsg('bot', 'Qual é a marca e o modelo exato do aparelho (e seu nome)?');
+        setBotQuickReplies([]);
+      } else {
+        botState.modelo = text;
+        botState.step = 'concluido';
+        const summary = `🤖 *PRÉ-TRIAGEM BOT - LABTECH_MSI*\n• *Equipamento:* ${botState.equipamento}\n• *Sintoma:* ${botState.sintoma}\n• *Modelo / Cliente:* ${botState.modelo}`;
+        const waUrl = `https://wa.me/${LABTECH_WHATSAPP_NUMBER}?text=${encodeURIComponent(summary)}`;
+        appendBotMsg('bot', 'Perfeito! Sua ficha de triagem está pronta. Clique abaixo para falar direto com a bancada no WhatsApp:', waUrl);
+        setBotQuickReplies(['Nova Triagem']);
+      }
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPwaPrompt = e;
+    });
+<!-- ... existing code ... -->
+      // Atualiza ano automático no rodapé
+      const yearEl = document.getElementById('current-year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // Autenticação PIN da Bancada
+      const pinForm = document.getElementById('pin-form');
+      if (pinForm) {
+        pinForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const entered = document.getElementById('pin-input').value.trim();
+          if (entered === getBenchPin()) {
+            isBenchAuthenticated = true;
+            closePinModal();
+            switchAppMode('bench');
+          } else {
+            document.getElementById('pin-error')?.classList.remove('hidden');
+          }
+        });
+      }
+
+      // Inicializa consulta de OS padrão na tela inicial
+      searchCustomerOS('OS-2026-101');
+<!-- ... existing code ... --></script></body></html>
