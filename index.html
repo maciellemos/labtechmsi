@@ -256,7 +256,7 @@
   <section id="bench-app-view" class="hidden flex-1 max-w-7xl mx-auto w-full px-4 py-8">
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
       <div>
-        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • Sincronizada na Nuvem</span>
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • ERP & BI na Nuvem</span>
         <h1 class="text-2xl font-extrabold text-white">Dashboard & Bancada LABTECH_MSI</h1>
         <p id="bench-user-email" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
@@ -281,6 +281,9 @@
       <button id="tab-btn-orders" onclick="switchBenchTab('orders')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         🛠️ Ordens de Serviço (OS)
       </button>
+      <button id="tab-btn-trade" onclick="switchBenchTab('trade')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+        🛒 Compras & Vendas
+      </button>
       <button id="tab-btn-knowledge" onclick="switchBenchTab('knowledge')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         🧠 Base de Defeitos
       </button>
@@ -292,23 +295,65 @@
       </button>
     </div>
 
-    <!-- ABA 1: VISÃO GERAL -->
+    <!-- ==================== ABA 1: VISÃO GERAL & BI ==================== -->
     <div id="bench-tab-overview" class="space-y-6">
       <div id="bench-kpi-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-4"></div>
 
+      <!-- GRÁFICO MENSAL + INDICADOR DE SERVIÇOS SOLUCIONADOS -->
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Gráfico de Barras Mensal -->
+        <div class="lg:col-span-8 glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="font-bold text-white">Indicador Financeiro & Operacional Mensal (2026)</h3>
+              <p class="text-xs text-slate-400">Comparativo de Entradas (OS + Vendas) vs. Saídas (Compras + Custos)</p>
+            </div>
+            <div class="flex items-center gap-3 text-[11px]">
+              <span class="flex items-center gap-1 text-emerald-300"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-400"></span> Entradas</span>
+              <span class="flex items-center gap-1 text-rose-300"><span class="w-2.5 h-2.5 rounded-sm bg-rose-400"></span> Saídas</span>
+            </div>
+          </div>
+          <div id="bench-monthly-chart" class="grid grid-cols-12 gap-1.5 items-end h-48 pt-4 border-b border-slate-800 pb-2"></div>
+          <div id="bench-monthly-summary" class="mt-3 flex flex-wrap justify-between text-xs text-slate-400"></div>
+        </div>
+
+        <!-- Gráfico Circular: Serviços Solucionados -->
+        <div class="lg:col-span-4 glass-card rounded-2xl p-6 flex flex-col items-center justify-between text-center">
+          <div class="w-full text-left">
+            <h3 class="font-bold text-white">Serviços Solucionados</h3>
+            <p class="text-xs text-slate-400">Taxa de conclusão da bancada</p>
+          </div>
+          <div id="bench-solved-donut" class="my-4"></div>
+          <div id="bench-solved-legend" class="w-full space-y-2 text-xs"></div>
+        </div>
+      </div>
+
+      <!-- LISTA DE SERVIÇOS POR ETAPA: ENTRADA, DIAGNÓSTICO E ORÇAMENTO -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="font-bold text-white text-lg">Fluxo da Bancada: Entrada • Diagnóstico • Orçamento</h3>
+            <p class="text-xs text-slate-400">Acompanhamento rápido dos aparelhos nas etapas iniciais de triagem e aprovação</p>
+          </div>
+          <button onclick="switchBenchTab('orders')" class="text-xs text-cyan-400 hover:underline font-semibold">Ver todas as OS →</button>
+        </div>
+        <div id="bench-pipeline-columns" class="grid md:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- DISTRIBUIÇÃO POR EQUIPAMENTO + RESUMO -->
       <div class="grid lg:grid-cols-2 gap-6">
         <div class="glass-card rounded-2xl p-6">
           <h3 class="font-bold text-white mb-4">Distribuição por Equipamento</h3>
           <div id="bench-device-chart" class="space-y-3"></div>
         </div>
         <div class="glass-card rounded-2xl p-6">
-          <h3 class="font-bold text-white mb-4">Indicadores Operacionais</h3>
-          <div id="bench-operational-metrics" class="space-y-4"></div>
+          <h3 class="font-bold text-white mb-4">Indicadores Operacionais & Estoque</h3>
+          <div id="bench-operational-metrics" class="space-y-3"></div>
         </div>
       </div>
     </div>
 
-    <!-- ABA 2: ORDENS DE SERVIÇO -->
+    <!-- ==================== ABA 2: ORDENS DE SERVIÇO ==================== -->
     <div id="bench-tab-orders" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <div class="flex items-center justify-between mb-4">
@@ -347,7 +392,7 @@
             <label class="block text-xs text-slate-400 mb-1">Status *</label>
             <select id="os-status" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
               <option value="Entrada">Entrada</option>
-              <option value="Em Análise">Em Análise</option>
+              <option value="Em Análise">Em Análise (Diagnóstico)</option>
               <option value="Orçamento Enviado">Orçamento Enviado</option>
               <option value="Em Reparo">Em Reparo</option>
               <option value="Pronto">Pronto</option>
@@ -377,14 +422,110 @@
       <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ABA 3: BASE DE DEFEITOS & SOLUÇÕES (KNOWLEDGE BASE) -->
+    <!-- ==================== ABA 3: COMPRAS & VENDAS (ESTOQUE & BALCÃO) ==================== -->
+    <div id="bench-tab-trade" class="hidden space-y-6">
+      <!-- KPIs de Compras & Vendas -->
+      <div id="trade-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <!-- Cadastrar Produto / Peça no Estoque -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-lg mb-4">📦 Cadastrar Item no Estoque</h3>
+          <form onsubmit="handleInventoryCreate(event)" class="grid sm:grid-cols-2 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Nome da Peça / Produto *</label>
+              <input id="inv-name" type="text" required placeholder="Ex: SSD NVMe 256GB / Tela iPhone 11 / Pasta Térmica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+              <select id="inv-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="Peça Reparo">Peça de Reparo</option>
+                <option value="Hardware / Upgrade">Hardware / Upgrade</option>
+                <option value="Acessório">Acessório</option>
+                <option value="Insumo Bancada">Insumo Bancada</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Qtd. Inicial</label>
+              <input id="inv-qty" type="number" min="0" value="1" required class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Preço de Custo (R$) *</label>
+              <input id="inv-cost" type="number" step="0.01" min="0" required placeholder="80.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Preço de Venda (R$) *</label>
+              <input id="inv-sell" type="number" step="0.01" min="0" required placeholder="150.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2 flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+                Salvar Produto no Estoque
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Registrar Movimentação: Compra ou Venda -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-lg mb-4">💳 Registrar Compra ou Venda</h3>
+          <form onsubmit="handleTradeOperation(event)" class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Tipo de Operação *</label>
+              <select id="trade-type" onchange="syncTradeDefaultPrice()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="venda">🟢 Venda (Saída Estoque + Entrada Caixa)</option>
+                <option value="compra">🔴 Compra (Entrada Estoque + Saída Caixa)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Item do Estoque (Opcional)</label>
+              <select id="trade-item-select" onchange="syncTradeDefaultPrice()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="">-- Item avulso / digitar nome --</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Descrição do Item *</label>
+              <input id="trade-item-name" type="text" required placeholder="Ex: Carregador Notebook Lenovo 65W" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Quantidade *</label>
+              <input id="trade-qty" type="number" min="1" value="1" required class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Valor Unitário (R$) *</label>
+              <input id="trade-unit-price" type="number" step="0.01" min="0.01" required placeholder="120.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Observação / Cliente / Fornecedor</label>
+              <input id="trade-notes" type="text" placeholder="Ex: Venda balcão PIX / Compra fornecedor Natal" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2 flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
+                Confirmar Operação
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ESTOQUE ATUAL + HISTÓRICO DE COMPRAS E VENDAS -->
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h3 class="font-bold text-white text-base">📦 Estoque de Peças & Produtos</h3>
+          <div id="bench-inventory-list" class="space-y-2.5"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h3 class="font-bold text-white text-base">🧾 Histórico de Compras & Vendas</h3>
+          <div id="bench-trade-history-list" class="space-y-2.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ABA 4: BASE DE DEFEITOS ==================== -->
     <div id="bench-tab-knowledge" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6 border border-cyan-500/20">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div>
-            <h3 class="font-bold text-white text-lg">🧠 Registrar Defeito & Solução na Base Técnica</h3>
-            <p class="text-xs text-slate-400">Guarde medições, componentes em curto, reballing e soluções para consultas futuras na bancada.</p>
-          </div>
+        <div class="mb-4">
+          <h3 class="font-bold text-white text-lg">🧠 Registrar Defeito & Solução na Base Técnica</h3>
+          <p class="text-xs text-slate-400">Guarde medições, componentes em curto, reballing e soluções para consultas futuras na bancada.</p>
         </div>
         <form onsubmit="handleKnowledgeSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
@@ -421,7 +562,6 @@
         </form>
       </div>
 
-      <!-- FILTRO E PESQUISA DA BASE DE DEFEITOS -->
       <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row gap-3 items-center justify-between">
         <input id="kb-search-input" oninput="renderKnowledgeList()" type="text" placeholder="🔍 Pesquisar por placa, modelo, sintoma, CI ou linha..." class="w-full sm:flex-1 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400" />
         <select id="kb-filter-category" onchange="renderKnowledgeList()" class="w-full sm:w-48 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
@@ -437,10 +577,10 @@
       <div id="bench-knowledge-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ABA 4: FINANCEIRO -->
+    <!-- ==================== ABA 5: FINANCEIRO ==================== -->
     <div id="bench-tab-finance" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
-        <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro</h3>
+        <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro Manual</h3>
         <form onsubmit="handleFinanceSubmit(event)" class="grid sm:grid-cols-4 gap-4">
           <div>
             <label class="block text-xs text-slate-400 mb-1">Tipo</label>
@@ -451,7 +591,7 @@
           </div>
           <div class="sm:col-span-2">
             <label class="block text-xs text-slate-400 mb-1">Descrição *</label>
-            <input id="fin-desc" type="text" required placeholder="Ex: Tela Notebook Samsung / Serviço OS-101" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            <input id="fin-desc" type="text" required placeholder="Ex: Energia / Internet / Serviço avulso" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
           </div>
           <div>
             <label class="block text-xs text-slate-400 mb-1">Valor (R$) *</label>
@@ -468,7 +608,7 @@
       <div id="bench-finance-list" class="glass-card rounded-2xl p-6 space-y-3"></div>
     </div>
 
-    <!-- ABA 5: CATÁLOGO DE SERVIÇOS -->
+    <!-- ==================== ABA 6: CATÁLOGO DE SERVIÇOS ==================== -->
     <div id="bench-tab-catalog" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Adicionar Serviço Padrão</h3>
@@ -647,6 +787,8 @@
     let cachedFinance = [];
     let cachedCatalog = [];
     let cachedKnowledge = [];
+    let cachedInventory = [];
+    let cachedTrades = [];
     let cachedPix = { pix_key: '84991216849', pix_receiver: 'MACIEL LEMOS DA CAMARA' };
 
     // ==================== UTILITÁRIOS & SEGURANÇA ====================
@@ -668,7 +810,7 @@
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function openInstallModal() { openModal('install-modal'); }
 
-    // ==================== GERADOR DE PIX PADRÃO BANCO CENTRAL (BR CODE / EMV) ====================
+    // ==================== GERADOR DE PIX PADRÃO BANCO CENTRAL ====================
     function formatEMVField(id, value) {
       const len = String(value.length).padStart(2, '0');
       return `${id}${len}${value}`;
@@ -806,7 +948,7 @@
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
             <div>
               <span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(order.id)}</span>
-              <h3 class="text-lg font-bold text-white">${escapeHTML(order.category)} • ${escapeHTML(order.model)}</h3>
+              <h3 class="text-lg font-bold text-white">${escapeHTML(order.category)} •${escapeHTML(order.model)}</h3>
               <p class="text-xs text-slate-400">Cliente: ${escapeHTML(order.client)}</p>
             </div>
             <div class="text-right">
@@ -864,7 +1006,7 @@
       }
 
       await searchCustomerOS();
-      const msg = `Olá LABTECH_MSI! Aprovo o orçamento da ${osId} (${model}) no valor de ${formatCurrency(price)}.`;
+      const msg = `Olá LABTECH_MSI! Aprovo o orçamento da ${osId} (${model}) no valor de${formatCurrency(price)}.`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
     }
 
@@ -885,8 +1027,7 @@
       const issue = document.getElementById('quote-issue').value.trim();
       const protocol = 'ORC-' + Math.floor(1000 + Math.random() * 9000);
 
-      document.getElementById('quote-protocol-preview').textContent = `Protocolo gerado: ${protocol}`;
-      const text = `*SOLICITAÇÃO DE ORÇAMENTO - LABTECH_MSI*\n*Protocolo:* ${protocol}\n*Cliente:* ${name}\n*Equipamento:* ${device}\n*Modelo:* ${model}\n*Problema:* ${issue}`;
+      document.getElementById('quote-protocol-preview').textContent = `Protocolo gerado: ${protocol}`; const text = `*SOLICITAÇÃO DE ORÇAMENTO - LABTECH_MSI*\n*Protocolo:* ${protocol}\n*Cliente:* ${name}\n*Equipamento:*${device}\n*Modelo:* ${model}\n*Problema:*${issue}`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     }
 
@@ -897,118 +1038,30 @@
       if (mode === 'bench' && currentUser) {
         clientView.classList.add('hidden');
         benchView.classList.remove('hidden');
-        document.getElementById('bench-user-email').textContent = `Conectado como: ${currentUser.email}`;
-        refreshAllBenchData();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        benchView.classList.add('hidden');
-        clientView.classList.remove('hidden');
-      }
-    }
-
-    function requestBenchAccess() {
-      if (currentUser) {
-        switchAppMode('bench');
-        return;
-      }
-      document.getElementById('login-error-msg').classList.add('hidden');
-      openModal('login-modal');
-    }
-
-    async function handleBenchLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('bench-email-input').value.trim();
-      const password = document.getElementById('bench-password-input').value;
-      const btn = document.getElementById('login-submit-btn');
-      const errEl = document.getElementById('login-error-msg');
-
-      btn.disabled = true;
-      btn.textContent = 'Autenticando...';
-      errEl.classList.add('hidden');
-
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-      btn.disabled = false;
-      btn.textContent = 'Entrar na Bancada';
-
-      if (error) {
-        errEl.textContent = 'E-mail ou senha inválidos.';
-        errEl.classList.remove('hidden');
-        return;
-      }
-
-      currentUser = data.user;
-      closeModal('login-modal');
-      switchAppMode('bench');
-    }
-
-    async function logoutBench() {
-      await supabaseClient.auth.signOut();
-      currentUser = null;
-      switchAppMode('client');
-    }
-
-    async function openPixConfigModal() {
-      await loadPixSettings();
-      document.getElementById('pix-key-input').value = cachedPix.pix_key || '';
-      document.getElementById('pix-receiver-input').value = cachedPix.pix_receiver || '';
-      openModal('pix-modal');
-    }
-
-    async function savePixConfig(e) {
-      e.preventDefault();
-      const pix_key = document.getElementById('pix-key-input').value.trim();
-      const pix_receiver = document.getElementById('pix-receiver-input').value.trim().toUpperCase();
-
-      const { error } = await supabaseClient
-        .from('settings')
-        .upsert({ id: 1, pix_key, pix_receiver });
-
-      if (error) {
-        alert('Erro ao salvar PIX: ' + error.message);
-        return;
-      }
-
-      cachedPix = { id: 1, pix_key, pix_receiver };
-      closeModal('pix-modal');
-      alert('Chave PIX atualizada na nuvem com sucesso!');
-    }
-
-    function switchBenchTab(tab) {
-      ['overview', 'orders', 'knowledge', 'finance', 'catalog'].forEach(t => {
-        document.getElementById(`bench-tab-${t}`).classList.toggle('hidden', t !== tab);
-        const btn = document.getElementById(`tab-btn-${t}`);
-        btn.className = t === tab
-          ? 'bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition'
-          : 'bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
-      });
-    }
-
-    function getNextOsNumber() {
-      let maxSeq = 100;
-      cachedOrders.forEach(o => {
-        const parts = String(o.id).split('-');
-        const num = parseInt(parts[parts.length - 1], 10);
-        if (!isNaN(num) && num > maxSeq) maxSeq = num;
-      });
-      return `OS-2026-${maxSeq + 1}`;
+        document.getElementById('bench-user-email').textContent = `Conectado como: ${currentUser.email}`; refreshAllBenchData(); window.scrollTo({ top: 0, behavior: 'smooth' }); } else { benchView.classList.add('hidden'); clientView.classList.remove('hidden'); } }  function requestBenchAccess() { if (currentUser) { switchAppMode('bench'); return; } document.getElementById('login-error-msg').classList.add('hidden'); openModal('login-modal'); }  async function handleBenchLogin(e) { e.preventDefault(); const email = document.getElementById('bench-email-input').value.trim(); const password = document.getElementById('bench-password-input').value; const btn = document.getElementById('login-submit-btn'); const errEl = document.getElementById('login-error-msg');  btn.disabled = true; btn.textContent = 'Autenticando...'; errEl.classList.add('hidden');  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });  btn.disabled = false; btn.textContent = 'Entrar na Bancada';  if (error) { errEl.textContent = 'E-mail ou senha inválidos.'; errEl.classList.remove('hidden'); return; }  currentUser = data.user; closeModal('login-modal'); switchAppMode('bench'); }  async function logoutBench() { await supabaseClient.auth.signOut(); currentUser = null; switchAppMode('client'); }  async function openPixConfigModal() { await loadPixSettings(); document.getElementById('pix-key-input').value = cachedPix.pix_key \vert{}\vert{} ''; document.getElementById('pix-receiver-input').value = cachedPix.pix_receiver \vert{}\vert{} ''; openModal('pix-modal'); }  async function savePixConfig(e) { e.preventDefault(); const pix_key = document.getElementById('pix-key-input').value.trim(); const pix_receiver = document.getElementById('pix-receiver-input').value.trim().toUpperCase();  const { error } = await supabaseClient .from('settings') .upsert({ id: 1, pix_key, pix_receiver });  if (error) { alert('Erro ao salvar PIX: ' + error.message); return; }  cachedPix = { id: 1, pix_key, pix_receiver }; closeModal('pix-modal'); alert('Chave PIX atualizada na nuvem com sucesso!'); }  function switchBenchTab(tab) { ['overview', 'orders', 'trade', 'knowledge', 'finance', 'catalog'].forEach(t => { document.getElementById(`bench-tab-${t}`).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`tab-btn-${t}`); btn.className = t === tab ? 'bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition' : 'bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition'; }); }  function getNextOsNumber() { let maxSeq = 100; cachedOrders.forEach(o => { const parts = String(o.id).split('-'); const num = parseInt(parts[parts.length - 1], 10); if (!isNaN(num) && num > maxSeq) maxSeq = num; }); return `OS-2026-${maxSeq + 1}`;
     }
 
     async function refreshAllBenchData() {
-      const [ordersRes, financeRes, catalogRes, kbRes] = await Promise.all([
+      const [ordersRes, financeRes, catalogRes, kbRes, invRes, tradeRes] = await Promise.all([
         supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
         supabaseClient.from('finance').select('*').order('id', { ascending: false }),
         supabaseClient.from('catalog').select('*').order('id', { ascending: true }),
-        supabaseClient.from('knowledge_base').select('*').order('id', { ascending: false })
+        supabaseClient.from('knowledge_base').select('*').order('id', { ascending: false }),
+        supabaseClient.from('inventory').select('*').order('name', { ascending: true }),
+        supabaseClient.from('trade_history').select('*').order('id', { ascending: false })
       ]);
 
       cachedOrders = ordersRes.data || [];
       cachedFinance = financeRes.data || [];
       cachedCatalog = catalogRes.data || [];
       cachedKnowledge = kbRes.data || [];
+      cachedInventory = invRes.data || [];
+      cachedTrades = tradeRes.data || [];
       await loadPixSettings();
 
       renderBenchDashboard();
+      renderTradeModule();
       renderKnowledgeList();
     }
 
@@ -1051,446 +1104,26 @@
         </div>
       `;
 
-      const counts = {};
-      orders.forEach(o => { counts[o.category] = (counts[o.category] || 0) + 1; });
-      const totalOrders = orders.length || 1;
-      document.getElementById('bench-device-chart').innerHTML = Object.entries(counts).map(([cat, count]) => {
-        const pct = Math.round((count / totalOrders) * 100);
-        return `
-          <div>
-            <div class="flex justify-between text-xs mb-1">
-              <span class="text-slate-300 font-semibold">${escapeHTML(cat)}</span>
-              <span class="text-cyan-400 font-bold">${count} (${pct}%)</span>
-            </div>
-            <div class="w-full h-2.5 bg-slateDark-950 rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500" style="width: ${pct}%"></div>
-            </div>
-          </div>
-        `;
-      }).join('') || '<p class="text-xs text-slate-400">Nenhuma OS cadastrada ainda.</p>';
+      // 1. GRÁFICO DE INDICADOR MENSAL (2026)
+      const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const monthlyIn = new Array(12).fill(0);
+      const monthlyOut = new Array(12).fill(0);
 
-      document.getElementById('bench-operational-metrics').innerHTML = `
-        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Receita Realizada (Entradas)</span>
-          <span class="font-bold text-emerald-400">${formatCurrency(totalIn)}</span>
-        </div>
-        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Custos de Peças / Insumos</span>
-          <span class="font-bold text-rose-400">${formatCurrency(totalOut)}</span>
-        </div>
-        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Casos na Base de Defeitos</span>
-          <span class="font-bold text-cyan-400">${cachedKnowledge.length} registros</span>
-        </div>
-      `;
-
-      if (!document.getElementById('os-edit-id').value) {
-        document.getElementById('os-number').value = getNextOsNumber();
-      }
-
-      document.getElementById('bench-orders-list').innerHTML = orders.map(o => `
-        <div class="glass-card rounded-2xl p-5 space-y-3 border border-slate-800">
-          <div class="flex justify-between items-start gap-2">
-            <div>
-              <span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(o.id)}</span>
-              <h4 class="font-bold text-white">${escapeHTML(o.client)} — ${escapeHTML(o.model)}</h4>
-              <p class="text-xs text-slate-400">${escapeHTML(o.category)} • Tel: ${escapeHTML(o.phone)}</p>
-            </div>
-            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-              ${escapeHTML(o.status)}
-            </span>
-          </div>
-          <p class="text-xs text-slate-300"><strong>Defeito:</strong> ${escapeHTML(o.issue)}</p>
-          <p class="text-xs text-slate-400"><strong>Laudo:</strong> ${escapeHTML(o.diagnosis || 'Pendente')}</p>
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
-            <span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(o.price)}</span>
-            <div class="flex flex-wrap gap-1.5">
-              <button onclick="editBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 text-slate-200 text-xs">Editar</button>
-              <button onclick="sendOsToKnowledge('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold" title="Salvar este diagnóstico na Base de Defeitos">🧠 Salvar Caso</button>
-              <button onclick="markOrderReady('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold">Marcar Pronto</button>
-              <button onclick="sendOrderWhatsApp('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold">WhatsApp</button>
-              <button onclick="deleteBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs">Excluir</button>
-            </div>
-          </div>
-        </div>
-      `).join('') || '<p class="text-sm text-slate-400">Nenhuma Ordem de Serviço registrada.</p>';
-
-      document.getElementById('bench-finance-list').innerHTML = finance.map(f => `
-        <div class="flex items-center justify-between p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 text-xs">
-          <div>
-            <p class="font-bold text-white">${escapeHTML(f.description)}</p>
-            <p class="text-slate-400">${escapeHTML(f.date)}</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="font-extrabold ${f.type === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">
-              ${f.type === 'entrada' ? '+' : '-'} ${formatCurrency(f.amount)}
-            </span>
-            <button onclick="deleteFinanceItem(${f.id})" class="text-slate-500 hover:text-rose-400">✕</button>
-          </div>
-        </div>
-      `).join('') || '<p class="text-xs text-slate-400">Nenhum lançamento financeiro.</p>';
-
-      document.getElementById('bench-catalog-list').innerHTML = catalog.map(c => `
-        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between gap-3">
-          <div>
-            <span class="text-[11px] text-cyan-400 font-bold">${escapeHTML(c.category)}</span>
-            <h4 class="font-bold text-white text-sm mt-0.5">${escapeHTML(c.name)}</h4>
-          </div>
-          <div class="flex items-center justify-between pt-2 border-t border-slate-800">
-            <span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(c.price)}</span>
-            <div class="flex gap-1.5">
-              <button onclick="useCatalogInOs(${c.id})" class="px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">Usar na OS</button>
-              <button onclick="deleteCatalogItem(${c.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs">✕</button>
-            </div>
-          </div>
-        </div>
-      `).join('') || '<p class="text-xs text-slate-400">Catálogo vazio.</p>';
-    }
-
-    // ==================== BASE DE DEFEITOS (KNOWLEDGE BASE) ====================
-    async function handleKnowledgeSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('save-kb-btn');
-      btn.disabled = true;
-      btn.textContent = 'Salvando...';
-
-      const payload = {
-        category: document.getElementById('kb-category').value,
-        model: document.getElementById('kb-model').value.trim(),
-        symptom: document.getElementById('kb-symptom').value.trim(),
-        component: document.getElementById('kb-component').value.trim(),
-        solution: document.getElementById('kb-solution').value.trim()
-      };
-
-      const { error } = await supabaseClient.from('knowledge_base').insert([payload]);
-
-      btn.disabled = false;
-      btn.textContent = 'Salvar na Base de Conhecimento';
-
-      if (error) {
-        alert('Erro ao salvar na Base de Defeitos: ' + error.message);
-        return;
-      }
-
-      e.target.reset();
-      await refreshAllBenchData();
-    }
-
-    function renderKnowledgeList() {
-      const container = document.getElementById('bench-knowledge-list');
-      if (!container) return;
-
-      const query = (document.getElementById('kb-search-input')?.value || '').toLowerCase().trim();
-      const catFilter = document.getElementById('kb-filter-category')?.value || '';
-
-      const filtered = cachedKnowledge.filter(item => {
-        const matchesCat = !catFilter || item.category === catFilter;
-        const haystack = `${item.model} ${item.symptom} ${item.component || ''} ${item.solution}`.toLowerCase();
-        const matchesQuery = !query || haystack.includes(query);
-        return matchesCat && matchesQuery;
+      finance.forEach(f => {
+        const parts = String(f.date || '').split('/');
+        let mIdx = -1;
+        if (parts.length === 3) {
+          mIdx = parseInt(parts[1], 10) - 1;
+        }
+        if (mIdx >= 0 && mIdx < 12) {
+          if (f.type === 'entrada') monthlyIn[mIdx] += Number(f.amount || 0);
+          else monthlyOut[mIdx] += Number(f.amount || 0);
+        }
       });
 
-      container.innerHTML = filtered.map(item => `
-        <div class="glass-card rounded-2xl p-5 space-y-3 border border-cyan-500/20">
-          <div class="flex items-start justify-between gap-2">
-            <div>
-              <span class="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 text-[11px] font-bold">${escapeHTML(item.category)}</span>
-              <h4 class="font-bold text-white text-base mt-1">${escapeHTML(item.model)}</h4>
-            </div>
-            <button onclick="deleteKnowledgeItem(${item.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>
-          </div>
-          <div class="space-y-1.5 text-xs">
-            <p class="text-amber-300"><strong>Sintoma:</strong> ${escapeHTML(item.symptom)}</p>
-            ${item.component ? `<p class="text-purple-300"><strong>Componente / Linha:</strong> ${escapeHTML(item.component)}</p>` : ''}
-            <div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 text-slate-200 leading-relaxed">
-              <strong class="text-emerald-400 block mb-1">Solução Técnica:</strong>
-              ${escapeHTML(item.solution)}
-            </div>
-          </div>
-          <div class="flex justify-end pt-1">
-            <button onclick="applyKnowledgeToOs(${item.id})" class="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition">
-              📋 Aplicar Laudo na OS
-            </button>
-          </div>
-        </div>
-      `).join('') || '<p class="text-sm text-slate-400">Nenhum registro encontrado na Base de Defeitos.</p>';
-    }
-
-    async function deleteKnowledgeItem(id) {
-      if (!confirm('Remover este registro da Base de Defeitos?')) return;
-      await supabaseClient.from('knowledge_base').delete().eq('id', id);
-      await refreshAllBenchData();
-    }
-
-    function applyKnowledgeToOs(id) {
-      const item = cachedKnowledge.find(k => k.id === id);
-      if (!item) return;
-      switchBenchTab('orders');
-      const laudoText = item.component
-        ? `${item.solution} (Ref: ${item.component})`
-        : item.solution;
-      document.getElementById('os-diagnosis').value = laudoText;
-      if (!document.getElementById('os-model').value) {
-        document.getElementById('os-model').value = item.model;
-      }
-      document.getElementById('bench-os-form').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function sendOsToKnowledge(osId) {
-      const order = cachedOrders.find(o => o.id === osId);
-      if (!order) return;
-      switchBenchTab('knowledge');
-      document.getElementById('kb-category').value = order.category;
-      document.getElementById('kb-model').value = order.model;
-      document.getElementById('kb-symptom').value = order.issue;
-      document.getElementById('kb-solution').value = order.diagnosis || '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function resetBenchForm() {
-      document.getElementById('bench-os-form').reset();
-      document.getElementById('os-edit-id').value = '';
-      document.getElementById('os-number').value = getNextOsNumber();
-      document.getElementById('bench-form-title').textContent = 'Nova Ordem de Serviço (Check-in)';
-    }
-
-    async function handleBenchOsSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('save-os-btn');
-      btn.disabled = true;
-      btn.textContent = 'Salvando...';
-
-      const editId = document.getElementById('os-edit-id').value;
-      const osId = document.getElementById('os-number').value;
-
-      const payload = {
-        id: osId,
-        client: document.getElementById('os-client').value.trim(),
-        phone: document.getElementById('os-phone').value.replace(/\D/g, ''),
-        category: document.getElementById('os-category').value,
-        model: document.getElementById('os-model').value.trim(),
-        status: document.getElementById('os-status').value,
-        price: parseFloat(document.getElementById('os-price').value) || 0,
-        issue: document.getElementById('os-issue').value.trim(),
-        diagnosis: document.getElementById('os-diagnosis').value.trim()
-      };
-
-      const { error } = editId
-        ? await supabaseClient.from('orders').update(payload).eq('id', editId)
-        : await supabaseClient.from('orders').insert([payload]);
-
-      btn.disabled = false;
-      btn.textContent = 'Salvar Ordem de Serviço na Nuvem';
-
-      if (error) {
-        alert('Erro ao salvar OS: ' + error.message);
-        return;
-      }
-
-      resetBenchForm();
-      await refreshAllBenchData();
-    }
-
-    function editBenchOrder(osId) {
-      const order = cachedOrders.find(o => o.id === osId);
-      if (!order) return;
-      document.getElementById('os-edit-id').value = order.id;
-      document.getElementById('os-number').value = order.id;
-      document.getElementById('os-client').value = order.client;
-      document.getElementById('os-phone').value = order.phone;
-      document.getElementById('os-category').value = order.category;
-      document.getElementById('os-model').value = order.model;
-      document.getElementById('os-status').value = order.status;
-      document.getElementById('os-price').value = order.price;
-      document.getElementById('os-issue').value = order.issue;
-      document.getElementById('os-diagnosis').value = order.diagnosis || '';
-      document.getElementById('bench-form-title').textContent = `Editando ${order.id}`;
-      document.getElementById('bench-os-form').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    async function markOrderReady(osId) {
-      const order = cachedOrders.find(o => o.id === osId);
-      if (!order) return;
-
-      await supabaseClient.from('orders').update({ status: 'Pronto', paid_in_finance: true }).eq('id', osId);
-
-      if (Number(order.price) > 0 && !order.paid_in_finance) {
-        await supabaseClient.from('finance').insert([{
-          type: 'entrada',
-          description: `Serviço ${order.id} (${order.model})`,
-          amount: Number(order.price),
-          date: new Date().toLocaleDateString('pt-BR')
-        }]);
-      }
-
-      await refreshAllBenchData();
-    }
-
-    async function deleteBenchOrder(osId) {
-      if (!confirm(`Excluir permanentemente a ordem ${osId}?`)) return;
-      await supabaseClient.from('orders').delete().eq('id', osId);
-      await refreshAllBenchData();
-    }
-
-    function sendOrderWhatsApp(osId) {
-      const o = cachedOrders.find(item => item.id === osId);
-      if (!o) return;
-      const targetPhone = o.phone.startsWith('55') ? o.phone : '55' + o.phone;
-      const portalLink = window.location.origin + window.location.pathname;
-      const msg = `*LABTECH_MSI — Atualização de Serviço*\n*OS:* ${o.id}\n*Cliente:* ${o.client}\n*Equipamento:* ${o.model}\n*Status:* ${o.status}\n*Laudo:* ${o.diagnosis || 'Em bancada'}\n*Valor:* ${formatCurrency(o.price)}\n*Chave PIX:* ${cachedPix.pix_key}\n\nAcompanhe e pague pelo QR Code em:\n${portalLink}`;
-      window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
-    }
-
-    // ==================== FINANCEIRO & CATÁLOGO ====================
-    async function handleFinanceSubmit(e) {
-      e.preventDefault();
-      await supabaseClient.from('finance').insert([{
-        type: document.getElementById('fin-type').value,
-        description: document.getElementById('fin-desc').value.trim(),
-        amount: parseFloat(document.getElementById('fin-amount').value) || 0,
-        date: new Date().toLocaleDateString('pt-BR')
-      }]);
-      e.target.reset();
-      await refreshAllBenchData();
-    }
-
-    async function deleteFinanceItem(id) {
-      await supabaseClient.from('finance').delete().eq('id', id);
-      await refreshAllBenchData();
-    }
-
-    async function handleCatalogSubmit(e) {
-      e.preventDefault();
-      await supabaseClient.from('catalog').insert([{
-        name: document.getElementById('cat-name').value.trim(),
-        category: document.getElementById('cat-category').value,
-        price: parseFloat(document.getElementById('cat-price').value) || 0
-      }]);
-      e.target.reset();
-      await refreshAllBenchData();
-    }
-
-    async function deleteCatalogItem(id) {
-      await supabaseClient.from('catalog').delete().eq('id', id);
-      await refreshAllBenchData();
-    }
-
-    function useCatalogInOs(id) {
-      const item = cachedCatalog.find(c => c.id === id);
-      if (!item) return;
-      switchBenchTab('orders');
-      resetBenchForm();
-      document.getElementById('os-category').value = item.category;
-      document.getElementById('os-diagnosis').value = item.name;
-      document.getElementById('os-price').value = item.price;
-    }
-
-    // ==================== CHATBOT DE TRIAGEM ====================
-    let chatState = { step: 0, device: '', symptom: '', model: '', name: '' };
-
-    function toggleChatbot() {
-      const win = document.getElementById('chatbot-window');
-      win.classList.toggle('hidden');
-      if (!win.classList.contains('hidden') && document.getElementById('chat-messages').children.length === 0) {
-        resetChatbot();
-      }
-    }
-
-    function resetChatbot() {
-      chatState = { step: 1, device: '', symptom: '', model: '', name: '' };
-      document.getElementById('chat-messages').innerHTML = '';
-      appendBotMessage('Olá! Bem-vindo à <strong>LABTECH_MSI</strong> 👋<br>Qual equipamento precisa de atendimento hoje?');
-      setQuickReplies(['Notebook / PC', 'Smartphone', 'Placa de Vídeo', 'Console', 'Endereço & Horário']);
-    }
-
-    function appendBotMessage(html) {
-      const box = document.getElementById('chat-messages');
-      box.innerHTML += `<div class="p-3 rounded-2xl rounded-tl-none bg-slateDark-800 text-slate-200 border border-slate-700/80 max-w-[88%]">${html}</div>`;
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function appendUserMessage(text) {
-      const box = document.getElementById('chat-messages');
-      box.innerHTML += `<div class="ml-auto p-3 rounded-2xl rounded-tr-none bg-cyan-500 text-slate-950 font-semibold max-w-[85%]">${escapeHTML(text)}</div>`;
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function setQuickReplies(options) {
-      const container = document.getElementById('chat-quick-replies');
-      container.innerHTML = options.map(opt => `
-        <button type="button" onclick="processChatInput('${escapeHTML(opt)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-semibold transition">
-          ${escapeHTML(opt)}
-        </button>
-      `).join('');
-    }
-
-    function handleChatSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById('chat-input');
-      const val = input.value.trim();
-      if (!val) return;
-      input.value = '';
-      processChatInput(val);
-    }
-
-    function processChatInput(text) {
-      if (text === 'Nova Triagem') {
-        resetChatbot();
-        return;
-      }
-
-      appendUserMessage(text);
-
-      if (chatState.step === 1 && text === 'Endereço & Horário') {
-        appendBotMessage('📍 <strong>Rua 8 de Dezembro, Ceará-Mirim/RN</strong> (CEP 59570-000)<br>🕒 Seg a Sex: 08h às 18h | Sáb: 08h às 12h<br>🛡️ <strong>Garantia:</strong> 90 dias nos serviços executados.');
-        setQuickReplies(['Notebook / PC', 'Smartphone', 'Placa de Vídeo', 'Console']);
-        return;
-      }
-
-      if (chatState.step === 1) {
-        chatState.device = text;
-        chatState.step = 2;
-        appendBotMessage(`Certo! Qual o <strong>sintoma principal</strong> do seu ${escapeHTML(text)}?`);
-        setQuickReplies(['Não liga / Sem vídeo', 'Superaquecimento', 'Tela / Conector quebrado', 'Lentidão / Sistema']);
-      } else if (chatState.step === 2) {
-        chatState.symptom = text;
-        chatState.step = 3;
-        appendBotMessage('Qual é a <strong>marca e o modelo</strong> exato do aparelho?');
-        setQuickReplies([]);
-      } else if (chatState.step === 3) {
-        chatState.model = text;
-        chatState.step = 4;
-        appendBotMessage('Por último, qual é o <strong>seu nome</strong>?');
-        setQuickReplies([]);
-      } else if (chatState.step === 4) {
-        chatState.name = text;
-        chatState.step = 5;
-        const summary = `*TRIAGEM BOT LABTECH_MSI*\n*Cliente:* ${chatState.name}\n*Equipamento:* ${chatState.device}\n*Modelo:* ${chatState.model}\n*Sintoma:* ${chatState.symptom}`;
-        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(summary)}`;
-        appendBotMessage(`
-          Perfeito, <strong>${escapeHTML(chatState.name)}</strong>! Sua pré-triagem está pronta:<br><br>
-          • <strong>Aparelho:</strong> ${escapeHTML(chatState.device)} (${escapeHTML(chatState.model)})<br>
-          • <strong>Sintoma:</strong> ${escapeHTML(chatState.symptom)}<br><br>
-          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="block text-center py-2 px-3 rounded-xl bg-emerald-500 text-slate-950 font-extrabold">
-            📲 Enviar Triagem no WhatsApp
-          </a>
-        `);
-        setQuickReplies(['Nova Triagem']);
-      }
-    }
-
-    // ==================== INICIALIZAÇÃO & SERVICE WORKER ====================
-    document.addEventListener('DOMContentLoaded', async () => {
-      const { data } = await supabaseClient.auth.getSession();
-      if (data?.session?.user) {
-        currentUser = data.session.user;
-      }
-      await loadPixSettings();
-    });
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-  </script>
-</body>
-</html>
+      const maxMonthVal = Math.max(100, ...monthlyIn, ...monthlyOut);
+      document.getElementById('bench-monthly-chart').innerHTML = monthNames.map((mName, idx) => {
+        const hIn = Math.round((monthlyIn[idx] / maxMonthVal) * 100);
+        const hOut = Math.round((monthlyOut[idx] / maxMonthVal) * 100);
+        return `
+          <div class="flex flex-col items-center h-full justify-end group" title="${mName}: Entradas${formatCurrency
