@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="LABTECH_MSI" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -49,17 +50,9 @@
       background-image: radial-gradient(rgba(34, 211, 238, 0.12) 1px, transparent 1px);
       background-size: 24px 24px;
     }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #060911;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1c2742;
-      border-radius: 9999px;
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #060911; }
+    ::-webkit-scrollbar-thumb { background: #1c2742; border-radius: 9999px; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col tech-grid pb-20 md:pb-0">
@@ -87,11 +80,11 @@
       </nav>
 
       <div class="flex items-center gap-2">
+        <span id="cloud-sync-badge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Nuvem Ativa
+        </span>
         <button onclick="openInstallModal()" class="px-3 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition flex items-center gap-1.5">
           <span>📲 App</span>
-        </button>
-        <button onclick="downloadSiteHtmlFile()" title="Baixar código limpo" class="hidden sm:flex px-3 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition items-center gap-1">
-          <span>⬇ HTML</span>
         </button>
         <button id="header-bench-btn" onclick="requestBenchAccess()" class="px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-bold transition flex items-center gap-1.5">
           <span>🔒 Bancada OS</span>
@@ -150,7 +143,7 @@
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-cyan-400 font-bold">✓</span>
-                <span>Acompanhamento em tempo real da OS e pagamento facilitado via PIX.</span>
+                <span>Consulta online em tempo real da OS e QR Code PIX com valor automático.</span>
               </li>
             </ul>
             <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
@@ -197,12 +190,12 @@
       <div class="glass-card rounded-2xl p-6 sm:p-8 border border-cyan-500/25">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Portal do Cliente</span>
+            <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Portal do Cliente • Tempo Real</span>
             <h2 class="text-2xl font-extrabold text-white mt-1">Acompanhar Ordem de Serviço & PIX</h2>
-            <p class="text-sm text-slate-400 mt-1">Digite o código da sua OS (ex.: <code class="text-cyan-300">OS-2026-101</code>, <code class="text-cyan-300">OS-2026-102</code> ou <code class="text-cyan-300">OS-2026-103</code>).</p>
+            <p class="text-sm text-slate-400 mt-1">Digite o código recebido no atendimento (ex.: <code class="text-cyan-300">OS-2026-101</code>).</p>
           </div>
           <form onsubmit="handleCustomerTrackSubmit(event)" class="flex w-full md:w-auto gap-2">
-            <input id="customer-os-search" type="text" value="OS-2026-103" placeholder="Ex: OS-2026-103" class="flex-1 md:w-56 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm uppercase focus:outline-none focus:border-cyan-400" />
+            <input id="customer-os-search" type="text" placeholder="Ex: OS-2026-101" class="flex-1 md:w-56 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm uppercase focus:outline-none focus:border-cyan-400" />
             <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
               Consultar
             </button>
@@ -258,18 +251,19 @@
   <section id="bench-app-view" class="hidden flex-1 max-w-7xl mx-auto w-full px-4 py-8">
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
       <div>
-        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • Gestão Interna</span>
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • Sincronizada na Nuvem</span>
         <h1 class="text-2xl font-extrabold text-white">Dashboard & Bancada LABTECH_MSI</h1>
+        <p id="bench-user-email" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="openPixConfigModal()" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition">
-          💠 Configurar PIX
+          💠 Configurar PIX (CPF / Chave)
         </button>
-        <button onclick="openPinChangeModal()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition">
-          🔑 Alterar PIN
+        <button onclick="refreshAllBenchData()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition">
+          🔄 Atualizar
         </button>
         <button onclick="logoutBench()" class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold transition">
-          Sair da Bancada
+          Sair
         </button>
       </div>
     </div>
@@ -365,8 +359,8 @@
             <input id="os-diagnosis" type="text" placeholder="Ex: Troca de CI PWM e limpeza ultrassônica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
           </div>
           <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-2 pt-2">
-            <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
-              Salvar Ordem de Serviço
+            <button id="save-os-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+              Salvar Ordem de Serviço na Nuvem
             </button>
           </div>
         </form>
@@ -446,7 +440,7 @@
     <p class="mt-1">Ceará-Mirim, Rio Grande do Norte • WhatsApp: (84) 99121-6849 • Instagram: @labtechmsicm</p>
   </footer>
 
-  <!-- BARRA INFERIOR MOBILE (ESTILO APP NATIVO) -->
+  <!-- BARRA INFERIOR MOBILE -->
   <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 glass-card border-t border-cyan-500/20 flex justify-around py-2 text-[11px] font-semibold">
     <a href="#inicio" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400">
       <span class="text-base">🏠</span>
@@ -498,19 +492,26 @@
     </button>
   </div>
 
-  <!-- MODAL PIN BANCADA -->
-  <div id="pin-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+  <!-- MODAL LOGIN BANCADA (SUPABASE AUTH) -->
+  <div id="login-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-amber-500/30 space-y-4">
       <div class="flex justify-between items-center">
-        <h3 class="font-bold text-white text-lg">🔒 Acesso à Bancada OS</h3>
-        <button onclick="closeModal('pin-modal')" class="text-slate-400 hover:text-white">✕</button>
+        <h3 class="font-bold text-white text-lg">🔒 Login Bancada OS</h3>
+        <button onclick="closeModal('login-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
-      <p class="text-xs text-slate-400">Digite o PIN de técnico para acessar o painel gerencial.</p>
-      <form onsubmit="verifyBenchPin(event)" class="space-y-3">
-        <input id="bench-pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••" class="w-full px-4 py-3 rounded-xl bg-slateDark-950 border border-slate-700 text-center text-white tracking-widest text-lg font-bold focus:outline-none focus:border-amber-400" />
-        <p id="pin-error-msg" class="hidden text-xs text-rose-400 text-center">PIN incorreto. Tente novamente.</p>
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm transition">
-          Entrar no Painel
+      <p class="text-xs text-slate-400">Entre com seu e-mail e senha cadastrados no Supabase para gerenciar as Ordens de Serviço.</p>
+      <form onsubmit="handleBenchLogin(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">E-mail do Técnico</label>
+          <input id="bench-email-input" type="email" required value="mcinformaticasuporte1@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Senha</label>
+          <input id="bench-password-input" type="password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400" />
+        </div>
+        <p id="login-error-msg" class="hidden text-xs text-rose-400 text-center"></p>
+        <button id="login-submit-btn" type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm transition">
+          Entrar na Bancada
         </button>
       </form>
     </div>
@@ -520,36 +521,20 @@
   <div id="pix-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-cyan-500/30 space-y-4">
       <div class="flex justify-between items-center">
-        <h3 class="font-bold text-white text-lg">💠 Configurar Chave PIX</h3>
+        <h3 class="font-bold text-white text-lg">💠 Configurar Chave PIX na Nuvem</h3>
         <button onclick="closeModal('pix-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
       <form onsubmit="savePixConfig(event)" class="space-y-3">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Chave PIX Oficial (Telefone, CNPJ, E-mail ou Aleatória)</label>
-          <input id="pix-key-input" type="text" required class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          <label class="block text-xs text-slate-400 mb-1">Chave PIX Oficial (CPF sem pontos, Telefone +55..., E-mail ou Aleatória)</label>
+          <input id="pix-key-input" type="text" required placeholder="Ex: 12345678900" class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
         </div>
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Nome do Recebedor</label>
-          <input id="pix-receiver-input" type="text" required class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          <label class="block text-xs text-slate-400 mb-1">Nome do Recebedor (sem acentos, máx. 25 caracteres)</label>
+          <input id="pix-receiver-input" type="text" required maxlength="25" placeholder="MACIEL LEMOS DA CAMARA" class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
         </div>
         <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">
           Salvar Configuração PIX
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL ALTERAR PIN -->
-  <div id="pin-change-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-slate-700 space-y-4">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-white text-lg">🔑 Alterar PIN da Bancada</h3>
-        <button onclick="closeModal('pin-change-modal')" class="text-slate-400 hover:text-white">✕</button>
-      </div>
-      <form onsubmit="saveNewPin(event)" class="space-y-3">
-        <input id="new-pin-input" type="password" inputmode="numeric" minlength="4" maxlength="6" required placeholder="Novo PIN (4 a 6 dígitos)" class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
-        <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">
-          Salvar Novo PIN
         </button>
       </form>
     </div>
@@ -563,16 +548,13 @@
         <button onclick="closeModal('install-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Instale o aplicativo web diretamente na tela inicial do seu celular sem ocupar memória:
+        Adicione este sistema à tela inicial do seu celular para acompanhar OS ou gerenciar a bancada como um aplicativo:
       </p>
       <div class="space-y-2.5 text-xs text-slate-300 bg-slateDark-950/80 p-4 rounded-xl border border-slate-800">
         <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito e selecione <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar aplicativo"</strong>.</p>
         <p><strong class="text-cyan-400">iPhone (Safari):</strong> Toque no ícone de <strong>Compartilhar (□↑)</strong> na barra inferior e escolha <strong>"Adicionar à Tela de Início"</strong>.</p>
       </div>
-      <div class="flex justify-end gap-2">
-        <button onclick="downloadSiteHtmlFile()" class="px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 text-cyan-300 text-xs font-semibold">
-          ⬇ Baixar HTML Limpo
-        </button>
+      <div class="flex justify-end">
         <button onclick="closeModal('install-modal')" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold">
           Entendi
         </button>
@@ -581,19 +563,19 @@
   </div>
 
   <script>
-    // ==================== UTILITÁRIOS & SEGURANÇA ====================
+    // ==================== CONFIGURAÇÃO SUPABASE ====================
+    const SUPABASE_URL = 'https://shhqlfxptomageoxlxbu.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_JumNMKTABz50bB040Gm_iQ_eWvvjTxB';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const WHATSAPP_NUMBER = '5584991216849';
-    const STORAGE_KEYS = {
-      ORDERS: 'labtech_msi_orders_v2',
-      FINANCE: 'labtech_msi_finance_v2',
-      CATALOG: 'labtech_msi_catalog_v2',
-      PIN: 'labtech_msi_pin_v2',
-      PIX: 'labtech_msi_pix_v2',
-      OS_SEQ: 'labtech_msi_os_seq_v2'
-    };
+    let currentUser = null;
+    let cachedOrders = [];
+    let cachedFinance = [];
+    let cachedCatalog = [];
+    let cachedPix = { pix_key: '84991216849', pix_receiver: 'LABTECH_MSI CEARA MIRIM' };
 
-    let isBenchAuthenticated = false;
-
+    // ==================== UTILITÁRIOS & SEGURANÇA ====================
     function escapeHTML(str) {
       if (str === null || str === undefined) return '';
       return String(str)
@@ -608,147 +590,70 @@
       return Number(val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function openInstallModal() { openModal('install-modal'); }
+
+    // ==================== GERADOR DE PIX PADRÃO BANCO CENTRAL (BR CODE / EMV) ====================
+    function formatEMVField(id, value) {
+      const len = String(value.length).padStart(2, '0');
+      return `${id}${len}${value}`;
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function openInstallModal() {
-      openModal('install-modal');
-    }
-
-    // Download limpo do arquivo HTML (remove nós dinâmicos/extensões antes de salvar)
-    function downloadSiteHtmlFile() {
-      const clone = document.documentElement.cloneNode(true);
-      clone.querySelectorAll('[data-bard-client-injected], chatgpt-sidebar, #gitmind-floating-toolbar').forEach(el => el.remove());
-      clone.removeAttribute('data-gitmind-ai-assistant-color-mode');
-      const cleanHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
-      const blob = new Blob([cleanHtml], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'index.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // ==================== DADOS INICIAIS (EXEMPLOS FICTÍCIOS) ====================
-    function initDefaultData() {
-      if (!localStorage.getItem(STORAGE_KEYS.ORDERS)) {
-        const sampleOrders = [
-          {
-            id: 'OS-2026-101',
-            client: 'Cliente Exemplo A',
-            phone: '84900000001',
-            category: 'Notebook',
-            model: 'Lenovo Ideapad 3i',
-            issue: 'Superaquecimento e desligamento repentino',
-            diagnosis: 'Limpeza química completa, desobstrução do cooler e troca por pasta térmica de prata.',
-            status: 'Em Reparo',
-            price: 140.00,
-            paidInFinance: false,
-            createdAt: '2026-11-11T09:30:00'
-          },
-          {
-            id: 'OS-2026-102',
-            client: 'Cliente Exemplo B',
-            phone: '84900000002',
-            category: 'Placa de Vídeo',
-            model: 'GTX 1660 Super 6GB',
-            issue: 'Sem sinal de vídeo e cooler em 100%',
-            diagnosis: 'Curto identificado na linha de alimentação das memórias; aguardando aprovação.',
-            status: 'Orçamento Enviado',
-            price: 280.00,
-            paidInFinance: false,
-            createdAt: '2026-11-12T14:15:00'
-          },
-          {
-            id: 'OS-2026-103',
-            client: 'Cliente Exemplo C',
-            phone: '84900000003',
-            category: 'Smartphone',
-            model: 'Samsung Galaxy A54',
-            issue: 'Conector USB-C com mau contato no carregamento turbo',
-            diagnosis: 'Substituição da subplaca de carga original e testes de corrente concluídos.',
-            status: 'Pronto',
-            price: 160.00,
-            paidInFinance: true,
-            createdAt: '2026-11-13T10:00:00'
+    function computeCRC16(payload) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < payload.length; i++) {
+        crc ^= payload.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) {
+          if ((crc & 0x8000) !== 0) {
+            crc = ((crc << 1) ^ 0x1021) & 0xFFFF;
+          } else {
+            crc = (crc << 1) & 0xFFFF;
           }
-        ];
-        localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(sampleOrders));
-        localStorage.setItem(STORAGE_KEYS.OS_SEQ, '103');
+        }
       }
-
-      if (!localStorage.getItem(STORAGE_KEYS.FINANCE)) {
-        const sampleFinance = [
-          { id: 1, type: 'entrada', desc: 'Serviço OS-2026-103 (Subplaca Galaxy A54)', amount: 160.00, date: '13/11/2026' },
-          { id: 2, type: 'saida', desc: 'Compra de peça - Subplaca USB-C', amount: 45.00, date: '12/11/2026' }
-        ];
-        localStorage.setItem(STORAGE_KEYS.FINANCE, JSON.stringify(sampleFinance));
-      }
-
-      if (!localStorage.getItem(STORAGE_KEYS.CATALOG)) {
-        const sampleCatalog = [
-          { id: 1, name: 'Limpeza Preventiva + Pasta Térmica', category: 'Notebook', price: 120.00 },
-          { id: 2, name: 'Formatação + Backup + Otimização', category: 'Notebook', price: 90.00 },
-          { id: 3, name: 'Troca de Conector de Carga', category: 'Smartphone', price: 130.00 },
-          { id: 4, name: 'Manutenção Térmica GPU (Pads + Pasta)', category: 'Placa de Vídeo', price: 180.00 }
-        ];
-        localStorage.setItem(STORAGE_KEYS.CATALOG, JSON.stringify(sampleCatalog));
-      }
-
-      if (!localStorage.getItem(STORAGE_KEYS.PIX)) {
-        localStorage.setItem(STORAGE_KEYS.PIX, JSON.stringify({
-          key: '84991216849',
-          receiver: 'LABTECH_MSI CEARA MIRIM'
-        }));
-      }
+      return crc.toString(16).toUpperCase().padStart(4, '0');
     }
 
-    function getOrders() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.ORDERS) || '[]');
+    function normalizeAscii(str, maxLen) {
+      return String(str || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^A-Za-z0-9 ]/g, '')
+        .trim()
+        .substring(0, maxLen)
+        .toUpperCase();
     }
 
-    function saveOrders(list) {
-      localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(list));
-    }
+    function generatePixBrCode(pixKey, receiverName, amount, txid) {
+      let cleanKey = String(pixKey || '').trim();
+      // Se for telefone BR de 11 dígitos sem +55, mantém como digitado (CPF também tem 11 dígitos)
+      const gui = formatEMVField('00', 'br.gov.bcb.pix');
+      const keyField = formatEMVField('01', cleanKey);
+      const merchantAccount = formatEMVField('26', gui + keyField);
 
-    function getFinance() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.FINANCE) || '[]');
-    }
+      const merchantCategory = formatEMVField('52', '0000');
+      const currency = formatEMVField('53', '986'); // BRL
+      const amountField = Number(amount) > 0 ? formatEMVField('54', Number(amount).toFixed(2)) : '';
+      const country = formatEMVField('58', 'BR');
+      const nameField = formatEMVField('59', normalizeAscii(receiverName || 'LABTECH MSI', 25) || 'LABTECH MSI');
+      const cityField = formatEMVField('60', 'CEARA MIRIM');
+      const cleanTx = String(txid || 'LABTECH').replace(/[^A-Za-z0-9]/g, '').substring(0, 25) || '***';
+      const additionalData = formatEMVField('62', formatEMVField('05', cleanTx));
 
-    function saveFinance(list) {
-      localStorage.setItem(STORAGE_KEYS.FINANCE, JSON.stringify(list));
-    }
+      const rawPayload =
+        formatEMVField('00', '01') +
+        merchantAccount +
+        merchantCategory +
+        currency +
+        amountField +
+        country +
+        nameField +
+        cityField +
+        additionalData +
+        '6304';
 
-    function getCatalog() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.CATALOG) || '[]');
-    }
-
-    function saveCatalog(list) {
-      localStorage.setItem(STORAGE_KEYS.CATALOG, JSON.stringify(list));
-    }
-
-    function getPixConfig() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.PIX) || '{"key":"84991216849","receiver":"LABTECH_MSI"}');
-    }
-
-    function getNextOsNumber() {
-      const orders = getOrders();
-      let maxSeq = parseInt(localStorage.getItem(STORAGE_KEYS.OS_SEQ) || '100', 10);
-      orders.forEach(o => {
-        const parts = String(o.id).split('-');
-        const num = parseInt(parts[parts.length - 1], 10);
-        if (!isNaN(num) && num > maxSeq) maxSeq = num;
-      });
-      const next = maxSeq + 1;
-      return `OS-2026-${next}`;
+      return rawPayload + computeCRC16(rawPayload);
     }
 
     // ==================== MODO CLIENTE: CONSULTA DE OS & PIX ====================
@@ -763,32 +668,44 @@
       searchCustomerOS();
     }
 
-    function buildPixPayload(pixKey, receiverName, amount, txid) {
-      const cleanKey = String(pixKey || '').trim();
-      const cleanName = String(receiverName || 'LABTECH_MSI').substring(0, 25).toUpperCase();
-      const cleanTx = String(txid || 'LABTECH').replace(/[^A-Za-z0-9]/g, '').substring(0, 15) || 'LABTECH';
-      const valStr = Number(amount || 0).toFixed(2);
-      return `PIX|CHAVE:${cleanKey}|FAVORECIDO:${cleanName}|VALOR:R$${valStr}|REF:${cleanTx}`;
+    async function loadPixSettings() {
+      const { data } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
+      if (data) cachedPix = data;
     }
 
-    function searchCustomerOS() {
+    async function searchCustomerOS() {
       const inputEl = document.getElementById('customer-os-search');
       const container = document.getElementById('customer-os-result');
       if (!inputEl || !container) return;
 
       const query = inputEl.value.trim().toUpperCase();
       if (!query) {
-        container.innerHTML = `<p class="text-sm text-slate-400">Informe o código da Ordem de Serviço acima.</p>`;
+        container.innerHTML = `<p class="text-sm text-slate-400">Informe o código da Ordem de Serviço acima para consultar em tempo real.</p>`;
         return;
       }
 
-      const orders = getOrders();
-      const order = orders.find(o => o.id.toUpperCase() === query);
+      container.innerHTML = `<p class="text-sm text-cyan-300 animate-pulse">Consultando Ordem de Serviço na nuvem...</p>`;
+
+      await loadPixSettings();
+      const { data: order, error } = await supabaseClient
+        .from('orders')
+        .select('*')
+        .ilike('id', query)
+        .maybeSingle();
+
+      if (error) {
+        container.innerHTML = `
+          <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm">
+            Ainda configurando o banco de dados. Certifique-se de ter executado o script SQL no Supabase.
+          </div>
+        `;
+        return;
+      }
 
       if (!order) {
         container.innerHTML = `
           <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm">
-            Ordem de Serviço <strong>${escapeHTML(query)}</strong> não encontrada neste navegador. Verifique o código ou fale conosco no WhatsApp.
+            Ordem de Serviço <strong>${escapeHTML(query)}</strong> não encontrada. Confira o código ou chame no WhatsApp.
           </div>
         `;
         return;
@@ -796,9 +713,8 @@
 
       const steps = ['Entrada', 'Em Análise', 'Orçamento Enviado', 'Em Reparo', 'Pronto'];
       const currentIdx = order.status === 'Entregue' ? 4 : Math.max(0, steps.indexOf(order.status));
-      const pix = getPixConfig();
-      const pixText = buildPixPayload(pix.key, pix.receiver, order.price, order.id);
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(pix.key)}`;
+      const pixPayload = generatePixBrCode(cachedPix.pix_key, cachedPix.pix_receiver, order.price, order.id);
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixPayload)}`;
 
       const timelineHtml = steps.map((step, idx) => {
         const active = idx <= currentIdx;
@@ -838,20 +754,20 @@
               <p class="text-slate-300"><strong>Defeito:</strong> ${escapeHTML(order.issue)}</p>
               <p class="text-slate-300"><strong>Diagnóstico:</strong> ${escapeHTML(order.diagnosis || 'Em avaliação na bancada.')}</p>
               ${order.status === 'Orçamento Enviado' ? `
-                <button onclick="approveCustomerQuote('${escapeHTML(order.id)}')" class="mt-2 w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">
+                <button onclick="approveCustomerQuote('${escapeHTML(order.id)}', '${escapeHTML(order.model)}', ${Number(order.price)})" class="mt-2 w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">
                   ✅ Aprovar Orçamento Agora
                 </button>
               ` : ''}
             </div>
 
             <div class="p-4 rounded-xl bg-slateDark-900 border border-cyan-500/25 flex flex-col sm:flex-row items-center gap-4">
-              <img src="${qrUrl}" alt="QR Code PIX" class="w-28 h-28 rounded-lg bg-white p-1.5 shrink-0" />
+              <img src="${qrUrl}" alt="QR Code PIX" class="w-32 h-32 rounded-lg bg-white p-1.5 shrink-0" />
               <div class="space-y-2 text-xs w-full">
-                <p class="font-bold text-cyan-300 uppercase">Pagamento via PIX</p>
-                <p class="text-slate-300">Chave: <strong class="text-white select-all">${escapeHTML(pix.key)}</strong></p>
-                <p class="text-slate-400">Favorecido: ${escapeHTML(pix.receiver)}</p>
-                <button onclick="copyPixCode('${escapeHTML(pix.key)}')" class="w-full py-2 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold transition">
-                  📋 Copiar Chave PIX
+                <p class="font-bold text-cyan-300 uppercase">Pagamento PIX (Valor Automático)</p>
+                <p class="text-slate-300">Chave: <strong class="text-white select-all">${escapeHTML(cachedPix.pix_key)}</strong></p>
+                <p class="text-slate-400">Favorecido: ${escapeHTML(cachedPix.pix_receiver)}</p>
+                <button onclick="copyPixCode('${escapeHTML(pixPayload)}')" class="w-full py-2 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold transition">
+                  📋 Copiar PIX Copia e Cola
                 </button>
                 <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá LABTECH_MSI! Segue o comprovante PIX referente à ${order.id} (${order.model}) no valor de ${formatCurrency(order.price)}.`)}" target="_blank" rel="noopener noreferrer" class="block text-center w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition">
                   Enviar Comprovante
@@ -863,23 +779,27 @@
       `;
     }
 
-    function approveCustomerQuote(osId) {
-      const orders = getOrders();
-      const idx = orders.findIndex(o => o.id === osId);
-      if (idx === -1) return;
-      orders[idx].status = 'Em Reparo';
-      saveOrders(orders);
-      searchCustomerOS();
-      if (isBenchAuthenticated) renderBenchDashboard();
-      const msg = `Olá LABTECH_MSI! Aprovo o orçamento da ${orders[idx].id} (${orders[idx].model}) no valor de ${formatCurrency(orders[idx].price)}.`;
+    async function approveCustomerQuote(osId, model, price) {
+      const { error } = await supabaseClient
+        .from('orders')
+        .update({ status: 'Em Reparo' })
+        .eq('id', osId);
+
+      if (error) {
+        alert('Não foi possível aprovar online: ' + error.message);
+        return;
+      }
+
+      await searchCustomerOS();
+      const msg = `Olá LABTECH_MSI! Aprovo o orçamento da ${osId} (${model}) no valor de ${formatCurrency(price)}.`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
     }
 
     function copyPixCode(text) {
       navigator.clipboard.writeText(text).then(() => {
-        alert('Chave PIX copiada: ' + text);
+        alert('Código PIX Copia e Cola copiado! Abra o app do seu banco e escolha "PIX Copia e Cola".');
       }).catch(() => {
-        alert('Chave PIX: ' + text);
+        alert('Código PIX: ' + text);
       });
     }
 
@@ -897,100 +817,130 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     }
 
-    // ==================== BANCADA OS & DASHBOARD ====================
+    // ==================== AUTENTICAÇÃO & BANCADA OS ====================
     function switchAppMode(mode) {
       const clientView = document.getElementById('client-app-view');
       const benchView = document.getElementById('bench-app-view');
-      if (mode === 'bench' && isBenchAuthenticated) {
+      if (mode === 'bench' && currentUser) {
         clientView.classList.add('hidden');
         benchView.classList.remove('hidden');
-        renderBenchDashboard();
+        document.getElementById('bench-user-email').textContent = `Conectado como: ${currentUser.email}`;
+        refreshAllBenchData();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         benchView.classList.add('hidden');
         clientView.classList.remove('hidden');
-        searchCustomerOS();
       }
     }
 
     function requestBenchAccess() {
-      if (isBenchAuthenticated) {
+      if (currentUser) {
         switchAppMode('bench');
         return;
       }
-      document.getElementById('bench-pin-input').value = '';
-      document.getElementById('pin-error-msg').classList.add('hidden');
-      openModal('pin-modal');
+      document.getElementById('login-error-msg').classList.add('hidden');
+      openModal('login-modal');
     }
 
-    function verifyBenchPin(e) {
+    async function handleBenchLogin(e) {
       e.preventDefault();
-      const entered = document.getElementById('bench-pin-input').value.trim();
-      const savedPin = localStorage.getItem(STORAGE_KEYS.PIN) || '1234';
-      if (entered === savedPin) {
-        isBenchAuthenticated = true;
-        closeModal('pin-modal');
-        switchAppMode('bench');
-      } else {
-        document.getElementById('pin-error-msg').classList.remove('hidden');
+      const email = document.getElementById('bench-email-input').value.trim();
+      const password = document.getElementById('bench-password-input').value;
+      const btn = document.getElementById('login-submit-btn');
+      const errEl = document.getElementById('login-error-msg');
+
+      btn.disabled = true;
+      btn.textContent = 'Autenticando...';
+      errEl.classList.add('hidden');
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      btn.disabled = false;
+      btn.textContent = 'Entrar na Bancada';
+
+      if (error) {
+        errEl.textContent = 'E-mail ou senha inválidos.';
+        errEl.classList.remove('hidden');
+        return;
       }
+
+      currentUser = data.user;
+      closeModal('login-modal');
+      switchAppMode('bench');
     }
 
-    function logoutBench() {
-      isBenchAuthenticated = false;
+    async function logoutBench() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
       switchAppMode('client');
     }
 
-    function openPinChangeModal() {
-      document.getElementById('new-pin-input').value = '';
-      openModal('pin-change-modal');
-    }
-
-    function saveNewPin(e) {
-      e.preventDefault();
-      const newPin = document.getElementById('new-pin-input').value.trim();
-      if (newPin.length >= 4) {
-        localStorage.setItem(STORAGE_KEYS.PIN, newPin);
-        closeModal('pin-change-modal');
-        alert('PIN atualizado com sucesso!');
-      }
-    }
-
-    function openPixConfigModal() {
-      const pix = getPixConfig();
-      document.getElementById('pix-key-input').value = pix.key;
-      document.getElementById('pix-receiver-input').value = pix.receiver;
+    async function openPixConfigModal() {
+      await loadPixSettings();
+      document.getElementById('pix-key-input').value = cachedPix.pix_key || '';
+      document.getElementById('pix-receiver-input').value = cachedPix.pix_receiver || '';
       openModal('pix-modal');
     }
 
-    function savePixConfig(e) {
+    async function savePixConfig(e) {
       e.preventDefault();
-      const key = document.getElementById('pix-key-input').value.trim();
-      const receiver = document.getElementById('pix-receiver-input').value.trim();
-      localStorage.setItem(STORAGE_KEYS.PIX, JSON.stringify({ key, receiver }));
+      const pix_key = document.getElementById('pix-key-input').value.trim();
+      const pix_receiver = document.getElementById('pix-receiver-input').value.trim().toUpperCase();
+
+      const { error } = await supabaseClient
+        .from('settings')
+        .upsert({ id: 1, pix_key, pix_receiver });
+
+      if (error) {
+        alert('Erro ao salvar PIX: ' + error.message);
+        return;
+      }
+
+      cachedPix = { id: 1, pix_key, pix_receiver };
       closeModal('pix-modal');
-      alert('Chave PIX salva com sucesso!');
+      alert('Chave PIX atualizada na nuvem com sucesso!');
     }
 
     function switchBenchTab(tab) {
       ['overview', 'orders', 'finance', 'catalog'].forEach(t => {
         document.getElementById(`bench-tab-${t}`).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById(`tab-btn-${t}`);
-        if (t === tab) {
-          btn.className = 'bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition';
-        } else {
-          btn.className = 'bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
-        }
+        btn.className = t === tab
+          ? 'bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition'
+          : 'bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
       });
+    }
+
+    function getNextOsNumber() {
+      let maxSeq = 100;
+      cachedOrders.forEach(o => {
+        const parts = String(o.id).split('-');
+        const num = parseInt(parts[parts.length - 1], 10);
+        if (!isNaN(num) && num > maxSeq) maxSeq = num;
+      });
+      return `OS-2026-${maxSeq + 1}`;
+    }
+
+    async function refreshAllBenchData() {
+      const [ordersRes, financeRes, catalogRes] = await Promise.all([
+        supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('finance').select('*').order('id', { ascending: false }),
+        supabaseClient.from('catalog').select('*').order('id', { ascending: true })
+      ]);
+
+      cachedOrders = ordersRes.data || [];
+      cachedFinance = financeRes.data || [];
+      cachedCatalog = catalogRes.data || [];
+      await loadPixSettings();
+
       renderBenchDashboard();
     }
 
     function renderBenchDashboard() {
-      const orders = getOrders();
-      const finance = getFinance();
-      const catalog = getCatalog();
+      const orders = cachedOrders;
+      const finance = cachedFinance;
+      const catalog = cachedCatalog;
 
-      // KPIs
       const activeOrders = orders.filter(o => o.status !== 'Entregue').length;
       const inRepair = orders.filter(o => o.status === 'Em Reparo' || o.status === 'Em Análise').length;
       const readyCount = orders.filter(o => o.status === 'Pronto').length;
@@ -1025,7 +975,6 @@
         </div>
       `;
 
-      // Gráfico por Categoria
       const counts = {};
       orders.forEach(o => { counts[o.category] = (counts[o.category] || 0) + 1; });
       const totalOrders = orders.length || 1;
@@ -1042,7 +991,7 @@
             </div>
           </div>
         `;
-      }).join('') || '<p class="text-xs text-slate-400">Sem dados cadastrados.</p>';
+      }).join('') || '<p class="text-xs text-slate-400">Nenhuma OS cadastrada ainda.</p>';
 
       document.getElementById('bench-operational-metrics').innerHTML = `
         <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
@@ -1054,14 +1003,13 @@
           <span class="font-bold text-rose-400">${formatCurrency(totalOut)}</span>
         </div>
         <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Total de OS Registradas</span>
+          <span class="text-slate-400">Total de OS na Nuvem</span>
           <span class="font-bold text-white">${orders.length}</span>
         </div>
       `;
 
-      // Lista de OS
-      if (!document.getElementById('os-number').value) {
-        resetBenchForm();
+      if (!document.getElementById('os-edit-id').value) {
+        document.getElementById('os-number').value = getNextOsNumber();
       }
 
       document.getElementById('bench-orders-list').innerHTML = orders.map(o => `
@@ -1088,13 +1036,12 @@
             </div>
           </div>
         </div>
-      `).join('');
+      `).join('') || '<p class="text-sm text-slate-400">Nenhuma Ordem de Serviço registrada.</p>';
 
-      // Lista Financeira
       document.getElementById('bench-finance-list').innerHTML = finance.map(f => `
         <div class="flex items-center justify-between p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 text-xs">
           <div>
-            <p class="font-bold text-white">${escapeHTML(f.desc)}</p>
+            <p class="font-bold text-white">${escapeHTML(f.description)}</p>
             <p class="text-slate-400">${escapeHTML(f.date)}</p>
           </div>
           <div class="flex items-center gap-3">
@@ -1106,7 +1053,6 @@
         </div>
       `).join('') || '<p class="text-xs text-slate-400">Nenhum lançamento financeiro.</p>';
 
-      // Lista Catálogo
       document.getElementById('bench-catalog-list').innerHTML = catalog.map(c => `
         <div class="glass-card p-4 rounded-2xl flex flex-col justify-between gap-3">
           <div>
@@ -1121,7 +1067,7 @@
             </div>
           </div>
         </div>
-      `).join('');
+      `).join('') || '<p class="text-xs text-slate-400">Catálogo vazio.</p>';
     }
 
     function resetBenchForm() {
@@ -1131,13 +1077,16 @@
       document.getElementById('bench-form-title').textContent = 'Nova Ordem de Serviço (Check-in)';
     }
 
-    function handleBenchOsSubmit(e) {
+    async function handleBenchOsSubmit(e) {
       e.preventDefault();
-      const orders = getOrders();
+      const btn = document.getElementById('save-os-btn');
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+
       const editId = document.getElementById('os-edit-id').value;
       const osId = document.getElementById('os-number').value;
 
-      const data = {
+      const payload = {
         id: osId,
         client: document.getElementById('os-client').value.trim(),
         phone: document.getElementById('os-phone').value.replace(/\D/g, ''),
@@ -1146,31 +1095,27 @@
         status: document.getElementById('os-status').value,
         price: parseFloat(document.getElementById('os-price').value) || 0,
         issue: document.getElementById('os-issue').value.trim(),
-        diagnosis: document.getElementById('os-diagnosis').value.trim(),
-        paidInFinance: false,
-        createdAt: new Date().toISOString()
+        diagnosis: document.getElementById('os-diagnosis').value.trim()
       };
 
-      if (editId) {
-        const idx = orders.findIndex(o => o.id === editId);
-        if (idx !== -1) {
-          data.paidInFinance = orders[idx].paidInFinance || false;
-          data.createdAt = orders[idx].createdAt;
-          orders[idx] = data;
-        }
-      } else {
-        orders.unshift(data);
-        const seqNum = parseInt(osId.split('-').pop(), 10);
-        if (!isNaN(seqNum)) localStorage.setItem(STORAGE_KEYS.OS_SEQ, String(seqNum));
+      const { error } = editId
+        ? await supabaseClient.from('orders').update(payload).eq('id', editId)
+        : await supabaseClient.from('orders').insert([payload]);
+
+      btn.disabled = false;
+      btn.textContent = 'Salvar Ordem de Serviço na Nuvem';
+
+      if (error) {
+        alert('Erro ao salvar OS: ' + error.message);
+        return;
       }
 
-      saveOrders(orders);
       resetBenchForm();
-      renderBenchDashboard();
+      await refreshAllBenchData();
     }
 
     function editBenchOrder(osId) {
-      const order = getOrders().find(o => o.id === osId);
+      const order = cachedOrders.find(o => o.id === osId);
       if (!order) return;
       document.getElementById('os-edit-id').value = order.id;
       document.getElementById('os-number').value = order.id;
@@ -1186,86 +1131,75 @@
       document.getElementById('bench-os-form').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function markOrderReady(osId) {
-      const orders = getOrders();
-      const idx = orders.findIndex(o => o.id === osId);
-      if (idx === -1) return;
+    async function markOrderReady(osId) {
+      const order = cachedOrders.find(o => o.id === osId);
+      if (!order) return;
 
-      orders[idx].status = 'Pronto';
-      if (Number(orders[idx].price) > 0 && !orders[idx].paidInFinance) {
-        const finance = getFinance();
-        finance.unshift({
-          id: Date.now(),
+      await supabaseClient.from('orders').update({ status: 'Pronto', paid_in_finance: true }).eq('id', osId);
+
+      if (Number(order.price) > 0 && !order.paid_in_finance) {
+        await supabaseClient.from('finance').insert([{
           type: 'entrada',
-          desc: `Serviço ${orders[idx].id} (${orders[idx].model})`,
-          amount: Number(orders[idx].price),
+          description: `Serviço ${order.id} (${order.model})`,
+          amount: Number(order.price),
           date: new Date().toLocaleDateString('pt-BR')
-        });
-        saveFinance(finance);
-        orders[idx].paidInFinance = true;
+        }]);
       }
 
-      saveOrders(orders);
-      renderBenchDashboard();
+      await refreshAllBenchData();
     }
 
-    function deleteBenchOrder(osId) {
-      if (!confirm(`Excluir a ordem ${osId}?`)) return;
-      saveOrders(getOrders().filter(o => o.id !== osId));
-      renderBenchDashboard();
+    async function deleteBenchOrder(osId) {
+      if (!confirm(`Excluir permanentemente a ordem ${osId}?`)) return;
+      await supabaseClient.from('orders').delete().eq('id', osId);
+      await refreshAllBenchData();
     }
 
     function sendOrderWhatsApp(osId) {
-      const o = getOrders().find(item => item.id === osId);
+      const o = cachedOrders.find(item => item.id === osId);
       if (!o) return;
       const targetPhone = o.phone.startsWith('55') ? o.phone : '55' + o.phone;
-      const pix = getPixConfig();
-      const msg = `*LABTECH_MSI — Atualização de Serviço*\n*OS:* ${o.id}\n*Cliente:* ${o.client}\n*Equipamento:* ${o.model}\n*Status:* ${o.status}\n*Laudo:* ${o.diagnosis || 'Em bancada'}\n*Valor:* ${formatCurrency(o.price)}\n*Chave PIX:* ${pix.key}`;
+      const portalLink = window.location.origin + window.location.pathname;
+      const msg = `*LABTECH_MSI — Atualização de Serviço*\n*OS:* ${o.id}\n*Cliente:* ${o.client}\n*Equipamento:* ${o.model}\n*Status:* ${o.status}\n*Laudo:* ${o.diagnosis || 'Em bancada'}\n*Valor:* ${formatCurrency(o.price)}\n*Chave PIX:* ${cachedPix.pix_key}\n\nAcompanhe e pague pelo QR Code em:\n${portalLink}`;
       window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
     }
 
     // ==================== FINANCEIRO & CATÁLOGO ====================
-    function handleFinanceSubmit(e) {
+    async function handleFinanceSubmit(e) {
       e.preventDefault();
-      const finance = getFinance();
-      finance.unshift({
-        id: Date.now(),
+      await supabaseClient.from('finance').insert([{
         type: document.getElementById('fin-type').value,
-        desc: document.getElementById('fin-desc').value.trim(),
+        description: document.getElementById('fin-desc').value.trim(),
         amount: parseFloat(document.getElementById('fin-amount').value) || 0,
         date: new Date().toLocaleDateString('pt-BR')
-      });
-      saveFinance(finance);
+      }]);
       e.target.reset();
-      renderBenchDashboard();
+      await refreshAllBenchData();
     }
 
-    function deleteFinanceItem(id) {
-      saveFinance(getFinance().filter(f => f.id !== id));
-      renderBenchDashboard();
+    async function deleteFinanceItem(id) {
+      await supabaseClient.from('finance').delete().eq('id', id);
+      await refreshAllBenchData();
     }
 
-    function handleCatalogSubmit(e) {
+    async function handleCatalogSubmit(e) {
       e.preventDefault();
-      const catalog = getCatalog();
-      catalog.push({
-        id: Date.now(),
+      await supabaseClient.from('catalog').insert([{
         name: document.getElementById('cat-name').value.trim(),
         category: document.getElementById('cat-category').value,
         price: parseFloat(document.getElementById('cat-price').value) || 0
-      });
-      saveCatalog(catalog);
+      }]);
       e.target.reset();
-      renderBenchDashboard();
+      await refreshAllBenchData();
     }
 
-    function deleteCatalogItem(id) {
-      saveCatalog(getCatalog().filter(c => c.id !== id));
-      renderBenchDashboard();
+    async function deleteCatalogItem(id) {
+      await supabaseClient.from('catalog').delete().eq('id', id);
+      await refreshAllBenchData();
     }
 
     function useCatalogInOs(id) {
-      const item = getCatalog().find(c => c.id === id);
+      const item = cachedCatalog.find(c => c.id === id);
       if (!item) return;
       switchBenchTab('orders');
       resetBenchForm();
@@ -1369,9 +1303,12 @@
     }
 
     // ==================== INICIALIZAÇÃO ====================
-    document.addEventListener('DOMContentLoaded', () => {
-      initDefaultData();
-      searchCustomerOS();
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data } = await supabaseClient.auth.getSession();
+      if (data?.session?.user) {
+        currentUser = data.session.user;
+      }
+      await loadPixSettings();
     });
   </script>
 </body>
