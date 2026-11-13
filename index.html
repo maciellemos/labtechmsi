@@ -1,775 +1,632 @@
 <!DOCTYPE html>
-<html><head><script data-bard-client-injected="true">(function(firebaseConfig, initialAuthToken, appId) {
-        window.__firebase_config = firebaseConfig;
-        window.__initial_auth_token = initialAuthToken;
-        window.__app_id = appId;
-            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNjRiNzdiNDMzZDdhMDAyMWI4NjE4YjhjYTU3ZTMyZGI5MWUxMTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIxNjkyNTM1NzI2NzkzMjQwMDc4OCIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2I4Yzg2YmQxOWFjMTk5NzZfaW5kZXguaHRtbC01ODUifSwiZXhwIjoxNzk0NTk4NjA5LCJpYXQiOjE3OTQ1OTUwMDksImFsZyI6IlJTMjU2In0.ktOIM4xJZfgcqgQ2BW3a7jXNzVq4fNXmxt56-XXphAbsh5tpyWABi-z7FUfhsqNoddSdiVjvuiwydZXpZLGbB3yVp59EWi0CbMJBOvFVU7iMLX_qIxbWRfHVwePCtb0fFa545BqC3VTOfWWvaydfGPjSzt6JxDH-jCxxhWy2QAL_y8YYkm2UUWhOuNrkryZln814L9kxgFGrMlqbnIiuvpW57Rl6lscp3se8kFblrMEzmEdflZC0QYzcY3bdDDyChCSJT36a06iEYZ6_k5lnk7Ua-SJBQ8568LqbXWEgJBsqblByxII2XAGIZqLkfROFkkQzIZQHSA4G4VAgoAd6VA","c_b8c86bd19ac19976_index.html-585")</script><script data-bard-client-injected="true">
-  document.addEventListener('input', (event) => {
-    if (event.target && (event.target.isContentEditable || event.target.hasAttribute('contenteditable'))) {
-      const clonedDoc = document.cloneNode(true);
-      const injectedScripts = clonedDoc.querySelectorAll('[data-bard-client-injected="true"]');
-      injectedScripts.forEach(el => el.remove());
-      window.parent.postMessage({
-        type: 'inlineEdit',
-        html: '<!DOCTYPE html>\n' + clonedDoc.documentElement.outerHTML
-      }, '*');
-    }
-  });
-</script><script data-bard-client-injected="true">(function(){'use strict';window.addEventListener("message",a=>{a.data&&a.data.type==="SUPPLEMENTAL_DATA_UPDATE"&&window.dispatchEvent(new CustomEvent("supplementaldataupdate",{detail:a.data.data}))});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const SCROLL_KEYS = new Set([
-    'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
-    ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End',
-  ]);
-  const HORIZONTAL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
+<html lang="pt-BR" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LABTECH_MSI | Laboratório de Eletrônica e Informática - Ceará-Mirim/RN</title>
+  <meta name="description" content="Assistência técnica especializada em reparo de placas, notebooks, smartphones, placas de vídeo e consoles em Ceará-Mirim/RN." />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LABTECH_MSI" />
 
-  function isTextEntryTarget(target) {
-    if (!target) return false;
-    const tagName = target.tagName;
-    return tagName === 'INPUT' || tagName === 'TEXTAREA' ||
-        tagName === 'SELECT' || target.isContentEditable === true;
-  }
-
-  // An element absorbs the key only if it both overflows on the axis being
-  // scrolled and is configured to scroll on that axis. The cheap dimension
-  // test runs first because getComputedStyle forces a style recalc, and this
-  // runs on every keypress. Each axis is read from its own longhand: the
-  // 'overflow' shorthand serializes as two values when the axes differ, which
-  // is the common 'overflow-x: hidden; overflow-y: auto' pane.
-  function canScroll(node, horizontal) {
-    const overflows = horizontal ? node.scrollWidth > node.clientWidth
-                                 : node.scrollHeight > node.clientHeight;
-    if (!overflows) return false;
-    const style = window.getComputedStyle(node);
-    const overflow = horizontal ? style.overflowX : style.overflowY;
-    return overflow === 'auto' || overflow === 'scroll';
-  }
-
-  // Walks up from the event target so nested scrollers keep their behavior.
-  // <body> is included because pages that pin the root height make it the
-  // scroll container.
-  function hasScrollableAncestor(target, horizontal) {
-    let node = target;
-    while (node && node !== document.documentElement) {
-      if (canScroll(node, horizontal)) return true;
-      node = node.parentElement;
-    }
-    return false;
-  }
-
-  function rootCanScroll(horizontal) {
-    const scroller = document.scrollingElement || document.documentElement;
-    if (!scroller) return false;
-    // Tolerate a pixel of rounding so subpixel layouts do not look scrollable.
-    return horizontal ? scroller.scrollWidth > window.innerWidth + 1
-                      : scroller.scrollHeight > window.innerHeight + 1;
-  }
-
-  window.addEventListener('keydown', function(event) {
-    if (!SCROLL_KEYS.has(event.key)) return;
-    if (event.defaultPrevented) return;
-    // Alt and Meta turn arrows into browser history navigation, and Ctrl is
-    // reserved for shortcuts, so none of them are scroll intent.
-    if (event.altKey || event.metaKey || event.ctrlKey) return;
-
-    const target = event.target;
-    if (isTextEntryTarget(target)) return;
-
-    // Anything that can still absorb the scroll gets to keep it.
-    const horizontal = HORIZONTAL_KEYS.has(event.key);
-    if (rootCanScroll(horizontal)) return;
-    if (hasScrollableAncestor(target, horizontal)) return;
-
-    event.preventDefault();
-  }, {capture: true, passive: false});
-})();</script><script data-bard-client-injected="true">(function() {
-  // Ensure this script is executed only once
-  if (window.firebaseAuthBridgeScriptLoaded) {
-    return;
-  }
-  window.firebaseAuthBridgeScriptLoaded = true;
-
-  let nextTokenPromiseId = 0;
-
-  // Stores { resolve, reject } for ongoing token requests
-  const pendingTokenPromises = {};
-
-  // Listen for messages from the Host Application
-  window.addEventListener('message', function(event) {
-
-    const messageData = event.data;
-
-  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
-      const { success, token, error, promiseId } = messageData ?? {};
-      if (pendingTokenPromises[promiseId]) {
-        if (success) {
-          pendingTokenPromises[promiseId].resolve(token);
-        } else {
-          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
-        }
-        delete pendingTokenPromises[promiseId];
-      }
-    }
-  });
-
-  // Expose a function for the Generated App to request a new Firebase token
-  window.requestNewFirebaseToken = function() {
-    const currentPromiseId = nextTokenPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingTokenPromises[currentPromiseId] = { resolve, reject };
-    });
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'REQUEST_NEW_FIREBASE_TOKEN',
-        promiseId: currentPromiseId
-      }, '*');
-    } else {
-      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
-      delete pendingTokenPromises[currentPromiseId];
-    }
-    return promise;
-  };
-})();</script><script data-bard-client-injected="true">
-let realOriginalGetUserMedia = null;
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-}
-
-(function() {
-  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
-    try {
-      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
-        get: function() {
-          return undefined; // Or throw an error
-        },
-        configurable: false
-      });
-    } catch (error) {
-      console.error("Error defining prototype getter:", error);
-    }
-  }
-})();
-
-(function() {
-  const pendingMediaResolvers = {};
-  let nextMediaPromiseId = 0;
-
-  function requestMediaPermissions(constraints) {
-    const mediaPromiseId = nextMediaPromiseId++;
-    const promise = new Promise((resolve, reject) => {
-      pendingMediaResolvers[mediaPromiseId] = (granted) => {
-        delete pendingMediaResolvers[mediaPromiseId];
-        resolve(granted);
-      };
-    });
-
-    window.parent.postMessage({
-      type: 'requestMediaPermission',
-      constraints: constraints,
-      promiseId: mediaPromiseId,
-    }, '*');
-
-    return promise;
-  }
-
-  let originalGetUserMedia = realOriginalGetUserMedia;
-
-  function interceptGetUserMedia() {
-    if (navigator.mediaDevices) {
-      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
-        value: function(constraints) {
-          return requestMediaPermissions(constraints).then((granted) => {
-            if (granted) {
-              if (originalGetUserMedia) {
-                return originalGetUserMedia(constraints);
-              } else {
-                throw new Error("Original getUserMedia not available.");
-              }
-            } else {
-              throw new DOMException('Permission denied', 'NotAllowedError');
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slateDark: {
+              950: '#060911',
+              900: '#0b101d',
+              800: '#121a2e',
+              700: '#1c2742'
+            },
+            cyanTech: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2'
             }
-          });
-        },
-        writable: false,
-        configurable: false
-      });
-    }
-  }
-
-  interceptGetUserMedia();
-
-  const observer = new MutationObserver(function(mutationsList, observer) {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
-        interceptGetUserMedia();
-      } else if (mutation.type === 'childList' && mutation.addedNodes) {
-        mutation.addedNodes.forEach(node => {
-          if (node === navigator.mediaDevices) {
-            interceptGetUserMedia();
           }
-        });
+        }
       }
-    }
-  });
-
-  function interceptSpeechRecognition() {
-    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-      return;
-    }
-
-    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    const SpeechRecognitionWrapper = function(...args) {
-      const recognizer = new OriginalSpeechRecognition(...args);
-      const originalStart = recognizer.start.bind(recognizer);
-
-      recognizer.start = function() {
-        requestMediaPermissions({ audio: true }).then(granted => {
-          if (granted) {
-            originalStart();
-          } else {
-            const errorEvent = new SpeechRecognitionErrorEvent('error');
-            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
-            recognizer.dispatchEvent(errorEvent);
-          }
-        });
-      };
-
-      return recognizer;
     };
-
-    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
-    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
-
-    if (window.SpeechRecognition) {
-      window.SpeechRecognition = SpeechRecognitionWrapper;
+  </script>
+  <style>
+    body {
+      background-color: #060911;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
-    if (window.webkitSpeechRecognition) {
-      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    .glass-card {
+      background: rgba(18, 26, 46, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.14);
     }
-  }
-
-  interceptSpeechRecognition();
-
-  window.addEventListener('message', function(event) {
-    if (event.data) {
-      if (event.data.type === 'resolveMediaPermission') {
-        const { promiseId, granted } = event.data;
-        if (pendingMediaResolvers[promiseId]) {
-          pendingMediaResolvers[promiseId](granted);
-        }
-      }
+    .tech-grid {
+      background-image: radial-gradient(rgba(34, 211, 238, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
     }
-  });
-
-})();</script><script ws-interception-config="{&quot;parentOrigin&quot;:&quot;https://gemini.google.com&quot;,&quot;proxiedDomains&quot;:[]}" data-bard-client-injected="true">(function(){'use strict';var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,d,e){if(b==Array.prototype||b==Object.prototype)return b;b[d]=e.value;return b};function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var d=0;d<b.length;++d){var e=b[d];if(e&&e.Math==Math)return e}throw Error("Cannot find global object");}var w=v(this);
-function y(b,d){if(d)a:{var e=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var k=b[h];if(!(k in e))break a;e=e[k]}b=b[b.length-1];h=e[b];d=d(h);d!=h&&d!=null&&u(e,b,{configurable:!0,writable:!0,value:d})}}function z(b){function d(h){return b.next(h)}function e(h){return b.throw(h)}return new Promise(function(h,k){function m(n){n.done?h(n.value):Promise.resolve(n.value).then(d,e).then(m,k)}m(b.next())})}y("globalThis",function(b){return b||w});/*
-
- Copyright The Closure Library Authors.
- SPDX-License-Identifier: Apache-2.0
-*/
-function A(b,d){function e(){}e.prototype=d.prototype;b.j=d.prototype;b.prototype=new e;b.prototype.constructor=b;b.h=function(h,k,m){for(var n=Array(arguments.length-2),p=2;p<arguments.length;p++)n[p-2]=arguments[p];return d.prototype[k].apply(h,n)}};function B(b,d,e="*"){function h(a){if(typeof a==="string")return F.encode(a).buffer;if(a instanceof ArrayBuffer)return a.slice(0);if(ArrayBuffer.isView(a))return a.buffer.slice(a.byteOffset,a.byteOffset+a.byteLength);throw Error("Invalid data type");}function k(a){a=h(a);var f={type:"send",data:new Uint8Array(a)},g;(g=r)==null||g.postMessage(f,[a])}function m(){if(!r)throw Error("Data port not captured yet.");r.onmessage=a=>{if(a.data.type==="message"){a=new MessageEvent("message",{data:G.decode(a.data.data)});
-let f;(f=c.onmessage)==null||f.call(c,a);c.dispatchEvent(a)}}}function n(){if(!t)throw Error("Control port not captured yet.");t.onmessage=a=>{switch(a.data.type){case "open":l=1;var f=new Event("open"),g;(g=c.onopen)==null||g.call(c,f);c.dispatchEvent(f);q.forEach(H=>{k(H)});q=[];break;case "close":g=a.data;l=3;g=new CloseEvent("close",{code:g.code,reason:g.reason,wasClean:g.wasClean});(f=c.onclose)==null||f.call(c,g);c.dispatchEvent(g);break;case "error":l=3;f=new Event("error");let x;(x=c.onerror)==
-null||x.call(c,f);c.dispatchEvent(f)}}}function p(a){return z(function*(){var f=new MessageChannel;t=f.port1;var g=new MessageChannel;r=g.port1;n();m();window.parent.postMessage({type:"websocket_open",portOrdering:["control","data"],url:b,protocols:a||[],connectionId:I},e,[f.port2,g.port2])}())}var c=Reflect.construct(EventTarget,[],new.target);c.CONNECTING=0;c.OPEN=1;c.CLOSING=2;c.CLOSED=3;c.url=b;c.binaryType="arraybuffer";c.protocol="";c.i="";var l=0,t=null,r=null,q=[],F=new TextEncoder,G=new TextDecoder;
-c.onopen=null;c.onmessage=null;c.onclose=null;c.onerror=null;Object.defineProperty(c,"readyState",{get:()=>l,enumerable:!0,configurable:!0});Object.defineProperty(c,"bufferedAmount",{get:()=>{var a=0;q.forEach(f=>{a+=typeof f==="string"?f.length:f.byteLength});return a},enumerable:!0,configurable:!0});var I=function(){var a;return((a=globalThis.crypto)==null?0:a.randomUUID)?globalThis.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,f=>{var g=Math.random()*16|0;return(f===
-"x"?g:g&3|8).toString(16)})}();c.send=a=>{if(l===1)a instanceof Blob?a.arrayBuffer().then(f=>{k(f)}):k(a);else if(l===0)if(typeof a==="string")q.push(a);else if(a instanceof ArrayBuffer||ArrayBuffer.isView(a))q.push(h(a));else throw Error("Sending Blob is not supported before the connection is open.");else console.debug("WebSocket send called in CLOSING or CLOSED state; ignored.")};c.close=(a=1E3,f="")=>{if(l!==2&&l!==3){l=2;a={type:"close",code:a,reason:f,wasClean:a===1E3};var g;(g=t)==null||g.postMessage(a)}};
-Promise.resolve().then(()=>p(d));return c}A(B,EventTarget);var C=document.currentScript,D=C==null?void 0:C.getAttribute("ws-interception-config");if(!D)throw Error("WebSocket Interceptor: Missing ws-interception-config attribute in the script tag.");var E=JSON.parse(D);if(!E.parentOrigin||typeof E.parentOrigin!=="string")throw Error("WebSocket Interceptor: Invalid parentOrigin in ws-interception-config");
-(function(b){var d=Object.getOwnPropertyDescriptor(window,"WebSocket");if(!d||d.writable||d.configurable)d=Object.assign(function(e,h){try{let k=(new URL(e)).hostname;if(b.proxiedDomains.some(m=>k===m||k.endsWith(`.${m}`)))return new B(e,h,b.parentOrigin)}catch(k){throw window.parent.postMessage({type:"websocket_blocked",url:e,reason:"blocked_invalid_url"},b.parentOrigin),new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");}window.parent.postMessage({type:"websocket_blocked",
-url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMException(`WebSocket connection to '${e}' is not allowed in Canvas.`,"SecurityError");},{CONNECTING:0,OPEN:1,CLOSING:2,CLOSED:3}),Object.defineProperty(window,"WebSocket",{value:d,writable:!1,configurable:!1})})({proxiedDomains:E.proxiedDomains||[],parentOrigin:E.parentOrigin});}).call(this);
-</script><script data-bard-client-injected="true">((function(modelInformation) {
-  const originalFetch = window.fetch;
-  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
-  let googleLlmBaseApiUrls = [
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageTransformModelName + ':generateContent',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
-    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
-  ];
-  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-    );
-  });
-  modelInformation.deprecatedImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predict',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':predictLongRunning',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedGenerateImageModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-  modelInformation.deprecatedImageTransformModelNames.forEach((modelName) => {
-    googleLlmBaseApiUrls.push(
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
-      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
-    );
-  });
-
-  const pendingFetchResolvers = {};
-  let nextPromiseId = 0;
-
-  function handleStringInput(input, optionsArgument) {
-    const actualUrl = input;
-    const fetchCallArgs = [actualUrl, optionsArgument];
-    const effectiveOptions = optionsArgument || {};
-    const bodyForApiKeyCheck = effectiveOptions.body;
-    const bodyForPostMessage = effectiveOptions.body;
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  function handleRequestInput(input, optionsArgument) {
-    const actualUrl = input.url;
-    const fetchCallArgs = [input, optionsArgument];
-    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (optionsArgument) {
-      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
-      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
-      if ('body' in optionsArgument) {
-        bodyForApiKeyCheck = optionsArgument.body;
-        bodyForPostMessage = optionsArgument.body;
-      } else {
-        bodyForApiKeyCheck = undefined;
-        bodyForPostMessage = input.body;
-      }
-    } else {
-      bodyForApiKeyCheck = undefined;
-      bodyForPostMessage = input.body;
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
-  }
-
-  window.fetch = function(input, optionsArgument) {
-    let actualUrl;
-    let fetchCallArgs;
-    let effectiveOptions = {};
-    let bodyForApiKeyCheck;
-    let bodyForPostMessage;
-
-    if (typeof input === 'string') {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
-    } else if (input instanceof Request) {
-      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
-    } else {
-      return originalFetch.apply(window, [input, optionsArgument]);
+    ::-webkit-scrollbar-track {
+      background: #060911;
     }
-
-    effectiveOptions.method = effectiveOptions.method || 'GET';
-    if (!effectiveOptions.headers) {
-      effectiveOptions.headers = new Headers();
+    ::-webkit-scrollbar-thumb {
+      background: #1c2742;
+      border-radius: 9999px;
     }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col tech-grid pb-20 md:pb-0">
 
-
-    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
-      let apiKeyIsNull = true;
-
-      const regex = new RegExp("models/([^:]+)");
-      const modelNameMatch = actualUrl.match(regex);
-      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
-
-
-      try {
-        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
-        const apiKeyParam = urlObject.searchParams.get('key');
-        if (apiKeyParam) {
-          apiKeyIsNull = false;
-        }
-      } catch (e) {
-        // Continue checks even if URL parsing fails
-      }
-
-      if (apiKeyIsNull && effectiveOptions.headers) {
-        const h = new Headers(effectiveOptions.headers);
-        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
-        if (apiKeyHeaderValue) {
-          apiKeyIsNull = false;
-          return originalFetch.apply(window, fetchCallArgs);
-        }
-      }
-
-      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
-        try {
-          const bodyData = JSON.parse(bodyForApiKeyCheck);
-          if (bodyData && bodyData.apiKey) {
-            apiKeyIsNull = false;
-            return originalFetch.apply(window, fetchCallArgs);
-          }
-        } catch (e) {
-          // Ignore JSON parsing errors
-        }
-      }
-
-      if(apiKeyIsNull) {
-        const promiseId = nextPromiseId++;
-        const promise = new Promise((resolve) => {
-          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
-            delete pendingFetchResolvers[promiseId];
-            resolve(resolvedResponse);
-          };
-        });
-
-        let serializedBodyForPostMessage;
-        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
-            serializedBodyForPostMessage = bodyForPostMessage;
-        } else if (bodyForPostMessage instanceof ReadableStream) {
-            serializedBodyForPostMessage = null;
-        } else {
-            try {
-                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
-            } catch (e) {
-                serializedBodyForPostMessage = null;
-            }
-        }
-
-        const messageOptions = {
-            method: effectiveOptions.method,
-            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
-            body: serializedBodyForPostMessage
-        };
-
-        window.parent.postMessage({
-          type: 'requestFetch',
-          url: actualUrl,
-          modelName: modelName,
-          options: messageOptions,
-          promiseId: promiseId,
-        }, '*');
-
-        return promise;
-      }
-      return originalFetch.apply(window, fetchCallArgs);
-    }
-    return originalFetch.apply(window, fetchCallArgs);
-  };
-
-  window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'resolveFetch') {
-      const { promiseId, response } = event.data;
-      if (pendingFetchResolvers[promiseId]) {
-        try {
-          const reconstructedResponse = new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers: new Headers(response.headers),
-          });
-          pendingFetchResolvers[promiseId](reconstructedResponse);
-        } catch (error) {
-          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
-        }
-      }
-    }
-  });
-
-}))({"textModelName":"gemini-3-flash-preview","imageModelName":"imagen-4.0-generate-001","imageEditModelName":"gemini-3.1-flash-image","imageTransformModelName":"gemini-3-pro-image","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash","gemini-2.5-flash-preview-04-17","gemini-2.5-flash-preview-05-20","gemini-2.5-flash-preview-09-2025"],"deprecatedImageModelNames":["imagen-3.0-generate-001","imagen-3.0-generate-002"],"deprecatedGenerateImageModelNames":["gemini-2.5-flash-image-preview","gemini-2.5-flash-image","gemini-3.1-flash-image-preview"],"deprecatedImageTransformModelNames":["gemini-3-pro-image-preview-11-2025"]})</script><script data-bard-client-injected="true">(function() {
-  function normalizeSlug(str) {
-    try {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^p{L}p{N}s_-]/gu, '')
-        .replace(/s+/g, '-');
-    } catch (e) {
-      return str
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9s_-]/g, '')
-        .replace(/s+/g, '-');
-    }
-  }
-
-  function findTargetElement(hash) {
-    if (!hash || hash === '#') {
-      return null;
-    }
-    const rawId = hash.startsWith('#') ? hash.slice(1) : hash;
-    let decodedId = rawId;
-    try {
-      decodedId = decodeURIComponent(rawId);
-    } catch (e) {
-      // Ignore URI malformed errors.
-    }
-
-    // 1. Direct ID match (raw and decoded).
-    let target = document.getElementById(rawId) || document.getElementById(decodedId);
-    if (target) {
-      return target;
-    }
-
-    // 2. Name attribute match (<a name="...">).
-    try {
-      if (typeof CSS !== 'undefined' && CSS.escape) {
-        target =
-          document.querySelector('[name="' + CSS.escape(rawId) + '"]') ||
-          document.querySelector('[name="' + CSS.escape(decodedId) + '"]');
-      } else {
-        const namedElements = document.getElementsByName(rawId);
-        if (namedElements && namedElements.length > 0) {
-          return namedElements[0];
-        }
-      }
-    } catch (e) {
-      // Ignore querySelector syntax errors.
-    }
-    if (target) {
-      return target;
-    }
-
-    // 3. Match heading text by slug (for Markdown TOCs where headings lack explicit IDs).
-    const targetSlug = normalizeSlug(decodedId);
-    if (targetSlug) {
-      for (const heading of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
-        if (normalizeSlug(heading.textContent || '') === targetSlug) {
-          return heading;
-        }
-      }
-    }
-
-    return null;
-  }
-
-  document.addEventListener('click', function(event) {
-    const target = event.target;
-    const anchor = target && typeof target.closest === 'function' ? target.closest('a') : null;
-    if (!anchor) {
-      return;
-    }
-
-    const href = anchor.getAttribute('href');
-    if (
-      !href ||
-      href.trim().toLowerCase().startsWith('javascript:') ||
-      anchor.hasAttribute('download')
-    ) {
-      return;
-    }
-
-    // Check if the link is an in-page hash / anchor link.
-    if (href.startsWith('#')) {
-      event.preventDefault();
-      const targetElement = findTargetElement(href);
-      if (targetElement) {
-        targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-      }
-      return;
-    }
-
-    // Check if the URL has the same origin/pathname but with a hash.
-    try {
-      const url = new URL(anchor.href, window.location.href);
-      if (
-        url.hash &&
-        url.origin === window.location.origin &&
-        url.pathname === window.location.pathname
-      ) {
-        event.preventDefault();
-        const targetElement = findTargetElement(url.hash);
-        if (targetElement) {
-          targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-        return;
-      }
-    } catch (e) {
-      // Fall through if URL parsing fails.
-    }
-
-    // For all external or full navigation links, prevent iframe-level navigation
-    // (which breaks in AGSA WebView or sandboxed iframes) and ensure they open
-    // safely in a new tab/window.
-    if (anchor.target !== '_blank') {
-      event.preventDefault();
-      window.open(anchor.href, '_blank', 'noopener,noreferrer');
-    }
-  }, {capture: true});
-})();</script><script data-bard-client-injected="true">(function(){'use strict';function a(){window.parent.postMessage({type:"interaction"},"*")}window.addEventListener("click",a,{capture:!0,passive:!0});window.addEventListener("touchstart",a,{capture:!0,passive:!0});window.addEventListener("keydown",a,{capture:!0,passive:!0});}).call(this);
-</script><script data-bard-client-injected="true">(function() {
-  const originalConsoleLog = console.log;
-  const originalConsoleError = console.error;
-
-    /**
-   * Normalizes an error event or a promise rejection reason into a structured error object.
-   * @param {*} errorEventOrReason The error object or reason.
-   * @return {object} Structured error data { message, name, stack }.
-   */
-  function getErrorObject(errorEventOrReason) {
-    if (errorEventOrReason instanceof Error) {
-      return {
-        message: errorEventOrReason.message,
-        name: errorEventOrReason.name,
-        stack: errorEventOrReason.stack,
-      };
-    }
-    // Fallback for non-Error objects.
-    try {
-      return {
-        message: JSON.stringify(errorEventOrReason),
-        name: 'UnknownErrorType',
-        stack: null,
-      };
-    } catch (e) {
-      return {
-        message: String(errorEventOrReason),
-        name: 'UnknownErrorTypeNonStringifiable',
-        stack: null,
-      };
-    }
-  }
-
-  /**
-   * Converts an array of arguments (from log/error) into a single string.
-   * Handles Error objects specially to include their message and stack.
-   * @param {Array<*>} args - Arguments passed to console methods.
-   * @return {string} A string representation of the arguments.
-   */
-  function stringifyArgs(args) {
-    return args
-      .map((arg) => {
-        if (arg instanceof Error) {
-          const {message, stack} = arg;
-          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
-        }
-        if (typeof arg === 'object' && arg !== null) {
-          try {
-            return JSON.stringify(arg);
-          } catch (error) {
-            return '[Circular Object]';
-          }
-        } else {
-          return String(arg);
-        }
-      })
-      .join(' ');
-  }
-
-  console.log = function(...args) {
-    const logString = stringifyArgs(args);
-    window.parent.postMessage({ type: 'log', message: logString }, '*');
-    originalConsoleLog.apply(console, args);
-  };
-
-  console.error = function(...args) {
-    let errorData;
-    if (args.length > 0 && args[0] instanceof Error) {
-      const err = args[0];
-      // If the first arg is an Error, capture its details.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        ...getErrorObject(err),
-        rawArgsString: stringifyArgs(args.slice(1)),
-        timestamp: new Date().toISOString(),
-      };
-    } else {
-      // If not an Error object, treat all args as a general error message.
-      errorData = {
-        type: 'error',
-        source: 'CONSOLE_ERROR',
-        message: stringifyArgs(args),
-        name: 'ConsoleLoggedError',
-        stack: null,
-        timestamp: new Date().toISOString(),
-      };
-    }
-    window.parent.postMessage(errorData, '*');
-    originalConsoleError.apply(console, args);
-  };
-
-  // Listen for global unhandled synchronous errors.
-  window.addEventListener('error', function(event) {
-    const errorDetails = event.error ? getErrorObject(event.error) : {
-      message: event.message,
-      name: 'GlobalError',
-      stack: null,
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno,
-    };
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'global',
-      ...errorDetails,
-      message: errorDetails.message || event.message,
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-  // Listen for unhandled promise rejections (asynchronous errors).
-  window.addEventListener('unhandledrejection', function(event) {
-    const errorDetails = getErrorObject(event.reason);
-
-    window.parent.postMessage({
-      type: 'error',
-      source: 'unhandledrejection',
-      ...errorDetails,
-      message: errorDetails.message || 'Unhandled Promise Rejection',
-      timestamp: new Date().toISOString(),
-    }, '*');
-  });
-
-})();</script></head><body><div class="flex items-center gap-2">
-          <button type="button" onclick="downloadSiteHtmlFile()" class="hidden sm:inline-flex px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-xs font-bold transition-all">
-            ⬇ Baixar HTML
-          </button>
-          <button type="button" onclick="handleInstallPWA()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition-all">
-            📲 Instalar App
-          </button>
-          <button type="button" onclick="toggleBenchAccess()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-extrabold transition-all">
-            🔒 <span id="toggle-mode-label">Bancada OS</span>
-          </button>
+  <!-- CABEÇALHO PRINCIPAL -->
+  <header class="sticky top-0 z-40 glass-card border-b border-cyan-500/20">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+      <a href="#inicio" onclick="switchAppMode('client')" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+          </svg>
         </div>
-      
-    
-<!-- ... existing code ... -->
-      <div class="space-y-3 text-xs text-slate-300 bg-slateDark-950 p-4 rounded-xl border border-slate-800 mb-4">
-        <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito e selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</p>
-        <p><strong class="text-cyan-400">iPhone (Safari):</strong> Toque no botão <strong>Compartilhar (□↑)</strong> na barra inferior e escolha <strong>"Adicionar à Tela de Início"</strong>.</p>
-        <p class="pt-2 border-t border-slate-800"><strong class="text-emerald-400">Publicar Online (GitHub / Netlify):</strong> Clique no botão verde abaixo para baixar o arquivo <code class="text-cyan-300">index.html</code> pronto para publicar gratuitamente.</p>
-      </div>
-      <div class="grid grid-cols-2 gap-2.5">
-        <button type="button" onclick="downloadSiteHtmlFile()" class="py-3 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs">
-          ⬇ Baixar index.html
+        <div>
+          <span class="font-extrabold tracking-wider text-white text-lg block leading-none">LABTECH<span class="text-cyan-400">_MSI</span></span>
+          <span class="text-[11px] text-slate-400 tracking-wide">Ceará-Mirim • RN</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+        <a href="#servicos" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Serviços</a>
+        <a href="#rastrear-os" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Acompanhar OS & PIX</a>
+        <a href="#orcamento" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Orçamento</a>
+        <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition">@labtechmsicm</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openInstallModal()" class="px-3 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition flex items-center gap-1.5">
+          <span>📲 App</span>
         </button>
-        <button type="button" onclick="closePwaModal()" class="py-3 px-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs">
+        <button onclick="downloadSiteHtmlFile()" title="Baixar código limpo" class="hidden sm:flex px-3 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition items-center gap-1">
+          <span>⬇ HTML</span>
+        </button>
+        <button id="header-bench-btn" onclick="requestBenchAccess()" class="px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🔒 Bancada OS</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MODO CLIENTE ==================== -->
+  <main id="client-app-view" class="flex-1">
+
+    <!-- HERO -->
+    <section id="inicio" class="max-w-7xl mx-auto px-4 pt-10 pb-14 md:pt-16 md:pb-20">
+      <div class="grid lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Laboratório Especializado em Microeletrônica • Ceará-Mirim/RN
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+            Diagnóstico preciso e reparo avançado para <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">seus equipamentos</span>.
+          </h1>
+          <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+            Manutenção de notebooks, smartphones, placas de vídeo, desktops e consoles com bancada equipada, transparência total e acompanhamento online da sua Ordem de Serviço.
+          </p>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <a href="#rastrear-os" class="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">
+              🔍 Consultar Minha OS / Pagar PIX
+            </a>
+            <a href="#orcamento" class="px-5 py-3 rounded-xl glass-card hover:border-cyan-400/50 text-white font-semibold text-sm transition">
+              Solicitar Orçamento
+            </a>
+            <a href="https://wa.me/5584991216849?text=Ol%C3%A1%20LABTECH_MSI!%20Gostaria%20de%20um%20atendimento%20t%C3%A9cnico." target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-semibold text-sm transition">
+              WhatsApp (84) 99121-6849
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="glass-card rounded-2xl p-6 space-y-5 border border-cyan-500/25 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div>
+                <p class="text-xs uppercase tracking-wider text-cyan-400 font-bold">Padrão Técnico</p>
+                <h2 class="text-lg font-bold text-white">LABTECH_MSI</h2>
+              </div>
+              <span class="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-300 text-xs font-bold">Garantia 90 dias</span>
+            </div>
+            <ul class="space-y-3 text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <span class="text-cyan-400 font-bold">✓</span>
+                <span>Análise eletrônica em nível de componente (curto, PWM, BIOS, reballing).</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-cyan-400 font-bold">✓</span>
+                <span>Limpeza técnica preventiva e troca de pasta térmica de alta condutividade.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-cyan-400 font-bold">✓</span>
+                <span>Acompanhamento em tempo real da OS e pagamento facilitado via PIX.</span>
+              </li>
+            </ul>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span>Seg a Sex: 08h às 18h | Sáb: 08h às 12h</span>
+              <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">@labtechmsicm</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-800/80">
+      <div class="mb-8">
+        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Especialidades</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Serviços de Bancada</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div onclick="selectServiceAndScroll('Notebook / PC')" class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
+          <div class="w-11 h-11 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center mb-4 font-bold text-lg">💻</div>
+          <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Notebooks & PCs</h3>
+          <p class="text-sm text-slate-400 mt-2">Reparo de placa-mãe, troca de tela, teclado, dobradiças, upgrade SSD/RAM e formatação.</p>
+        </div>
+        <div onclick="selectServiceAndScroll('Smartphone / Celular')" class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
+          <div class="w-11 h-11 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center mb-4 font-bold text-lg">📱</div>
+          <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Smartphones</h3>
+          <p class="text-sm text-slate-400 mt-2">Troca de frontal, bateria, conector de carga, desoxidação e recuperação de placa.</p>
+        </div>
+        <div onclick="selectServiceAndScroll('Placa de Vídeo / GPU')" class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
+          <div class="w-11 h-11 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 font-bold text-lg">🎛️</div>
+          <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Placas de Vídeo</h3>
+          <p class="text-sm text-slate-400 mt-2">Diagnóstico de VRM/memórias, troca de thermal pads, limpeza profunda e reparo eletrônico.</p>
+        </div>
+        <div onclick="selectServiceAndScroll('Console / Videogame')" class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
+          <div class="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 font-bold text-lg">🎮</div>
+          <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Consoles</h3>
+          <p class="text-sm text-slate-400 mt-2">PS4, PS5, Xbox e Nintendo: troca de porta HDMI, limpeza, metal líquido e fonte.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACOMPANHAMENTO DE OS + PAGAMENTO PIX -->
+    <section id="rastrear-os" class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-800/80">
+      <div class="glass-card rounded-2xl p-6 sm:p-8 border border-cyan-500/25">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Portal do Cliente</span>
+            <h2 class="text-2xl font-extrabold text-white mt-1">Acompanhar Ordem de Serviço & PIX</h2>
+            <p class="text-sm text-slate-400 mt-1">Digite o código da sua OS (ex.: <code class="text-cyan-300">OS-2026-101</code>, <code class="text-cyan-300">OS-2026-102</code> ou <code class="text-cyan-300">OS-2026-103</code>).</p>
+          </div>
+          <form onsubmit="handleCustomerTrackSubmit(event)" class="flex w-full md:w-auto gap-2">
+            <input id="customer-os-search" type="text" value="OS-2026-103" placeholder="Ex: OS-2026-103" class="flex-1 md:w-56 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm uppercase focus:outline-none focus:border-cyan-400" />
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+              Consultar
+            </button>
+          </form>
+        </div>
+
+        <div id="customer-os-result" class="mt-4"></div>
+      </div>
+    </section>
+
+    <!-- SOLICITAÇÃO DE ORÇAMENTO -->
+    <section id="orcamento" class="max-w-4xl mx-auto px-4 py-12 border-t border-slate-800/80">
+      <div class="glass-card rounded-2xl p-6 sm:p-8">
+        <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Pré-Atendimento Rápido</span>
+        <h2 class="text-2xl font-extrabold text-white mt-1 mb-6">Solicitar Orçamento via WhatsApp</h2>
+
+        <form id="quote-form" onsubmit="handleQuoteSubmit(event)" class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Seu Nome *</label>
+            <input id="quote-name" type="text" required placeholder="Ex: João Silva" class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tipo de Equipamento *</label>
+            <select id="quote-device" class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400">
+              <option value="Notebook / PC">Notebook / PC</option>
+              <option value="Smartphone / Celular">Smartphone / Celular</option>
+              <option value="Placa de Vídeo / GPU">Placa de Vídeo / GPU</option>
+              <option value="Console / Videogame">Console / Videogame</option>
+              <option value="Outro Equipamento">Outro Equipamento</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Marca e Modelo *</label>
+            <input id="quote-model" type="text" required placeholder="Ex: Notebook Lenovo Ideapad 3 / iPhone 13 / RTX 3060" class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Descrição do Problema *</label>
+            <textarea id="quote-issue" rows="3" required placeholder="Descreva o que está acontecendo com o aparelho..." class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400"></textarea>
+          </div>
+          <div class="sm:col-span-2 flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+            <span id="quote-protocol-preview" class="text-xs text-slate-400">Protocolo gerado automaticamente ao enviar.</span>
+            <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition shadow-lg shadow-emerald-500/20">
+              Enviar para WhatsApp LABTECH_MSI
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODO BANCADA & DASHBOARD ==================== -->
+  <section id="bench-app-view" class="hidden flex-1 max-w-7xl mx-auto w-full px-4 py-8">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
+      <div>
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • Gestão Interna</span>
+        <h1 class="text-2xl font-extrabold text-white">Dashboard & Bancada LABTECH_MSI</h1>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="openPixConfigModal()" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition">
+          💠 Configurar PIX
+        </button>
+        <button onclick="openPinChangeModal()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition">
+          🔑 Alterar PIN
+        </button>
+        <button onclick="logoutBench()" class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold transition">
+          Sair da Bancada
+        </button>
+      </div>
+    </div>
+
+    <!-- ABAS DO DASHBOARD -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <button id="tab-btn-overview" onclick="switchBenchTab('overview')" class="bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition">
+        📊 Visão Geral & BI
+      </button>
+      <button id="tab-btn-orders" onclick="switchBenchTab('orders')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+        🛠️ Ordens de Serviço (OS)
+      </button>
+      <button id="tab-btn-finance" onclick="switchBenchTab('finance')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+        💰 Caixa & Peças
+      </button>
+      <button id="tab-btn-catalog" onclick="switchBenchTab('catalog')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+        📋 Catálogo de Serviços
+      </button>
+    </div>
+
+    <!-- ABA 1: VISÃO GERAL -->
+    <div id="bench-tab-overview" class="space-y-6">
+      <div id="bench-kpi-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-4"></div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white mb-4">Distribuição por Equipamento</h3>
+          <div id="bench-device-chart" class="space-y-3"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white mb-4">Indicadores Operacionais</h3>
+          <div id="bench-operational-metrics" class="space-y-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: ORDENS DE SERVIÇO -->
+    <div id="bench-tab-orders" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="bench-form-title" class="font-bold text-white text-lg">Nova Ordem de Serviço (Check-in)</h3>
+          <button type="button" onclick="resetBenchForm()" class="text-xs text-cyan-400 hover:underline">Limpar / Nova OS</button>
+        </div>
+        <form id="bench-os-form" onsubmit="handleBenchOsSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <input type="hidden" id="os-edit-id" />
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nº OS</label>
+            <input id="os-number" type="text" readonly class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 font-mono text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nome do Cliente *</label>
+            <input id="os-client" type="text" required placeholder="Nome completo" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">WhatsApp Cliente *</label>
+            <input id="os-phone" type="text" required placeholder="84999990000" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+            <select id="os-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Placa de Vídeo">Placa de Vídeo</option>
+              <option value="Console">Console</option>
+              <option value="Desktop / PC">Desktop / PC</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Equipamento / Modelo *</label>
+            <input id="os-model" type="text" required placeholder="Ex: Dell Inspiron 15 3520" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Status *</label>
+            <select id="os-status" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Entrada">Entrada</option>
+              <option value="Em Análise">Em Análise</option>
+              <option value="Orçamento Enviado">Orçamento Enviado</option>
+              <option value="Em Reparo">Em Reparo</option>
+              <option value="Pronto">Pronto</option>
+              <option value="Entregue">Entregue</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor (R$)</label>
+            <input id="os-price" type="number" step="0.01" min="0" value="0" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Defeito Relatado *</label>
+            <input id="os-issue" type="text" required placeholder="Ex: Não liga, sem vídeo..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Laudo Técnico / Serviço Executado</label>
+            <input id="os-diagnosis" type="text" placeholder="Ex: Troca de CI PWM e limpeza ultrassônica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-2 pt-2">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+              Salvar Ordem de Serviço
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- ABA 3: FINANCEIRO -->
+    <div id="bench-tab-finance" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro</h3>
+        <form onsubmit="handleFinanceSubmit(event)" class="grid sm:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Tipo</label>
+            <select id="fin-type" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="entrada">Entrada (Receita)</option>
+              <option value="saida">Saída (Peça / Custo)</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Descrição *</label>
+            <input id="fin-desc" type="text" required placeholder="Ex: Tela Notebook Samsung / Serviço OS-101" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor (R$) *</label>
+            <input id="fin-amount" type="number" step="0.01" min="0.01" required placeholder="150.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-4 flex justify-end">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
+              Registrar Lançamento
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="bench-finance-list" class="glass-card rounded-2xl p-6 space-y-3"></div>
+    </div>
+
+    <!-- ABA 4: CATÁLOGO DE SERVIÇOS -->
+    <div id="bench-tab-catalog" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-white text-lg mb-4">Adicionar Serviço Padrão</h3>
+        <form onsubmit="handleCatalogSubmit(event)" class="grid sm:grid-cols-4 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Nome do Serviço *</label>
+            <input id="cat-name" type="text" required placeholder="Ex: Limpeza Completa + Pasta Térmica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+            <select id="cat-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Placa de Vídeo">Placa de Vídeo</option>
+              <option value="Console">Console</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor Base (R$) *</label>
+            <input id="cat-price" type="number" step="0.01" min="0" required placeholder="120.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-4 flex justify-end">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+              Salvar no Catálogo
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="bench-catalog-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer class="border-t border-slate-800/80 py-8 px-4 text-center text-xs text-slate-400">
+    <p class="font-bold text-slate-300">LABTECH_MSI — Laboratório de Eletrônica e Manutenção</p>
+    <p class="mt-1">Ceará-Mirim, Rio Grande do Norte • WhatsApp: (84) 99121-6849 • Instagram: @labtechmsicm</p>
+  </footer>
+
+  <!-- BARRA INFERIOR MOBILE (ESTILO APP NATIVO) -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 glass-card border-t border-cyan-500/20 flex justify-around py-2 text-[11px] font-semibold">
+    <a href="#inicio" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400">
+      <span class="text-base">🏠</span>
+      <span>Início</span>
+    </a>
+    <a href="#rastrear-os" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400">
+      <span class="text-base">🔍</span>
+      <span>Minha OS</span>
+    </a>
+    <a href="#orcamento" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400">
+      <span class="text-base">📝</span>
+      <span>Orçar</span>
+    </a>
+    <button onclick="requestBenchAccess()" class="flex flex-col items-center text-amber-300">
+      <span class="text-base">🔒</span>
+      <span>Bancada</span>
+    </button>
+    <button onclick="toggleChatbot()" class="flex flex-col items-center text-emerald-400">
+      <span class="text-base">🤖</span>
+      <span>Bot IA</span>
+    </button>
+  </nav>
+
+  <!-- WIDGET CHATBOT FLUTUANTE -->
+  <div class="fixed bottom-16 md:bottom-6 right-4 z-50">
+    <div id="chatbot-window" class="hidden mb-3 w-80 sm:w-96 glass-card rounded-2xl border border-cyan-500/30 shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+          <div>
+            <p class="text-white font-bold text-sm leading-none">Assistente LABTECH_MSI</p>
+            <p class="text-cyan-100 text-[11px] mt-0.5">Triagem Técnica Online</p>
+          </div>
+        </div>
+        <button onclick="toggleChatbot()" class="text-white/80 hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <div id="chat-messages" class="p-4 h-72 overflow-y-auto space-y-3 text-xs bg-slateDark-950/90"></div>
+      <div id="chat-quick-replies" class="px-3 py-2 bg-slateDark-900 border-t border-slate-800 flex flex-wrap gap-1.5"></div>
+
+      <form id="chat-form" onsubmit="handleChatSubmit(event)" class="p-2.5 bg-slateDark-900 border-t border-slate-800 flex gap-2">
+        <input id="chat-input" type="text" placeholder="Digite sua resposta..." class="flex-1 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-cyan-400" />
+        <button type="submit" class="px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs">Enviar</button>
+      </form>
+    </div>
+
+    <button onclick="toggleChatbot()" class="ml-auto flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-extrabold text-xs shadow-xl shadow-cyan-500/25 hover:scale-105 transition">
+      <span>💬 Atendimento Técnico</span>
+    </button>
+  </div>
+
+  <!-- MODAL PIN BANCADA -->
+  <div id="pin-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-amber-500/30 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-white text-lg">🔒 Acesso à Bancada OS</h3>
+        <button onclick="closeModal('pin-modal')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <p class="text-xs text-slate-400">Digite o PIN de técnico para acessar o painel gerencial.</p>
+      <form onsubmit="verifyBenchPin(event)" class="space-y-3">
+        <input id="bench-pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="••••" class="w-full px-4 py-3 rounded-xl bg-slateDark-950 border border-slate-700 text-center text-white tracking-widest text-lg font-bold focus:outline-none focus:border-amber-400" />
+        <p id="pin-error-msg" class="hidden text-xs text-rose-400 text-center">PIN incorreto. Tente novamente.</p>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm transition">
+          Entrar no Painel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIGURAR PIX -->
+  <div id="pix-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-cyan-500/30 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-white text-lg">💠 Configurar Chave PIX</h3>
+        <button onclick="closeModal('pix-modal')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="savePixConfig(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Chave PIX Oficial (Telefone, CNPJ, E-mail ou Aleatória)</label>
+          <input id="pix-key-input" type="text" required class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Nome do Recebedor</label>
+          <input id="pix-receiver-input" type="text" required class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">
+          Salvar Configuração PIX
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ALTERAR PIN -->
+  <div id="pin-change-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-slate-700 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-white text-lg">🔑 Alterar PIN da Bancada</h3>
+        <button onclick="closeModal('pin-change-modal')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="saveNewPin(event)" class="space-y-3">
+        <input id="new-pin-input" type="password" inputmode="numeric" minlength="4" maxlength="6" required placeholder="Novo PIN (4 a 6 dígitos)" class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">
+          Salvar Novo PIN
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL INSTALAR APP PWA -->
+  <div id="install-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-cyan-500/30 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-white text-lg">📲 Instalar App LABTECH_MSI</h3>
+        <button onclick="closeModal('install-modal')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Instale o aplicativo web diretamente na tela inicial do seu celular sem ocupar memória:
+      </p>
+      <div class="space-y-2.5 text-xs text-slate-300 bg-slateDark-950/80 p-4 rounded-xl border border-slate-800">
+        <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito e selecione <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar aplicativo"</strong>.</p>
+        <p><strong class="text-cyan-400">iPhone (Safari):</strong> Toque no ícone de <strong>Compartilhar (□↑)</strong> na barra inferior e escolha <strong>"Adicionar à Tela de Início"</strong>.</p>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button onclick="downloadSiteHtmlFile()" class="px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 text-cyan-300 text-xs font-semibold">
+          ⬇ Baixar HTML Limpo
+        </button>
+        <button onclick="closeModal('install-modal')" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold">
           Entendi
         </button>
       </div>
-    
-  
-<!-- ... existing code ... -->
+    </div>
+  </div>
+
   <script>
-    // Número oficial de WhatsApp da LABTECH_MSI (formato internacional sem '+' ou espaços)
-    const LABTECH_WHATSAPP_NUMBER = '5584991216849';
-    const STORAGE_KEY_ORDERS = 'labtech_msi_orders_v1';
-    const STORAGE_KEY_FINANCE = 'labtech_msi_finance_v1';
-    const STORAGE_KEY_CATALOG = 'labtech_msi_catalog_v1';
-    const STORAGE_KEY_PIN = 'labtech_msi_bench_pin';
+    // ==================== UTILITÁRIOS & SEGURANÇA ====================
+    const WHATSAPP_NUMBER = '5584991216849';
+    const STORAGE_KEYS = {
+      ORDERS: 'labtech_msi_orders_v2',
+      FINANCE: 'labtech_msi_finance_v2',
+      CATALOG: 'labtech_msi_catalog_v2',
+      PIN: 'labtech_msi_pin_v2',
+      PIX: 'labtech_msi_pix_v2',
+      OS_SEQ: 'labtech_msi_os_seq_v2'
+    };
 
-    let deferredPwaPrompt = null;
     let isBenchAuthenticated = false;
-    let currentAppMode = 'client';
 
-    // ---------------------------------------------------------------------
-    // Exportação Direta do Arquivo index.html Pronto para GitHub / Netlify
-    // ---------------------------------------------------------------------
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatCurrency(val) {
+      return Number(val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function openInstallModal() {
+      openModal('install-modal');
+    }
+
+    // Download limpo do arquivo HTML (remove nós dinâmicos/extensões antes de salvar)
     function downloadSiteHtmlFile() {
-      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll('[data-bard-client-injected], chatgpt-sidebar, #gitmind-floating-toolbar').forEach(el => el.remove());
+      clone.removeAttribute('data-gitmind-ai-assistant-color-mode');
+      const cleanHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+      const blob = new Blob([cleanHtml], { type: 'text/html;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -780,529 +637,742 @@ url:e,reason:"blocked_domain_not_allowlisted"},b.parentOrigin);throw new DOMExce
       URL.revokeObjectURL(url);
     }
 
-    // ---------------------------------------------------------------------
-    // Gerenciamento de Dados (OS, Financeiro, Catálogo, PIN & Modais)
-    // ---------------------------------------------------------------------
-    function getBenchPin() {
-      return localStorage.getItem(STORAGE_KEY_PIN) || '1234';
-    }
-
-    function getBenchOrders() {
-      const raw = localStorage.getItem(STORAGE_KEY_ORDERS);
-      if (raw) {
-        try { return JSON.parse(raw); } catch (e) {}
+    // ==================== DADOS INICIAIS (EXEMPLOS FICTÍCIOS) ====================
+    function initDefaultData() {
+      if (!localStorage.getItem(STORAGE_KEYS.ORDERS)) {
+        const sampleOrders = [
+          {
+            id: 'OS-2026-101',
+            client: 'Cliente Exemplo A',
+            phone: '84900000001',
+            category: 'Notebook',
+            model: 'Lenovo Ideapad 3i',
+            issue: 'Superaquecimento e desligamento repentino',
+            diagnosis: 'Limpeza química completa, desobstrução do cooler e troca por pasta térmica de prata.',
+            status: 'Em Reparo',
+            price: 140.00,
+            paidInFinance: false,
+            createdAt: '2026-11-11T09:30:00'
+          },
+          {
+            id: 'OS-2026-102',
+            client: 'Cliente Exemplo B',
+            phone: '84900000002',
+            category: 'Placa de Vídeo',
+            model: 'GTX 1660 Super 6GB',
+            issue: 'Sem sinal de vídeo e cooler em 100%',
+            diagnosis: 'Curto identificado na linha de alimentação das memórias; aguardando aprovação.',
+            status: 'Orçamento Enviado',
+            price: 280.00,
+            paidInFinance: false,
+            createdAt: '2026-11-12T14:15:00'
+          },
+          {
+            id: 'OS-2026-103',
+            client: 'Cliente Exemplo C',
+            phone: '84900000003',
+            category: 'Smartphone',
+            model: 'Samsung Galaxy A54',
+            issue: 'Conector USB-C com mau contato no carregamento turbo',
+            diagnosis: 'Substituição da subplaca de carga original e testes de corrente concluídos.',
+            status: 'Pronto',
+            price: 160.00,
+            paidInFinance: true,
+            createdAt: '2026-11-13T10:00:00'
+          }
+        ];
+        localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(sampleOrders));
+        localStorage.setItem(STORAGE_KEYS.OS_SEQ, '103');
       }
-      const defaults = [
-        {
-          id: 'OS-2026-101',
-          clientName: 'Mariana Souza',
-          clientPhone: '(84) 99812-3456',
-          deviceType: 'Notebook',
-          deviceModel: 'Dell Inspiron 15 3520',
-          serial: 'SN849201',
-          accessories: 'Carregador original',
-          defect: 'Não liga, LED de carga piscando 3 vezes.',
-          diagnosis: 'Curto na linha primária de 19V reparado + limpeza térmica completa.',
-          status: 'Pronto',
-          price: 280.00,
-          createdAt: '12/11/2026 09:30'
-        },
-        {
-          id: 'OS-2026-102',
-          clientName: 'João Pedro Lima',
-          clientPhone: '(84) 99445-7788',
-          deviceType: 'Console / Game',
-          deviceModel: 'PlayStation 5 Slim',
-          serial: 'PS5-9921',
-          accessories: 'Cabo de força',
-          defect: 'Sem sinal de vídeo na TV após queda de energia.',
-          diagnosis: 'Porta HDMI danificada e CI encoder HDMI em curto. Peça em trânsito.',
-          status: 'Aguardando Peça',
-          price: 350.00,
-          createdAt: '12/11/2026 14:15'
-        },
-        {
-          id: 'OS-2026-103',
-          clientName: 'Fernanda Costa',
-          clientPhone: '(84) 99102-8899',
-          deviceType: 'Smartphone',
-          deviceModel: 'iPhone 13 128GB',
-          serial: 'IMEI-35489',
-          accessories: 'Capa transparente',
-          defect: 'Não carrega no cabo e esquenta próximo à câmera.',
-          diagnosis: 'Em análise microscópica do circuito Tristar/Hydra.',
-          status: 'Em Análise',
-          price: 240.00,
-          createdAt: '13/11/2026 10:05'
-        }
-      ];
-      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(defaults));
-      return defaults;
+
+      if (!localStorage.getItem(STORAGE_KEYS.FINANCE)) {
+        const sampleFinance = [
+          { id: 1, type: 'entrada', desc: 'Serviço OS-2026-103 (Subplaca Galaxy A54)', amount: 160.00, date: '13/11/2026' },
+          { id: 2, type: 'saida', desc: 'Compra de peça - Subplaca USB-C', amount: 45.00, date: '12/11/2026' }
+        ];
+        localStorage.setItem(STORAGE_KEYS.FINANCE, JSON.stringify(sampleFinance));
+      }
+
+      if (!localStorage.getItem(STORAGE_KEYS.CATALOG)) {
+        const sampleCatalog = [
+          { id: 1, name: 'Limpeza Preventiva + Pasta Térmica', category: 'Notebook', price: 120.00 },
+          { id: 2, name: 'Formatação + Backup + Otimização', category: 'Notebook', price: 90.00 },
+          { id: 3, name: 'Troca de Conector de Carga', category: 'Smartphone', price: 130.00 },
+          { id: 4, name: 'Manutenção Térmica GPU (Pads + Pasta)', category: 'Placa de Vídeo', price: 180.00 }
+        ];
+        localStorage.setItem(STORAGE_KEYS.CATALOG, JSON.stringify(sampleCatalog));
+      }
+
+      if (!localStorage.getItem(STORAGE_KEYS.PIX)) {
+        localStorage.setItem(STORAGE_KEYS.PIX, JSON.stringify({
+          key: '84991216849',
+          receiver: 'LABTECH_MSI CEARA MIRIM'
+        }));
+      }
     }
 
-    function saveBenchOrders(orders) {
-      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
-      renderBenchOrders();
-      updateDashboardOverview();
+    function getOrders() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.ORDERS) || '[]');
+    }
+
+    function saveOrders(list) {
+      localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(list));
+    }
+
+    function getFinance() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.FINANCE) || '[]');
+    }
+
+    function saveFinance(list) {
+      localStorage.setItem(STORAGE_KEYS.FINANCE, JSON.stringify(list));
+    }
+
+    function getCatalog() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.CATALOG) || '[]');
+    }
+
+    function saveCatalog(list) {
+      localStorage.setItem(STORAGE_KEYS.CATALOG, JSON.stringify(list));
+    }
+
+    function getPixConfig() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.PIX) || '{"key":"84991216849","receiver":"LABTECH_MSI"}');
+    }
+
+    function getNextOsNumber() {
+      const orders = getOrders();
+      let maxSeq = parseInt(localStorage.getItem(STORAGE_KEYS.OS_SEQ) || '100', 10);
+      orders.forEach(o => {
+        const parts = String(o.id).split('-');
+        const num = parseInt(parts[parts.length - 1], 10);
+        if (!isNaN(num) && num > maxSeq) maxSeq = num;
+      });
+      const next = maxSeq + 1;
+      return `OS-2026-${next}`;
+    }
+
+    // ==================== MODO CLIENTE: CONSULTA DE OS & PIX ====================
+    function selectServiceAndScroll(category) {
+      const select = document.getElementById('quote-device');
+      if (select) select.value = category;
+      document.getElementById('orcamento').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleCustomerTrackSubmit(e) {
+      e.preventDefault();
       searchCustomerOS();
     }
 
-    function getFinanceEntries() {
-      const raw = localStorage.getItem(STORAGE_KEY_FINANCE);
-      if (raw) {
-        try { return JSON.parse(raw); } catch (e) {}
-      }
-      const defaults = [
-        { id: 'FIN-1', type: 'entrada', desc: 'Reparo Placa Notebook OS-2026-101', category: 'Mão de Obra / OS', amount: 280.00, date: '12/11/2026' },
-        { id: 'FIN-2', type: 'saida', desc: 'Compra Conector HDMI PS5 + Fluxo Amtech', category: 'Peças & Componentes', amount: 85.00, date: '12/11/2026' }
-      ];
-      localStorage.setItem(STORAGE_KEY_FINANCE, JSON.stringify(defaults));
-      return defaults;
+    function buildPixPayload(pixKey, receiverName, amount, txid) {
+      const cleanKey = String(pixKey || '').trim();
+      const cleanName = String(receiverName || 'LABTECH_MSI').substring(0, 25).toUpperCase();
+      const cleanTx = String(txid || 'LABTECH').replace(/[^A-Za-z0-9]/g, '').substring(0, 15) || 'LABTECH';
+      const valStr = Number(amount || 0).toFixed(2);
+      return `PIX|CHAVE:${cleanKey}|FAVORECIDO:${cleanName}|VALOR:R$${valStr}|REF:${cleanTx}`;
     }
 
-    function saveFinanceEntries(entries) {
-      localStorage.setItem(STORAGE_KEY_FINANCE, JSON.stringify(entries));
-      renderFinanceList();
-      updateDashboardOverview();
-    }
+    function searchCustomerOS() {
+      const inputEl = document.getElementById('customer-os-search');
+      const container = document.getElementById('customer-os-result');
+      if (!inputEl || !container) return;
 
-    function getCatalogItems() {
-      const raw = localStorage.getItem(STORAGE_KEY_CATALOG);
-      if (raw) {
-        try { return JSON.parse(raw); } catch (e) {}
-      }
-      const defaults = [
-        { id: 'CAT-1', name: 'Limpeza Química + Pasta Térmica Prata', group: 'Notebook / PC', price: 120.00, sla: '24h úteis' },
-        { id: 'CAT-2', name: 'Troca de Conector HDMI PS5 / Xbox', group: 'Consoles', price: 320.00, sla: '48h úteis' },
-        { id: 'CAT-3', name: 'Reparo Circuito de Carga / Microsoldagem', group: 'Smartphones', price: 240.00, sla: '24h a 48h' },
-        { id: 'CAT-4', name: 'Regravação de BIOS + Diagnóstico Placa', group: 'Placas / Microsoldagem', price: 180.00, sla: '24h úteis' }
-      ];
-      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(defaults));
-      return defaults;
-    }
-
-    function saveCatalogItems(items) {
-      localStorage.setItem(STORAGE_KEY_CATALOG, JSON.stringify(items));
-      renderCatalogList();
-    }
-
-    function getStatusBadgeClasses(status) {
-      switch (status) {
-        case 'Pronto': return 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300';
-        case 'Entregue': return 'bg-slate-700/40 border-slate-600 text-slate-300';
-        case 'Aguardando Peça': return 'bg-amber-500/15 border-amber-400/40 text-amber-300';
-        case 'Orçamento Enviado': return 'bg-purple-500/15 border-purple-400/40 text-purple-300';
-        case 'Em Reparo': return 'bg-cyan-500/15 border-cyan-400/40 text-cyan-300';
-        default: return 'bg-sky-500/15 border-sky-400/40 text-sky-300';
-      }
-    }
-
-    function handleInstallPWA() {
-      if (deferredPwaPrompt) {
-        deferredPwaPrompt.prompt();
-        deferredPwaPrompt = null;
-      } else {
-        document.getElementById('pwa-install-modal')?.classList.remove('hidden');
-      }
-    }
-    function closePwaModal() { document.getElementById('pwa-install-modal')?.classList.add('hidden'); }
-    function closePinModal() { document.getElementById('pin-modal')?.classList.add('hidden'); }
-    function openChangePinModal() { document.getElementById('change-pin-modal')?.classList.remove('hidden'); }
-    function closeChangePinModal() { document.getElementById('change-pin-modal')?.classList.add('hidden'); }
-    function closeReceiptModal() { document.getElementById('receipt-modal')?.classList.add('hidden'); }
-
-    function toggleBenchAccess() {
-      if (currentAppMode === 'bench') {
-        switchAppMode('client');
+      const query = inputEl.value.trim().toUpperCase();
+      if (!query) {
+        container.innerHTML = `<p class="text-sm text-slate-400">Informe o código da Ordem de Serviço acima.</p>`;
         return;
       }
-      if (isBenchAuthenticated) {
-        switchAppMode('bench');
-      } else {
-        document.getElementById('pin-error')?.classList.add('hidden');
-        document.getElementById('pin-input').value = '';
-        document.getElementById('pin-modal')?.classList.remove('hidden');
-        setTimeout(() => document.getElementById('pin-input')?.focus(), 100);
+
+      const orders = getOrders();
+      const order = orders.find(o => o.id.toUpperCase() === query);
+
+      if (!order) {
+        container.innerHTML = `
+          <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm">
+            Ordem de Serviço <strong>${escapeHTML(query)}</strong> não encontrada neste navegador. Verifique o código ou fale conosco no WhatsApp.
+          </div>
+        `;
+        return;
       }
+
+      const steps = ['Entrada', 'Em Análise', 'Orçamento Enviado', 'Em Reparo', 'Pronto'];
+      const currentIdx = order.status === 'Entregue' ? 4 : Math.max(0, steps.indexOf(order.status));
+      const pix = getPixConfig();
+      const pixText = buildPixPayload(pix.key, pix.receiver, order.price, order.id);
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(pix.key)}`;
+
+      const timelineHtml = steps.map((step, idx) => {
+        const active = idx <= currentIdx;
+        return `
+          <div class="flex-1 flex flex-col items-center text-center">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${active ? 'bg-cyan-500 text-slate-950' : 'bg-slateDark-800 text-slate-500 border border-slate-700'}">
+              ${active ? '✓' : idx + 1}
+            </div>
+            <span class="text-[11px] mt-1.5 ${active ? 'text-cyan-300 font-semibold' : 'text-slate-500'}">${step}</span>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="p-5 rounded-2xl bg-slateDark-950/90 border border-slate-800 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(order.id)}</span>
+              <h3 class="text-lg font-bold text-white">${escapeHTML(order.category)} • ${escapeHTML(order.model)}</h3>
+              <p class="text-xs text-slate-400">Cliente: ${escapeHTML(order.client)}</p>
+            </div>
+            <div class="text-right">
+              <span class="inline-block px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-bold">
+                ${escapeHTML(order.status)}
+              </span>
+              <p class="text-lg font-extrabold text-emerald-400 mt-1">${formatCurrency(order.price)}</p>
+            </div>
+          </div>
+
+          <div class="flex items-start justify-between gap-1 pt-1">
+            ${timelineHtml}
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4 text-sm">
+            <div class="p-4 rounded-xl bg-slateDark-900 border border-slate-800 space-y-2">
+              <p class="text-xs font-bold uppercase text-slate-400">Relato & Laudo Técnico</p>
+              <p class="text-slate-300"><strong>Defeito:</strong> ${escapeHTML(order.issue)}</p>
+              <p class="text-slate-300"><strong>Diagnóstico:</strong> ${escapeHTML(order.diagnosis || 'Em avaliação na bancada.')}</p>
+              ${order.status === 'Orçamento Enviado' ? `
+                <button onclick="approveCustomerQuote('${escapeHTML(order.id)}')" class="mt-2 w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">
+                  ✅ Aprovar Orçamento Agora
+                </button>
+              ` : ''}
+            </div>
+
+            <div class="p-4 rounded-xl bg-slateDark-900 border border-cyan-500/25 flex flex-col sm:flex-row items-center gap-4">
+              <img src="${qrUrl}" alt="QR Code PIX" class="w-28 h-28 rounded-lg bg-white p-1.5 shrink-0" />
+              <div class="space-y-2 text-xs w-full">
+                <p class="font-bold text-cyan-300 uppercase">Pagamento via PIX</p>
+                <p class="text-slate-300">Chave: <strong class="text-white select-all">${escapeHTML(pix.key)}</strong></p>
+                <p class="text-slate-400">Favorecido: ${escapeHTML(pix.receiver)}</p>
+                <button onclick="copyPixCode('${escapeHTML(pix.key)}')" class="w-full py-2 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold transition">
+                  📋 Copiar Chave PIX
+                </button>
+                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá LABTECH_MSI! Segue o comprovante PIX referente à ${order.id} (${order.model}) no valor de ${formatCurrency(order.price)}.`)}" target="_blank" rel="noopener noreferrer" class="block text-center w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition">
+                  Enviar Comprovante
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
+    function approveCustomerQuote(osId) {
+      const orders = getOrders();
+      const idx = orders.findIndex(o => o.id === osId);
+      if (idx === -1) return;
+      orders[idx].status = 'Em Reparo';
+      saveOrders(orders);
+      searchCustomerOS();
+      if (isBenchAuthenticated) renderBenchDashboard();
+      const msg = `Olá LABTECH_MSI! Aprovo o orçamento da ${orders[idx].id} (${orders[idx].model}) no valor de ${formatCurrency(orders[idx].price)}.`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function copyPixCode(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Chave PIX copiada: ' + text);
+      }).catch(() => {
+        alert('Chave PIX: ' + text);
+      });
+    }
+
+    // ==================== ORÇAMENTO CLIENTE ====================
+    function handleQuoteSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('quote-name').value.trim();
+      const device = document.getElementById('quote-device').value;
+      const model = document.getElementById('quote-model').value.trim();
+      const issue = document.getElementById('quote-issue').value.trim();
+      const protocol = 'ORC-' + Math.floor(1000 + Math.random() * 9000);
+
+      document.getElementById('quote-protocol-preview').textContent = `Protocolo gerado: ${protocol}`;
+      const text = `*SOLICITAÇÃO DE ORÇAMENTO - LABTECH_MSI*\n*Protocolo:* ${protocol}\n*Cliente:* ${name}\n*Equipamento:* ${device}\n*Modelo:* ${model}\n*Problema:* ${issue}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== BANCADA OS & DASHBOARD ====================
     function switchAppMode(mode) {
-      currentAppMode = mode;
       const clientView = document.getElementById('client-app-view');
       const benchView = document.getElementById('bench-app-view');
-      const label = document.getElementById('toggle-mode-label');
-
-      if (mode === 'bench') {
-        clientView?.classList.add('hidden');
-        benchView?.classList.remove('hidden');
-        if (label) label.textContent = 'Modo Cliente';
-        resetBenchForm();
-        renderBenchOrders();
-        renderFinanceList();
-        renderCatalogList();
-        updateDashboardOverview();
+      if (mode === 'bench' && isBenchAuthenticated) {
+        clientView.classList.add('hidden');
+        benchView.classList.remove('hidden');
+        renderBenchDashboard();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
-        benchView?.classList.add('hidden');
-        clientView?.classList.remove('hidden');
-        if (label) label.textContent = 'Bancada OS';
+        benchView.classList.add('hidden');
+        clientView.classList.remove('hidden');
+        searchCustomerOS();
       }
     }
 
-    function switchDashboardTab(tabName) {
-      const tabs = ['overview', 'orders', 'finance', 'catalog'];
-      tabs.forEach(t => {
-        const panel = document.getElementById(`dash-tab-${t}`);
+    function requestBenchAccess() {
+      if (isBenchAuthenticated) {
+        switchAppMode('bench');
+        return;
+      }
+      document.getElementById('bench-pin-input').value = '';
+      document.getElementById('pin-error-msg').classList.add('hidden');
+      openModal('pin-modal');
+    }
+
+    function verifyBenchPin(e) {
+      e.preventDefault();
+      const entered = document.getElementById('bench-pin-input').value.trim();
+      const savedPin = localStorage.getItem(STORAGE_KEYS.PIN) || '1234';
+      if (entered === savedPin) {
+        isBenchAuthenticated = true;
+        closeModal('pin-modal');
+        switchAppMode('bench');
+      } else {
+        document.getElementById('pin-error-msg').classList.remove('hidden');
+      }
+    }
+
+    function logoutBench() {
+      isBenchAuthenticated = false;
+      switchAppMode('client');
+    }
+
+    function openPinChangeModal() {
+      document.getElementById('new-pin-input').value = '';
+      openModal('pin-change-modal');
+    }
+
+    function saveNewPin(e) {
+      e.preventDefault();
+      const newPin = document.getElementById('new-pin-input').value.trim();
+      if (newPin.length >= 4) {
+        localStorage.setItem(STORAGE_KEYS.PIN, newPin);
+        closeModal('pin-change-modal');
+        alert('PIN atualizado com sucesso!');
+      }
+    }
+
+    function openPixConfigModal() {
+      const pix = getPixConfig();
+      document.getElementById('pix-key-input').value = pix.key;
+      document.getElementById('pix-receiver-input').value = pix.receiver;
+      openModal('pix-modal');
+    }
+
+    function savePixConfig(e) {
+      e.preventDefault();
+      const key = document.getElementById('pix-key-input').value.trim();
+      const receiver = document.getElementById('pix-receiver-input').value.trim();
+      localStorage.setItem(STORAGE_KEYS.PIX, JSON.stringify({ key, receiver }));
+      closeModal('pix-modal');
+      alert('Chave PIX salva com sucesso!');
+    }
+
+    function switchBenchTab(tab) {
+      ['overview', 'orders', 'finance', 'catalog'].forEach(t => {
+        document.getElementById(`bench-tab-${t}`).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById(`tab-btn-${t}`);
-        if (t === tabName) {
-          panel?.classList.remove('hidden');
-          if (btn) btn.className = 'flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all bg-cyan-500 text-slate-950';
+        if (t === tab) {
+          btn.className = 'bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition';
         } else {
-          panel?.classList.add('hidden');
-          if (btn) btn.className = 'flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white hover:bg-slateDark-800';
+          btn.className = 'bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
         }
       });
+      renderBenchDashboard();
+    }
+
+    function renderBenchDashboard() {
+      const orders = getOrders();
+      const finance = getFinance();
+      const catalog = getCatalog();
+
+      // KPIs
+      const activeOrders = orders.filter(o => o.status !== 'Entregue').length;
+      const inRepair = orders.filter(o => o.status === 'Em Reparo' || o.status === 'Em Análise').length;
+      const readyCount = orders.filter(o => o.status === 'Pronto').length;
+
+      const totalIn = finance.filter(f => f.type === 'entrada').reduce((acc, f) => acc + Number(f.amount), 0);
+      const totalOut = finance.filter(f => f.type === 'saida').reduce((acc, f) => acc + Number(f.amount), 0);
+      const balance = totalIn - totalOut;
+
+      const approvedOrders = orders.filter(o => ['Em Reparo', 'Pronto', 'Entregue'].includes(o.status) && Number(o.price) > 0);
+      const avgTicket = approvedOrders.length ? approvedOrders.reduce((a, b) => a + Number(b.price), 0) / approvedOrders.length : 0;
+
+      document.getElementById('bench-kpi-grid').innerHTML = `
+        <div class="glass-card p-4 rounded-2xl">
+          <p class="text-xs text-slate-400">OS Ativas</p>
+          <p class="text-2xl font-extrabold text-white mt-1">${activeOrders}</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl">
+          <p class="text-xs text-slate-400">Em Bancada</p>
+          <p class="text-2xl font-extrabold text-cyan-400 mt-1">${inRepair}</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl">
+          <p class="text-xs text-slate-400">Prontos p/ Retirada</p>
+          <p class="text-2xl font-extrabold text-emerald-400 mt-1">${readyCount}</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl">
+          <p class="text-xs text-slate-400">Ticket Médio (Aprovadas)</p>
+          <p class="text-2xl font-extrabold text-blue-400 mt-1">${formatCurrency(avgTicket)}</p>
+        </div>
+        <div class="glass-card p-4 rounded-2xl col-span-2 lg:col-span-1">
+          <p class="text-xs text-slate-400">Saldo em Caixa</p>
+          <p class="text-2xl font-extrabold ${balance >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1">${formatCurrency(balance)}</p>
+        </div>
+      `;
+
+      // Gráfico por Categoria
+      const counts = {};
+      orders.forEach(o => { counts[o.category] = (counts[o.category] || 0) + 1; });
+      const totalOrders = orders.length || 1;
+      document.getElementById('bench-device-chart').innerHTML = Object.entries(counts).map(([cat, count]) => {
+        const pct = Math.round((count / totalOrders) * 100);
+        return `
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-slate-300 font-semibold">${escapeHTML(cat)}</span>
+              <span class="text-cyan-400 font-bold">${count} (${pct}%)</span>
+            </div>
+            <div class="w-full h-2.5 bg-slateDark-950 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('') || '<p class="text-xs text-slate-400">Sem dados cadastrados.</p>';
+
+      document.getElementById('bench-operational-metrics').innerHTML = `
+        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
+          <span class="text-slate-400">Receita Realizada (Entradas)</span>
+          <span class="font-bold text-emerald-400">${formatCurrency(totalIn)}</span>
+        </div>
+        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
+          <span class="text-slate-400">Custos de Peças / Insumos</span>
+          <span class="font-bold text-rose-400">${formatCurrency(totalOut)}</span>
+        </div>
+        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
+          <span class="text-slate-400">Total de OS Registradas</span>
+          <span class="font-bold text-white">${orders.length}</span>
+        </div>
+      `;
+
+      // Lista de OS
+      if (!document.getElementById('os-number').value) {
+        resetBenchForm();
+      }
+
+      document.getElementById('bench-orders-list').innerHTML = orders.map(o => `
+        <div class="glass-card rounded-2xl p-5 space-y-3 border border-slate-800">
+          <div class="flex justify-between items-start gap-2">
+            <div>
+              <span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(o.id)}</span>
+              <h4 class="font-bold text-white">${escapeHTML(o.client)} — ${escapeHTML(o.model)}</h4>
+              <p class="text-xs text-slate-400">${escapeHTML(o.category)} • Tel: ${escapeHTML(o.phone)}</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+              ${escapeHTML(o.status)}
+            </span>
+          </div>
+          <p class="text-xs text-slate-300"><strong>Defeito:</strong> ${escapeHTML(o.issue)}</p>
+          <p class="text-xs text-slate-400"><strong>Laudo:</strong> ${escapeHTML(o.diagnosis || 'Pendente')}</p>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+            <span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(o.price)}</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="editBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 text-slate-200 text-xs">Editar</button>
+              <button onclick="markOrderReady('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold">Marcar Pronto</button>
+              <button onclick="sendOrderWhatsApp('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold">WhatsApp</button>
+              <button onclick="deleteBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs">Excluir</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Lista Financeira
+      document.getElementById('bench-finance-list').innerHTML = finance.map(f => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 text-xs">
+          <div>
+            <p class="font-bold text-white">${escapeHTML(f.desc)}</p>
+            <p class="text-slate-400">${escapeHTML(f.date)}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-extrabold ${f.type === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">
+              ${f.type === 'entrada' ? '+' : '-'} ${formatCurrency(f.amount)}
+            </span>
+            <button onclick="deleteFinanceItem(${f.id})" class="text-slate-500 hover:text-rose-400">✕</button>
+          </div>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum lançamento financeiro.</p>';
+
+      // Lista Catálogo
+      document.getElementById('bench-catalog-list').innerHTML = catalog.map(c => `
+        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between gap-3">
+          <div>
+            <span class="text-[11px] text-cyan-400 font-bold">${escapeHTML(c.category)}</span>
+            <h4 class="font-bold text-white text-sm mt-0.5">${escapeHTML(c.name)}</h4>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+            <span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(c.price)}</span>
+            <div class="flex gap-1.5">
+              <button onclick="useCatalogInOs(${c.id})" class="px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">Usar na OS</button>
+              <button onclick="deleteCatalogItem(${c.id})" class="px-2 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs">✕</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
     function resetBenchForm() {
-      const form = document.getElementById('bench-os-form');
-      if (form) form.reset();
-      document.getElementById('editing-os-id').value = '';
-      document.getElementById('os-form-title').querySelector('span:last-child').textContent = 'Nova Ordem de Serviço';
-      document.getElementById('os-cancel-edit-btn')?.classList.add('hidden');
-      const orders = getBenchOrders();
-      const nextNum = 101 + orders.length + Math.floor(Math.random() * 10);
-      document.getElementById('os-number-badge').textContent = `OS-${new Date().getFullYear()}-${nextNum}`;
+      document.getElementById('bench-os-form').reset();
+      document.getElementById('os-edit-id').value = '';
+      document.getElementById('os-number').value = getNextOsNumber();
+      document.getElementById('bench-form-title').textContent = 'Nova Ordem de Serviço (Check-in)';
     }
 
-    function editBenchOrder(id) {
-      const order = getBenchOrders().find(o => o.id === id);
-      if (!order) return;
-      document.getElementById('editing-os-id').value = order.id;
-      document.getElementById('os-number-badge').textContent = order.id;
-      document.getElementById('os-form-title').querySelector('span:last-child').textContent = `Editando ${order.id}`;
-      document.getElementById('os-client-name').value = order.clientName;
-      document.getElementById('os-client-phone').value = order.clientPhone;
-      document.getElementById('os-device-type').value = order.deviceType;
-      document.getElementById('os-device-model').value = order.deviceModel;
-      document.getElementById('os-serial').value = order.serial || '';
-      document.getElementById('os-accessories').value = order.accessories || '';
-      document.getElementById('os-defect').value = order.defect;
-      document.getElementById('os-diagnosis').value = order.diagnosis || '';
-      document.getElementById('os-status').value = order.status;
-      document.getElementById('os-price').value = order.price || 0;
-      document.getElementById('os-cancel-edit-btn')?.classList.remove('hidden');
-    }
+    function handleBenchOsSubmit(e) {
+      e.preventDefault();
+      const orders = getOrders();
+      const editId = document.getElementById('os-edit-id').value;
+      const osId = document.getElementById('os-number').value;
 
-    function quickUpdateOrderStatus(id, newStatus) {
-      const orders = getBenchOrders();
-      const idx = orders.findIndex(o => o.id === id);
-      if (idx !== -1) {
-        orders[idx].status = newStatus;
-        saveBenchOrders(orders);
-      }
-    }
+      const data = {
+        id: osId,
+        client: document.getElementById('os-client').value.trim(),
+        phone: document.getElementById('os-phone').value.replace(/\D/g, ''),
+        category: document.getElementById('os-category').value,
+        model: document.getElementById('os-model').value.trim(),
+        status: document.getElementById('os-status').value,
+        price: parseFloat(document.getElementById('os-price').value) || 0,
+        issue: document.getElementById('os-issue').value.trim(),
+        diagnosis: document.getElementById('os-diagnosis').value.trim(),
+        paidInFinance: false,
+        createdAt: new Date().toISOString()
+      };
 
-    function openReceiptModal(id) {
-      const order = getBenchOrders().find(o => o.id === id);
-      if (!order) return;
-      const text =
-`🔧 *COMPROVANTE DE ORDEM DE SERVIÇO - LABTECH_MSI*
-━━━━━━━━━━━━━━━━━━━━━━
-📋 *OS:* ${order.id}
-📅 *Entrada:* ${order.createdAt}
-📌 *Status:* ${order.status}
-
-👤 *Cliente:* ${order.clientName}
-💻 *Equipamento:* ${order.deviceType} - ${order.deviceModel}
-⚠️ *Defeito:* ${order.defect}
-🔬 *Laudo Técnico:* ${order.diagnosis || 'Em análise na bancada'}
-💰 *Valor:* R$ ${Number(order.price || 0).toFixed(2).replace('.', ',')}
-🔑 *Chave PIX:* (84) 99121-6849
-━━━━━━━━━━━━━━━━━━━━━━
-LABTECH_MSI • Ceará-Mirim/RN • @labtechmsicm`;
-
-      document.getElementById('print-os-area').textContent = text;
-      const phoneDigits = (order.clientPhone || '').replace(/\D/g, '');
-      const waTarget = phoneDigits.length >= 10 ? `55${phoneDigits}` : LABTECH_WHATSAPP_NUMBER;
-      document.getElementById('receipt-whatsapp-link').href = `https://wa.me/${waTarget}?text=${encodeURIComponent(text)}`;
-      document.getElementById('receipt-modal')?.classList.remove('hidden');
-    }
-
-    function renderBenchOrders() {
-      const container = document.getElementById('bench-orders-list');
-      if (!container) return;
-      const query = (document.getElementById('os-search-input')?.value || '').toLowerCase();
-      const filterStatus = document.getElementById('os-filter-status')?.value || 'TODOS';
-
-      const orders = getBenchOrders().filter(o => {
-        const matchQuery = !query || o.id.toLowerCase().includes(query) || o.clientName.toLowerCase().includes(query) || o.deviceModel.toLowerCase().includes(query);
-        const matchStatus = filterStatus === 'TODOS' || o.status === filterStatus;
-        return matchQuery && matchStatus;
-      });
-
-      if (!orders.length) {
-        container.innerHTML = `<div class="glass-card rounded-2xl p-6 text-center text-xs text-slate-400">Nenhuma Ordem de Serviço encontrada com esse filtro.</div>`;
-        return;
+      if (editId) {
+        const idx = orders.findIndex(o => o.id === editId);
+        if (idx !== -1) {
+          data.paidInFinance = orders[idx].paidInFinance || false;
+          data.createdAt = orders[idx].createdAt;
+          orders[idx] = data;
+        }
+      } else {
+        orders.unshift(data);
+        const seqNum = parseInt(osId.split('-').pop(), 10);
+        if (!isNaN(seqNum)) localStorage.setItem(STORAGE_KEYS.OS_SEQ, String(seqNum));
       }
 
-      container.innerHTML = orders.map(o => `
-        <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <span class="font-mono text-xs text-cyan-400 font-bold">${o.id}</span>
-              <h4 class="text-base font-bold text-white">${o.deviceType} • ${o.deviceModel}</h4>
-              <p class="text-xs text-slate-400">Cliente: <strong class="text-slate-200">${o.clientName}</strong> (${o.clientPhone})</p>
-            </div>
-            <span class="px-3 py-1 rounded-full border text-xs font-bold ${getStatusBadgeClasses(o.status)}">${o.status}</span>
-          </div>
-          <p class="text-xs text-slate-300 bg-slateDark-950/80 p-3 rounded-xl border border-slate-800"><strong>Defeito:</strong> ${o.defect}</p>
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <span class="font-mono text-sm font-extrabold text-emerald-400">R$ ${Number(o.price || 0).toFixed(2).replace('.', ',')}</span>
-            <div class="flex flex-wrap gap-1.5">
-              <button type="button" onclick="quickUpdateOrderStatus('${o.id}', 'Pronto')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-semibold">Marcar Pronto</button>
-              <button type="button" onclick="editBenchOrder('${o.id}')" class="px-2.5 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 text-cyan-300 text-xs font-semibold">Editar</button>
-              <button type="button" onclick="openReceiptModal('${o.id}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-semibold">Comprovante / WA</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderFinanceList() {
-      const container = document.getElementById('finance-list');
-      if (!container) return;
-      const entries = getFinanceEntries();
-      let balance = 0;
-      entries.forEach(e => { balance += e.type === 'entrada' ? Number(e.amount) : -Number(e.amount); });
-
-      const badge = document.getElementById('finance-balance-badge');
-      if (badge) badge.textContent = `Saldo: R$ ${balance.toFixed(2).replace('.', ',')}`;
-
-      container.innerHTML = entries.map(e => `
-        <div class="p-3.5 rounded-xl bg-slateDark-950/90 border border-slate-800 flex items-center justify-between gap-3">
-          <div>
-            <p class="text-xs font-bold text-white">${e.desc}</p>
-            <span class="text-[11px] text-slate-400">${e.category} • ${e.date}</span>
-          </div>
-          <span class="font-mono text-xs font-extrabold ${e.type === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">
-            ${e.type === 'entrada' ? '+' : '-'} R$ ${Number(e.amount).toFixed(2).replace('.', ',')}
-          </span>
-        </div>
-      `).join('');
-    }
-
-    function useCatalogInOrder(id) {
-      const item = getCatalogItems().find(c => c.id === id);
-      if (!item) return;
-      switchDashboardTab('orders');
+      saveOrders(orders);
       resetBenchForm();
-      document.getElementById('os-defect').value = item.name;
+      renderBenchDashboard();
+    }
+
+    function editBenchOrder(osId) {
+      const order = getOrders().find(o => o.id === osId);
+      if (!order) return;
+      document.getElementById('os-edit-id').value = order.id;
+      document.getElementById('os-number').value = order.id;
+      document.getElementById('os-client').value = order.client;
+      document.getElementById('os-phone').value = order.phone;
+      document.getElementById('os-category').value = order.category;
+      document.getElementById('os-model').value = order.model;
+      document.getElementById('os-status').value = order.status;
+      document.getElementById('os-price').value = order.price;
+      document.getElementById('os-issue').value = order.issue;
+      document.getElementById('os-diagnosis').value = order.diagnosis || '';
+      document.getElementById('bench-form-title').textContent = `Editando ${order.id}`;
+      document.getElementById('bench-os-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function markOrderReady(osId) {
+      const orders = getOrders();
+      const idx = orders.findIndex(o => o.id === osId);
+      if (idx === -1) return;
+
+      orders[idx].status = 'Pronto';
+      if (Number(orders[idx].price) > 0 && !orders[idx].paidInFinance) {
+        const finance = getFinance();
+        finance.unshift({
+          id: Date.now(),
+          type: 'entrada',
+          desc: `Serviço ${orders[idx].id} (${orders[idx].model})`,
+          amount: Number(orders[idx].price),
+          date: new Date().toLocaleDateString('pt-BR')
+        });
+        saveFinance(finance);
+        orders[idx].paidInFinance = true;
+      }
+
+      saveOrders(orders);
+      renderBenchDashboard();
+    }
+
+    function deleteBenchOrder(osId) {
+      if (!confirm(`Excluir a ordem ${osId}?`)) return;
+      saveOrders(getOrders().filter(o => o.id !== osId));
+      renderBenchDashboard();
+    }
+
+    function sendOrderWhatsApp(osId) {
+      const o = getOrders().find(item => item.id === osId);
+      if (!o) return;
+      const targetPhone = o.phone.startsWith('55') ? o.phone : '55' + o.phone;
+      const pix = getPixConfig();
+      const msg = `*LABTECH_MSI — Atualização de Serviço*\n*OS:* ${o.id}\n*Cliente:* ${o.client}\n*Equipamento:* ${o.model}\n*Status:* ${o.status}\n*Laudo:* ${o.diagnosis || 'Em bancada'}\n*Valor:* ${formatCurrency(o.price)}\n*Chave PIX:* ${pix.key}`;
+      window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== FINANCEIRO & CATÁLOGO ====================
+    function handleFinanceSubmit(e) {
+      e.preventDefault();
+      const finance = getFinance();
+      finance.unshift({
+        id: Date.now(),
+        type: document.getElementById('fin-type').value,
+        desc: document.getElementById('fin-desc').value.trim(),
+        amount: parseFloat(document.getElementById('fin-amount').value) || 0,
+        date: new Date().toLocaleDateString('pt-BR')
+      });
+      saveFinance(finance);
+      e.target.reset();
+      renderBenchDashboard();
+    }
+
+    function deleteFinanceItem(id) {
+      saveFinance(getFinance().filter(f => f.id !== id));
+      renderBenchDashboard();
+    }
+
+    function handleCatalogSubmit(e) {
+      e.preventDefault();
+      const catalog = getCatalog();
+      catalog.push({
+        id: Date.now(),
+        name: document.getElementById('cat-name').value.trim(),
+        category: document.getElementById('cat-category').value,
+        price: parseFloat(document.getElementById('cat-price').value) || 0
+      });
+      saveCatalog(catalog);
+      e.target.reset();
+      renderBenchDashboard();
+    }
+
+    function deleteCatalogItem(id) {
+      saveCatalog(getCatalog().filter(c => c.id !== id));
+      renderBenchDashboard();
+    }
+
+    function useCatalogInOs(id) {
+      const item = getCatalog().find(c => c.id === id);
+      if (!item) return;
+      switchBenchTab('orders');
+      resetBenchForm();
+      document.getElementById('os-category').value = item.category;
+      document.getElementById('os-diagnosis').value = item.name;
       document.getElementById('os-price').value = item.price;
     }
 
-    function renderCatalogList() {
-      const container = document.getElementById('catalog-list');
-      if (!container) return;
-      const items = getCatalogItems();
-      container.innerHTML = items.map(item => `
-        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 flex flex-col justify-between gap-3">
-          <div>
-            <span class="text-[10px] font-mono text-cyan-400 uppercase">${item.group} • Prazo: ${item.sla}</span>
-            <h4 class="text-sm font-bold text-white mt-1">${item.name}</h4>
-          </div>
-          <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
-            <span class="font-mono text-sm font-extrabold text-emerald-400">R$ ${Number(item.price).toFixed(2).replace('.', ',')}</span>
-            <button type="button" onclick="useCatalogInOrder('${item.id}')" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 text-xs font-bold transition-all">
-              Usar na OS
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
+    // ==================== CHATBOT DE TRIAGEM ====================
+    let chatState = { step: 0, device: '', symptom: '', model: '', name: '' };
 
-    function updateDashboardOverview() {
-      const orders = getBenchOrders();
-      const finance = getFinanceEntries();
-
-      const active = orders.filter(o => o.status !== 'Entregue');
-      const analise = orders.filter(o => ['Em Análise', 'Em Reparo', 'Orçamento Enviado'].includes(o.status));
-      const peca = orders.filter(o => o.status === 'Aguardando Peça');
-      const pronto = orders.filter(o => o.status === 'Pronto');
-      const benchTotal = active.reduce((sum, o) => sum + Number(o.price || 0), 0);
-
-      const totalIn = finance.filter(f => f.type === 'entrada').reduce((s, f) => s + Number(f.amount), 0);
-      const totalOut = finance.filter(f => f.type === 'saida').reduce((s, f) => s + Number(f.amount), 0);
-      const net = totalIn - totalOut;
-      const ticket = orders.length ? (orders.reduce((s, o) => s + Number(o.price || 0), 0) / orders.length) : 0;
-
-      if (document.getElementById('kpi-total')) document.getElementById('kpi-total').textContent = active.length;
-      if (document.getElementById('kpi-analise')) document.getElementById('kpi-analise').textContent = analise.length;
-      if (document.getElementById('kpi-peca')) document.getElementById('kpi-peca').textContent = peca.length;
-      if (document.getElementById('kpi-pronto')) document.getElementById('kpi-pronto').textContent = pronto.length;
-      if (document.getElementById('kpi-saldo-liquido')) document.getElementById('kpi-saldo-liquido').textContent = `R$ ${net.toFixed(2).replace('.', ',')}`;
-      if (document.getElementById('kpi-valor-sub')) document.getElementById('kpi-valor-sub').textContent = `Em bancada: R$ ${benchTotal.toFixed(2).replace('.', ',')}`;
-
-      if (document.getElementById('ov-total-in')) document.getElementById('ov-total-in').textContent = `R$ ${totalIn.toFixed(2).replace('.', ',')}`;
-      if (document.getElementById('ov-total-out')) document.getElementById('ov-total-out').textContent = `R$ ${totalOut.toFixed(2).replace('.', ',')}`;
-      if (document.getElementById('ov-ticket-medio')) document.getElementById('ov-ticket-medio').textContent = `R$ ${ticket.toFixed(2).replace('.', ',')}`;
-
-      const margin = totalIn > 0 ? Math.max(0, Math.round(((totalIn - totalOut) / totalIn) * 100)) : 0;
-      if (document.getElementById('ov-margin-percent')) document.getElementById('ov-margin-percent').textContent = `${margin}%`;
-      if (document.getElementById('ov-bar-in')) document.getElementById('ov-bar-in').style.width = `${margin}%`;
-      if (document.getElementById('ov-bar-out')) document.getElementById('ov-bar-out').style.width = `${100 - margin}%`;
-
-      const distEl = document.getElementById('chart-device-distribution');
-      if (distEl) {
-        const counts = {};
-        orders.forEach(o => { counts[o.deviceType] = (counts[o.deviceType] || 0) + 1; });
-        const entries = Object.entries(counts);
-        distEl.innerHTML = entries.map(([cat, count]) => {
-          const pct = Math.round((count / Math.max(1, orders.length)) * 100);
-          return `
-            <div>
-              <div class="flex justify-between text-xs mb-1">
-                <span class="text-slate-300 font-medium">${cat}</span>
-                <span class="font-mono text-cyan-400">${count} OS (${pct}%)</span>
-              </div>
-              <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400" style="width: ${pct}%"></div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      const prioEl = document.getElementById('overview-priority-list');
-      if (prioEl) {
-        prioEl.innerHTML = active.slice(0, 3).map(o => `
-          <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="font-mono text-xs text-cyan-400 font-bold">${o.id}</span>
-              <span class="text-[11px] font-bold text-emerald-400">${o.status}</span>
-            </div>
-            <p class="text-sm font-bold text-white">${o.deviceModel}</p>
-            <p class="text-xs text-slate-400">${o.clientName} • R$ ${Number(o.price || 0).toFixed(2).replace('.', ',')}</p>
-          </div>
-        `).join('');
-      }
-    }
-
-    // ---------------------------------------------------------------------
-    // Chatbot Interativo de Triagem Técnica LABTECH_MSI
-    // ---------------------------------------------------------------------
-    let botState = { step: 'inicio', equipamento: '', sintoma: '', modelo: '' };
-
-    function toggleChatbotWidget(forceOpen) {
+    function toggleChatbot() {
       const win = document.getElementById('chatbot-window');
-      if (!win) return;
-      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : win.classList.contains('hidden');
-      if (shouldOpen) {
-        win.classList.remove('hidden');
-        if (!document.getElementById('chatbot-messages')?.children.length) {
-          resetChatbot();
-        }
-      } else {
-        win.classList.add('hidden');
+      win.classList.toggle('hidden');
+      if (!win.classList.contains('hidden') && document.getElementById('chat-messages').children.length === 0) {
+        resetChatbot();
       }
     }
 
-    function appendBotMsg(sender, text, waLink) {
-      const box = document.getElementById('chatbot-messages');
-      if (!box) return;
-      const isBot = sender === 'bot';
-      const wrapper = document.createElement('div');
-      wrapper.className = isBot ? 'flex justify-start' : 'flex justify-end';
-      wrapper.innerHTML = `
-        <div class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${isBot ? 'bg-slateDark-850 border border-slate-700 text-slate-200' : 'bg-cyan-500 text-slate-950 font-semibold'}">
-          <div class="whitespace-pre-line">${text}</div>
-          ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener noreferrer" class="mt-2.5 block w-full py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-center">Enviar Triagem no WhatsApp</a>` : ''}
-        </div>
-      `;
-      box.appendChild(wrapper);
+    function resetChatbot() {
+      chatState = { step: 1, device: '', symptom: '', model: '', name: '' };
+      document.getElementById('chat-messages').innerHTML = '';
+      appendBotMessage('Olá! Bem-vindo à <strong>LABTECH_MSI</strong> 👋<br>Qual equipamento precisa de atendimento hoje?');
+      setQuickReplies(['Notebook / PC', 'Smartphone', 'Placa de Vídeo', 'Console', 'Garantia & Horário']);
+    }
+
+    function appendBotMessage(html) {
+      const box = document.getElementById('chat-messages');
+      box.innerHTML += `<div class="p-3 rounded-2xl rounded-tl-none bg-slateDark-800 text-slate-200 border border-slate-700/80 max-w-[88%]">${html}</div>`;
       box.scrollTop = box.scrollHeight;
     }
 
-    function setBotQuickReplies(options) {
-      const box = document.getElementById('chatbot-quick-replies');
-      if (!box) return;
-      box.innerHTML = options.map(opt => `
-        <button type="button" onclick="handleBotInput('${opt.replace(/'/g, "\\'")}')"
-          class="px-2.5 py-1.5 rounded-lg bg-slateDark-800 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-semibold transition-all">
-          ${opt}
+    function appendUserMessage(text) {
+      const box = document.getElementById('chat-messages');
+      box.innerHTML += `<div class="ml-auto p-3 rounded-2xl rounded-tr-none bg-cyan-500 text-slate-950 font-semibold max-w-[85%]">${escapeHTML(text)}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setQuickReplies(options) {
+      const container = document.getElementById('chat-quick-replies');
+      container.innerHTML = options.map(opt => `
+        <button type="button" onclick="processChatInput('${escapeHTML(opt)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-semibold transition">
+          ${escapeHTML(opt)}
         </button>
       `).join('');
     }
 
-    function resetChatbot() {
-      botState = { step: 'equipamento', equipamento: '', sintoma: '', modelo: '' };
-      const box = document.getElementById('chatbot-messages');
-      if (box) box.innerHTML = '';
-      appendBotMsg('bot', 'Olá! Sou o assistente técnico da LABTECH_MSI (Ceará-Mirim/RN). Qual equipamento precisa de atendimento hoje?');
-      setBotQuickReplies(['Notebook / PC', 'Smartphone', 'Console / Game', 'Placa de Vídeo', 'Garantia & Prazo']);
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      processChatInput(val);
     }
 
-    function handleBotInput(rawText) {
-      const text = (rawText || '').trim();
-      if (!text) return;
-      appendBotMsg('user', text);
-
-      if (text.toLowerCase().includes('garantia') || text.toLowerCase().includes('prazo')) {
-        appendBotMsg('bot', '🛡️ Todos os serviços da LABTECH_MSI possuem garantia de 90 dias.\n⏱️ O diagnóstico técnico leva em média 24h úteis.\n📍 Atendimento em Ceará-Mirim/RN • WhatsApp: (84) 99121-6849.');
-        setBotQuickReplies(['Iniciar Triagem de Aparelho']);
-        return;
-      }
-
-      if (text === 'Iniciar Triagem de Aparelho') {
+    function processChatInput(text) {
+      if (text === 'Nova Triagem') {
         resetChatbot();
         return;
       }
 
-      if (botState.step === 'equipamento') {
-        botState.equipamento = text;
-        botState.step = 'sintoma';
-        appendBotMsg('bot', `Certo! Equipamento: ${text}.\nQual é o sintoma principal apresentado?`);
-        setBotQuickReplies(['Não liga / Sem imagem', 'Superaquecimento / Limpeza', 'Conector / Tela quebrada', 'Lentidão / Formatação']);
-      } else if (botState.step === 'sintoma') {
-        botState.sintoma = text;
-        botState.step = 'modelo';
-        appendBotMsg('bot', 'Qual é a marca e o modelo exato do aparelho (e seu nome)?');
-        setBotQuickReplies([]);
-      } else {
-        botState.modelo = text;
-        botState.step = 'concluido';
-        const summary = `🤖 *PRÉ-TRIAGEM BOT - LABTECH_MSI*\n• *Equipamento:* ${botState.equipamento}\n• *Sintoma:* ${botState.sintoma}\n• *Modelo / Cliente:* ${botState.modelo}`;
-        const waUrl = `https://wa.me/${LABTECH_WHATSAPP_NUMBER}?text=${encodeURIComponent(summary)}`;
-        appendBotMsg('bot', 'Perfeito! Sua ficha de triagem está pronta. Clique abaixo para falar direto com a bancada no WhatsApp:', waUrl);
-        setBotQuickReplies(['Nova Triagem']);
+      appendUserMessage(text);
+
+      if (chatState.step === 1 && text === 'Garantia & Horário') {
+        appendBotMessage('📍 <strong>Ceará-Mirim/RN</strong><br>🕒 Seg a Sex: 08h às 18h | Sáb: 08h às 12h<br>🛡️ <strong>Garantia:</strong> 90 dias nos serviços executados.');
+        setQuickReplies(['Notebook / PC', 'Smartphone', 'Placa de Vídeo', 'Console']);
+        return;
+      }
+
+      if (chatState.step === 1) {
+        chatState.device = text;
+        chatState.step = 2;
+        appendBotMessage(`Certo! Qual o <strong>sintoma principal</strong> do seu ${escapeHTML(text)}?`);
+        setQuickReplies(['Não liga / Sem vídeo', 'Superaquecimento', 'Tela / Conector quebrado', 'Lentidão / Sistema']);
+      } else if (chatState.step === 2) {
+        chatState.symptom = text;
+        chatState.step = 3;
+        appendBotMessage('Qual é a <strong>marca e o modelo</strong> exato do aparelho?');
+        setQuickReplies([]);
+      } else if (chatState.step === 3) {
+        chatState.model = text;
+        chatState.step = 4;
+        appendBotMessage('Por último, qual é o <strong>seu nome</strong>?');
+        setQuickReplies([]);
+      } else if (chatState.step === 4) {
+        chatState.name = text;
+        chatState.step = 5;
+        const summary = `*TRIAGEM BOT LABTECH_MSI*\n*Cliente:* ${chatState.name}\n*Equipamento:* ${chatState.device}\n*Modelo:* ${chatState.model}\n*Sintoma:* ${chatState.symptom}`;
+        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(summary)}`;
+        appendBotMessage(`
+          Perfeito, <strong>${escapeHTML(chatState.name)}</strong>! Sua pré-triagem está pronta:<br><br>
+          • <strong>Aparelho:</strong> ${escapeHTML(chatState.device)} (${escapeHTML(chatState.model)})<br>
+          • <strong>Sintoma:</strong> ${escapeHTML(chatState.symptom)}<br><br>
+          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="block text-center py-2 px-3 rounded-xl bg-emerald-500 text-slate-950 font-extrabold">
+            📲 Enviar Triagem no WhatsApp
+          </a>
+        `);
+        setQuickReplies(['Nova Triagem']);
       }
     }
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPwaPrompt = e;
+    // ==================== INICIALIZAÇÃO ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      initDefaultData();
+      searchCustomerOS();
     });
-<!-- ... existing code ... -->
-      // Atualiza ano automático no rodapé
-      const yearEl = document.getElementById('current-year');
-      if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-      // Autenticação PIN da Bancada
-      const pinForm = document.getElementById('pin-form');
-      if (pinForm) {
-        pinForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const entered = document.getElementById('pin-input').value.trim();
-          if (entered === getBenchPin()) {
-            isBenchAuthenticated = true;
-            closePinModal();
-            switchAppMode('bench');
-          } else {
-            document.getElementById('pin-error')?.classList.remove('hidden');
-          }
-        });
-      }
-
-      // Inicializa consulta de OS padrão na tela inicial
-      searchCustomerOS('OS-2026-101');
-<!-- ... existing code ... --></script></body></html>
+  </script>
+</body>
+</html>
