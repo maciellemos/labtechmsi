@@ -1,0 +1,19 @@
+{
+  "name": "LABTECH_MSI - Bancada & OS",
+  "short_name": "LABTECH_MSI",
+  "description": "Diagnóstico, Microssoldagem e Acompanhamento de OS - Ceará-Mirim/RN",
+  "start_url": "/labtechmsi/",
+  "scope": "/labtechmsi/",
+  "display": "standalone",
+  "background_color": "#060911",
+  "theme_color": "#060911",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
