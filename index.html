@@ -64,10 +64,8 @@
   <header class="sticky top-0 z-40 glass-card border-b border-cyan-500/20">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
       <a href="#inicio" onclick="switchAppMode('client')" class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-          <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-          </svg>
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 overflow-hidden">
+          <img src="logo.png" alt="LABTECH_MSI" onerror="this.style.display='none'" class="w-full h-full object-cover" />
         </div>
         <div>
           <span class="font-extrabold tracking-wider text-white text-lg block leading-none">LABTECH<span class="text-cyan-400">_MSI</span></span>
@@ -283,6 +281,9 @@
       <button id="tab-btn-orders" onclick="switchBenchTab('orders')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         🛠️ Ordens de Serviço (OS)
       </button>
+      <button id="tab-btn-knowledge" onclick="switchBenchTab('knowledge')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+        🧠 Base de Defeitos
+      </button>
       <button id="tab-btn-finance" onclick="switchBenchTab('finance')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         💰 Caixa & Peças
       </button>
@@ -376,7 +377,67 @@
       <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ABA 3: FINANCEIRO -->
+    <!-- ABA 3: BASE DE DEFEITOS & SOLUÇÕES (KNOWLEDGE BASE) -->
+    <div id="bench-tab-knowledge" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border border-cyan-500/20">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="font-bold text-white text-lg">🧠 Registrar Defeito & Solução na Base Técnica</h3>
+            <p class="text-xs text-slate-400">Guarde medições, componentes em curto, reballing e soluções para consultas futuras na bancada.</p>
+          </div>
+        </div>
+        <form onsubmit="handleKnowledgeSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+            <select id="kb-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Placa de Vídeo">Placa de Vídeo</option>
+              <option value="Console">Console</option>
+              <option value="Desktop / PC">Desktop / PC</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Modelo / Placa (Boardview) *</label>
+            <input id="kb-model" type="text" required placeholder="Ex: Samsung NP300V4A / iPhone 13 Pro" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Sintoma Apresentado *</label>
+            <input id="kb-symptom" type="text" required placeholder="Ex: Consumo 0.04A, não sobe chip / sem imagem" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Componente / Linha / Referência</label>
+            <input id="kb-component" type="text" placeholder="Ex: MOSFET AON7410 / Linha PPBUS_G3H" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4">
+            <label class="block text-xs text-slate-400 mb-1">Diagnóstico & Solução Aplicada *</label>
+            <textarea id="kb-solution" rows="2" required placeholder="Descreva os testes realizados, tensões medidas e o procedimento que resolveu o problema..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm"></textarea>
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+            <button id="save-kb-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+              Salvar na Base de Conhecimento
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- FILTRO E PESQUISA DA BASE DE DEFEITOS -->
+      <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <input id="kb-search-input" oninput="renderKnowledgeList()" type="text" placeholder="🔍 Pesquisar por placa, modelo, sintoma, CI ou linha..." class="w-full sm:flex-1 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400" />
+        <select id="kb-filter-category" onchange="renderKnowledgeList()" class="w-full sm:w-48 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+          <option value="">Todas as Categorias</option>
+          <option value="Notebook">Notebook</option>
+          <option value="Smartphone">Smartphone</option>
+          <option value="Placa de Vídeo">Placa de Vídeo</option>
+          <option value="Console">Console</option>
+          <option value="Desktop / PC">Desktop / PC</option>
+        </select>
+      </div>
+
+      <div id="bench-knowledge-list" class="grid md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- ABA 4: FINANCEIRO -->
     <div id="bench-tab-finance" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro</h3>
@@ -407,7 +468,7 @@
       <div id="bench-finance-list" class="glass-card rounded-2xl p-6 space-y-3"></div>
     </div>
 
-    <!-- ABA 4: CATÁLOGO DE SERVIÇOS -->
+    <!-- ABA 5: CATÁLOGO DE SERVIÇOS -->
     <div id="bench-tab-catalog" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Adicionar Serviço Padrão</h3>
@@ -448,7 +509,7 @@
     <p>
       WhatsApp: <a href="https://wa.me/5584991216849" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">(84) 99121-6849</a> •
       Instagram: <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">@labtechmsicm</a> •
-      Links: <a href="https://bio.site/Labtech_MSI_CM" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">bio.site/Labtech_MSI_CM</a>
+      E-mail: <a href="mailto:labtechmsicm@gmail.com" class="text-cyan-400 hover:underline">labtechmsicm@gmail.com</a>
     </p>
   </footer>
 
@@ -585,6 +646,7 @@
     let cachedOrders = [];
     let cachedFinance = [];
     let cachedCatalog = [];
+    let cachedKnowledge = [];
     let cachedPix = { pix_key: '84991216849', pix_receiver: 'MACIEL LEMOS DA CAMARA' };
 
     // ==================== UTILITÁRIOS & SEGURANÇA ====================
@@ -913,7 +975,7 @@
     }
 
     function switchBenchTab(tab) {
-      ['overview', 'orders', 'finance', 'catalog'].forEach(t => {
+      ['overview', 'orders', 'knowledge', 'finance', 'catalog'].forEach(t => {
         document.getElementById(`bench-tab-${t}`).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById(`tab-btn-${t}`);
         btn.className = t === tab
@@ -933,18 +995,21 @@
     }
 
     async function refreshAllBenchData() {
-      const [ordersRes, financeRes, catalogRes] = await Promise.all([
+      const [ordersRes, financeRes, catalogRes, kbRes] = await Promise.all([
         supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
         supabaseClient.from('finance').select('*').order('id', { ascending: false }),
-        supabaseClient.from('catalog').select('*').order('id', { ascending: true })
+        supabaseClient.from('catalog').select('*').order('id', { ascending: true }),
+        supabaseClient.from('knowledge_base').select('*').order('id', { ascending: false })
       ]);
 
       cachedOrders = ordersRes.data || [];
       cachedFinance = financeRes.data || [];
       cachedCatalog = catalogRes.data || [];
+      cachedKnowledge = kbRes.data || [];
       await loadPixSettings();
 
       renderBenchDashboard();
+      renderKnowledgeList();
     }
 
     function renderBenchDashboard() {
@@ -1014,8 +1079,8 @@
           <span class="font-bold text-rose-400">${formatCurrency(totalOut)}</span>
         </div>
         <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Total de OS na Nuvem</span>
-          <span class="font-bold text-white">${orders.length}</span>
+          <span class="text-slate-400">Casos na Base de Defeitos</span>
+          <span class="font-bold text-cyan-400">${cachedKnowledge.length} registros</span>
         </div>
       `;
 
@@ -1037,10 +1102,11 @@
           </div>
           <p class="text-xs text-slate-300"><strong>Defeito:</strong> ${escapeHTML(o.issue)}</p>
           <p class="text-xs text-slate-400"><strong>Laudo:</strong> ${escapeHTML(o.diagnosis || 'Pendente')}</p>
-          <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
             <span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(o.price)}</span>
             <div class="flex flex-wrap gap-1.5">
               <button onclick="editBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 text-slate-200 text-xs">Editar</button>
+              <button onclick="sendOsToKnowledge('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold" title="Salvar este diagnóstico na Base de Defeitos">🧠 Salvar Caso</button>
               <button onclick="markOrderReady('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold">Marcar Pronto</button>
               <button onclick="sendOrderWhatsApp('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold">WhatsApp</button>
               <button onclick="deleteBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs">Excluir</button>
@@ -1079,6 +1145,106 @@
           </div>
         </div>
       `).join('') || '<p class="text-xs text-slate-400">Catálogo vazio.</p>';
+    }
+
+    // ==================== BASE DE DEFEITOS (KNOWLEDGE BASE) ====================
+    async function handleKnowledgeSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('save-kb-btn');
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+
+      const payload = {
+        category: document.getElementById('kb-category').value,
+        model: document.getElementById('kb-model').value.trim(),
+        symptom: document.getElementById('kb-symptom').value.trim(),
+        component: document.getElementById('kb-component').value.trim(),
+        solution: document.getElementById('kb-solution').value.trim()
+      };
+
+      const { error } = await supabaseClient.from('knowledge_base').insert([payload]);
+
+      btn.disabled = false;
+      btn.textContent = 'Salvar na Base de Conhecimento';
+
+      if (error) {
+        alert('Erro ao salvar na Base de Defeitos: ' + error.message);
+        return;
+      }
+
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    function renderKnowledgeList() {
+      const container = document.getElementById('bench-knowledge-list');
+      if (!container) return;
+
+      const query = (document.getElementById('kb-search-input')?.value || '').toLowerCase().trim();
+      const catFilter = document.getElementById('kb-filter-category')?.value || '';
+
+      const filtered = cachedKnowledge.filter(item => {
+        const matchesCat = !catFilter || item.category === catFilter;
+        const haystack = `${item.model} ${item.symptom} ${item.component || ''} ${item.solution}`.toLowerCase();
+        const matchesQuery = !query || haystack.includes(query);
+        return matchesCat && matchesQuery;
+      });
+
+      container.innerHTML = filtered.map(item => `
+        <div class="glass-card rounded-2xl p-5 space-y-3 border border-cyan-500/20">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 text-[11px] font-bold">${escapeHTML(item.category)}</span>
+              <h4 class="font-bold text-white text-base mt-1">${escapeHTML(item.model)}</h4>
+            </div>
+            <button onclick="deleteKnowledgeItem(${item.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>
+          </div>
+          <div class="space-y-1.5 text-xs">
+            <p class="text-amber-300"><strong>Sintoma:</strong> ${escapeHTML(item.symptom)}</p>
+            ${item.component ? `<p class="text-purple-300"><strong>Componente / Linha:</strong> ${escapeHTML(item.component)}</p>` : ''}
+            <div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 text-slate-200 leading-relaxed">
+              <strong class="text-emerald-400 block mb-1">Solução Técnica:</strong>
+              ${escapeHTML(item.solution)}
+            </div>
+          </div>
+          <div class="flex justify-end pt-1">
+            <button onclick="applyKnowledgeToOs(${item.id})" class="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition">
+              📋 Aplicar Laudo na OS
+            </button>
+          </div>
+        </div>
+      `).join('') || '<p class="text-sm text-slate-400">Nenhum registro encontrado na Base de Defeitos.</p>';
+    }
+
+    async function deleteKnowledgeItem(id) {
+      if (!confirm('Remover este registro da Base de Defeitos?')) return;
+      await supabaseClient.from('knowledge_base').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    function applyKnowledgeToOs(id) {
+      const item = cachedKnowledge.find(k => k.id === id);
+      if (!item) return;
+      switchBenchTab('orders');
+      const laudoText = item.component
+        ? `${item.solution} (Ref: ${item.component})`
+        : item.solution;
+      document.getElementById('os-diagnosis').value = laudoText;
+      if (!document.getElementById('os-model').value) {
+        document.getElementById('os-model').value = item.model;
+      }
+      document.getElementById('bench-os-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function sendOsToKnowledge(osId) {
+      const order = cachedOrders.find(o => o.id === osId);
+      if (!order) return;
+      switchBenchTab('knowledge');
+      document.getElementById('kb-category').value = order.category;
+      document.getElementById('kb-model').value = order.model;
+      document.getElementById('kb-symptom').value = order.issue;
+      document.getElementById('kb-solution').value = order.diagnosis || '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function resetBenchForm() {
@@ -1313,7 +1479,7 @@
       }
     }
 
-    // ==================== INICIALIZAÇÃO ====================
+    // ==================== INICIALIZAÇÃO & SERVICE WORKER ====================
     document.addEventListener('DOMContentLoaded', async () => {
       const { data } = await supabaseClient.auth.getSession();
       if (data?.session?.user) {
@@ -1321,9 +1487,10 @@
       }
       await loadPixSettings();
     });
-  </script>
-if ('serviceWorker' in navigator) {
+
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(() => {});
-    } 
+    }
+  </script>
 </body>
 </html>
