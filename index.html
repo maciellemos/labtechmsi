@@ -196,7 +196,7 @@
       </div>
     </section>
 
-    <!-- ==================== LABTECH STORE (VITRINE PÚBLICA) ==================== -->
+    <!-- LABTECH STORE -->
     <section id="loja" class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-800/80">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
@@ -288,7 +288,7 @@
   <section id="bench-app-view" class="hidden flex-1 max-w-7xl mx-auto w-full px-4 py-8">
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
       <div>
-        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • ERP & BI na Nuvem</span>
+        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • ERP, BI & Tech Lab na Nuvem</span>
         <h1 class="text-2xl font-extrabold text-white">Dashboard & Bancada LABTECH_MSI</h1>
         <p id="bench-user-email" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
@@ -319,11 +319,14 @@
       <button type="button" id="tab-btn-knowledge" onclick="switchBenchTab('knowledge')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         🧠 Base de Defeitos
       </button>
+      <button type="button" id="tab-btn-techlab" onclick="switchBenchTab('techlab')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+        🔓 Desbloqueios, Películas & Benchmark
+      </button>
       <button type="button" id="tab-btn-finance" onclick="switchBenchTab('finance')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         💰 Caixa & Peças
       </button>
       <button type="button" id="tab-btn-catalog" onclick="switchBenchTab('catalog')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        📋 Catálogo de Serviços
+        📋 Catálogo
       </button>
     </div>
 
@@ -449,7 +452,7 @@
       <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ABA 3: COMPRAS, VENDAS & ESTOQUE DA STORE -->
+    <!-- ABA 3: COMPRAS, VENDAS & STORE -->
     <div id="bench-tab-trade" class="hidden space-y-6">
       <div id="trade-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
 
@@ -615,7 +618,154 @@
       <div id="bench-knowledge-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ABA 5: FINANCEIRO -->
+    <!-- ==================== ABA 5: DESBLOQUEIOS, PELÍCULAS & BENCHMARK ==================== -->
+    <div id="bench-tab-techlab" class="hidden space-y-6">
+
+      <!-- SUB-NAVEGAÇÃO TECH LAB -->
+      <div class="flex flex-wrap gap-2">
+        <button type="button" id="subtab-btn-unlocks" onclick="switchTechSubTab('unlocks')" class="tech-sub-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition">
+          🔓 Central de Desbloqueios (FRP / Mi / BIOS)
+        </button>
+        <button type="button" id="subtab-btn-protectors" onclick="switchTechSubTab('protectors')" class="tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+          🛡️ Compatibilidade de Películas 3D
+        </button>
+        <button type="button" id="subtab-btn-benchmark" onclick="switchTechSubTab('benchmark')" class="tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+          ⚡ Comparador de Processadores & Benchmark
+        </button>
+      </div>
+
+      <!-- MÓDULO A: DESBLOQUEIOS -->
+      <div id="techlab-sub-unlocks" class="space-y-6">
+        <div class="glass-card rounded-2xl p-6 border border-amber-500/25">
+          <h3 class="font-bold text-white text-base mb-1">🔗 Atalhos Rápidos de Bancada & FRP</h3>
+          <p class="text-xs text-slate-400 mb-4">Ferramentas e portais de apoio para verificação de IMEI, bloqueios e bypass direto no navegador.</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-bold">
+            <a href="https://vnrom.net/bypass/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-amber-400/50 border border-slate-800 text-amber-300 text-center transition">
+              🌐 vnROM Bypass APK
+            </a>
+            <a href="https://samfw.com/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-cyan-400/50 border border-slate-800 text-cyan-300 text-center transition">
+              📱 SamFW / Firmwares
+            </a>
+            <a href="https://www.imei.info/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-emerald-400/50 border border-slate-800 text-emerald-300 text-center transition">
+              🔍 Consulta IMEI / Blacklist
+            </a>
+            <a href="https://www.hardreset.info/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-purple-400/50 border border-slate-800 text-purple-300 text-center transition">
+              🔄 HardReset & Modo EDL
+            </a>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-lg mb-4">📝 Salvar Método de Desbloqueio Resolvido</h3>
+          <form onsubmit="handleUnlockSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Marca *</label>
+              <select id="ul-brand" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="Samsung">Samsung</option>
+                <option value="Motorola">Motorola</option>
+                <option value="Xiaomi / Redmi">Xiaomi / Redmi</option>
+                <option value="Apple / iPhone">Apple / iPhone</option>
+                <option value="Realme / Oppo / Infinix">Realme / Oppo / Infinix</option>
+                <option value="Notebook / BIOS">Notebook / BIOS</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Modelo & Patch / Android *</label>
+              <input id="ul-model" type="text" required placeholder="Ex: Galaxy A14 (SM-A145M) Android 14" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Tipo de Bloqueio *</label>
+              <select id="ul-type" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="FRP / Conta Google">FRP / Conta Google</option>
+                <option value="Mi Cloud / Conta Mi">Mi Cloud / Conta Mi</option>
+                <option value="MDM / PayJoy / Knox">MDM / PayJoy / Knox</option>
+                <option value="iCloud / Passcode">iCloud / Passcode</option>
+                <option value="Senha BIOS / Computrace">Senha BIOS / Computrace</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Ferramenta / Cabo</label>
+              <input id="ul-tool" type="text" placeholder="Ex: SamFW Tool / Test Point / UnlockTool" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2 lg:col-span-4">
+              <label class="block text-xs text-slate-400 mb-1">Passo a Passo / Observação Técnica *</label>
+              <textarea id="ul-method" rows="2" required placeholder="Descreva o procedimento (ex.: código *#0*#, modo MTP, server ou ponto de test point)..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm"></textarea>
+            </div>
+            <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition">
+                Salvar Procedimento
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <input id="ul-search-input" oninput="renderUnlockList()" type="text" placeholder="🔍 Filtrar desbloqueios por marca, modelo, FRP, Mi Cloud..." class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400" />
+        </div>
+
+        <div id="bench-unlocks-list" class="grid md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- MÓDULO B: COMPATIBILIDADE DE PELÍCULAS -->
+      <div id="techlab-sub-protectors" class="hidden space-y-6">
+        <div class="glass-card rounded-2xl p-6 border border-cyan-500/25">
+          <h3 class="font-bold text-white text-lg mb-1">🛡️ Tabela de Compatibilidade de Películas 3D / Cerâmica</h3>
+          <p class="text-xs text-slate-400 mb-4">Pesquise o modelo do cliente para encontrar películas equivalentes disponíveis no seu estoque.</p>
+          <input id="sp-search-input" oninput="renderProtectorList()" type="text" placeholder="🔍 Digite qualquer modelo (Ex: Moto G22, Redmi Note 12, A03, iPhone 13...)" class="w-full px-4 py-3 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white text-sm focus:outline-none" />
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-base mb-4">+ Adicionar Nova Equivalência de Película</h3>
+          <form onsubmit="handleProtectorSubmit(event)" class="grid sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Modelo Principal *</label>
+              <input id="sp-primary" type="text" required placeholder="Ex: Moto G22" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Modelos Compatíveis (mesma tela) *</label>
+              <input id="sp-compat" type="text" required placeholder="Ex: Moto E22 / Moto E32 / Realme C35" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Observação (Entalhe / Furo)</label>
+              <input id="sp-notes" type="text" placeholder="Ex: Furo centralizado, borda fina" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-3 flex justify-end">
+              <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">
+                Salvar Compatibilidade
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="bench-protectors-list" class="grid md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- MÓDULO C: COMPARADOR DE PROCESSADORES & BENCHMARK -->
+      <div id="techlab-sub-benchmark" class="hidden space-y-6">
+        <div class="glass-card rounded-2xl p-6 border border-purple-500/25 space-y-5">
+          <div>
+            <h3 class="font-bold text-white text-lg">⚡ Comparador de Aparelhos, Processadores & Benchmark</h3>
+            <p class="text-xs text-slate-400">Compare dois chips ou aparelhos lado a lado para orientar clientes na compra de upgrades ou troca de equipamento.</p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-cyan-400 mb-1.5">Equipamento / Processador A</label>
+              <select id="bench-comp-a" onchange="renderProcessorComparison()" class="w-full px-3.5 py-2.5 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-purple-400 mb-1.5">Equipamento / Processador B</label>
+              <select id="bench-comp-b" onchange="renderProcessorComparison()" class="w-full px-3.5 py-2.5 rounded-xl bg-slateDark-950 border border-purple-500/40 text-white text-sm"></select>
+            </div>
+          </div>
+
+          <div id="processor-comparison-result" class="pt-2"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ABA 6: FINANCEIRO -->
     <div id="bench-tab-finance" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro Manual</h3>
@@ -646,7 +796,7 @@
       <div id="bench-finance-list" class="glass-card rounded-2xl p-6 space-y-3"></div>
     </div>
 
-    <!-- ABA 6: CATÁLOGO DE SERVIÇOS -->
+    <!-- ABA 7: CATÁLOGO DE SERVIÇOS -->
     <div id="bench-tab-catalog" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Adicionar Serviço Padrão</h3>
@@ -869,10 +1019,35 @@
     let cachedCatalog = [];
     let cachedKnowledge = [];
     let cachedInventory = [];
+    let cachedUnlocks = [];
+    let cachedProtectors = [];
     let publicStoreItems = [];
     let shoppingCart = [];
     let cachedTrades = [];
     let cachedPix = { pix_key: '84991216849', pix_receiver: 'MACIEL LEMOS DA CAMARA' };
+
+    // ==================== BASE DE DADOS INTERNA: PELÍCULAS & PROCESSADORES ====================
+    const DEFAULT_PROTECTORS = [
+      { id: 'def1', primary_model: 'Moto G22 / Moto E22', compatible_models: 'Moto E32 • Moto E32s • Realme C35 • Realme C31', notes: 'Tela 6.5" furo centralizado' },
+      { id: 'def2', primary_model: 'Redmi Note 12 4G / 5G', compatible_models: 'Poco X5 5G • Redmi Note 11 Pro • Poco X4 Pro', notes: 'Tela 6.67" borda preta fina' },
+      { id: 'def3', primary_model: 'Samsung Galaxy A03 / A03s / A03 Core', compatible_models: 'Galaxy A02s • Galaxy A04 • Galaxy A04e • Moto G10 / G20 / G30', notes: 'Entalhe em gota (V-notch)' },
+      { id: 'def4', primary_model: 'Samsung Galaxy A14 / A24 / A34', compatible_models: 'Galaxy A13 4G • Galaxy A23 • Galaxy M13 • Galaxy M23', notes: 'Entalhe gota 6.6"' },
+      { id: 'def5', primary_model: 'iPhone 13 / iPhone 13 Pro / iPhone 14', compatible_models: 'iPhone 13 • iPhone 13 Pro • iPhone 14 (6.1")', notes: 'Mesma dimensão frontal 6.1"' },
+      { id: 'def6', primary_model: 'iPhone 11 / iPhone XR', compatible_models: 'iPhone 11 • iPhone XR (6.1")', notes: 'Compatibilidade 100% idêntica' }
+    ];
+
+    const PROCESSOR_BENCHMARKS = [
+      { id: 'sd685', name: 'Snapdragon 685 (Redmi Note 12 / Note 13)', type: 'Smartphone', cores: '8 Núcleos (2.8 GHz)', litho: '6 nm', gpu: 'Adreno 610', score: 345000, scale: 'AnTuTu v10', ideal: 'Uso diário fluido, redes sociais e jogos leves' },
+      { id: 'hg85', name: 'MediaTek Helio G85 (Moto G23 / Redmi 12C / A05)', type: 'Smartphone', cores: '8 Núcleos (2.0 GHz)', litho: '12 nm', gpu: 'Mali-G52 MC2', score: 265000, scale: 'AnTuTu v10', ideal: 'Tarefas básicas, WhatsApp e aplicativos bancários' },
+      { id: 'hg99', name: 'MediaTek Helio G99 (Poco M5 / Galaxy A15 / A24)', type: 'Smartphone', cores: '8 Núcleos (2.2 GHz)', litho: '6 nm', gpu: 'Mali-G57 MC2', score: 420000, scale: 'AnTuTu v10', ideal: 'Multitarefa rápida, Free Fire / COD no médio-alto' },
+      { id: 'ex1380', name: 'Samsung Exynos 1380 (Galaxy A54 / A35)', type: 'Smartphone', cores: '8 Núcleos (2.4 GHz)', litho: '5 nm', gpu: 'Mali-G68 MP5', score: 595000, scale: 'AnTuTu v10', ideal: 'Alto desempenho, câmeras 4K e jogos pesados' },
+      { id: 'a15', name: 'Apple A15 Bionic (iPhone 13 / iPhone 14)', type: 'Smartphone', cores: '6 Núcleos (3.23 GHz)', litho: '5 nm', gpu: 'Apple GPU 4/5-core', score: 1280000, scale: 'AnTuTu v10', ideal: 'Edição de vídeo, jogos no máximo e longevidade' },
+      { id: 'r5_5500u', name: 'AMD Ryzen 5 5500U (Notebooks Lenovo / Acer)', type: 'Notebook', cores: '6 Núcleos / 12 Threads', litho: '7 nm', gpu: 'Radeon Vega 7', score: 13100, scale: 'PassMark CPU', ideal: 'Trabalho pesado, programação, AutoCAD 2D e jogos leves' },
+      { id: 'i5_12450h', name: 'Intel Core i5-12450H (Notebooks Gamer / Nitro)', type: 'Notebook', cores: '8 Núcleos / 12 Threads', litho: '10 nm (Intel 7)', gpu: 'Intel UHD + Dedicada', score: 17400, scale: 'PassMark CPU', ideal: 'Renderização, edição, jogos modernos e engenharia' },
+      { id: 'i3_1115g4', name: 'Intel Core i3-1115G4 (Notebooks Escritório)', type: 'Notebook', cores: '2 Núcleos / 4 Threads', litho: '10 nm SuperFin', gpu: 'Intel UHD Xe G4', score: 6150, scale: 'PassMark CPU', ideal: 'Pacote Office, navegação, estudos e sistemas PDV' },
+      { id: 'rtx3060', name: 'NVIDIA GeForce RTX 3060 12GB (Desktop GPU)', type: 'Placa de Vídeo', cores: '3584 CUDA Cores', litho: '8 nm Samsung', gpu: '12GB GDDR6 192-bit', score: 17150, scale: 'PassMark G3D', ideal: 'Jogos Full HD / Quad HD Ultra, Blender e IA local' },
+      { id: 'rx6600', name: 'AMD Radeon RX 6600 8GB (Desktop GPU)', type: 'Placa de Vídeo', cores: '1792 Stream Proc.', litho: '7 nm TSMC', gpu: '8GB GDDR6 128-bit', score: 15100, scale: 'PassMark G3D', ideal: 'Excelente custo-benefício em Full HD Alto/Ultra' }
+    ];
 
     function escapeHTML(str) {
       if (str === null || str === undefined) return '';
@@ -952,7 +1127,7 @@
       return rawPayload + computeCRC16(rawPayload);
     }
 
-    // ==================== LABTECH STORE (VITRINE PÚBLICA & CARRINHO) ====================
+    // ==================== LABTECH STORE ====================
     async function loadPublicStore() {
       const { data } = await supabaseClient
         .from('inventory')
@@ -1126,7 +1301,7 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
     }
 
-    // ==================== MODO CLIENTE: CONSULTA DE OS & PIX ====================
+    // ==================== CONSULTA DE OS & PIX ====================
     function selectServiceAndScroll(category) {
       const select = document.getElementById('quote-device');
       if (select) select.value = category;
@@ -1353,7 +1528,7 @@
     }
 
     function switchBenchTab(tab) {
-      ['overview', 'orders', 'trade', 'knowledge', 'finance', 'catalog'].forEach(t => {
+      ['overview', 'orders', 'trade', 'knowledge', 'techlab', 'finance', 'catalog'].forEach(t => {
         document.getElementById(`bench-tab-${t}`).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById(`tab-btn-${t}`);
         btn.className = t === tab
@@ -1373,13 +1548,15 @@
     }
 
     async function refreshAllBenchData() {
-      const [ordersRes, financeRes, catalogRes, kbRes, invRes, tradeRes] = await Promise.all([
+      const [ordersRes, financeRes, catalogRes, kbRes, invRes, tradeRes, ulRes, spRes] = await Promise.all([
         supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
         supabaseClient.from('finance').select('*').order('id', { ascending: false }),
         supabaseClient.from('catalog').select('*').order('id', { ascending: true }),
         supabaseClient.from('knowledge_base').select('*').order('id', { ascending: false }),
         supabaseClient.from('inventory').select('*').order('name', { ascending: true }),
-        supabaseClient.from('trade_history').select('*').order('id', { ascending: false })
+        supabaseClient.from('trade_history').select('*').order('id', { ascending: false }),
+        supabaseClient.from('unlock_guides').select('*').order('id', { ascending: false }),
+        supabaseClient.from('screen_protectors').select('*').order('id', { ascending: false })
       ]);
 
       cachedOrders = ordersRes.data || [];
@@ -1388,12 +1565,17 @@
       cachedKnowledge = kbRes.data || [];
       cachedInventory = invRes.data || [];
       cachedTrades = tradeRes.data || [];
+      cachedUnlocks = ulRes.data || [];
+      cachedProtectors = [...(spRes.data || []), ...DEFAULT_PROTECTORS];
       await loadPixSettings();
       await loadPublicStore();
 
       renderBenchDashboard();
       renderTradeModule();
       renderKnowledgeList();
+      renderUnlockList();
+      renderProtectorList();
+      initBenchmarkSelectors();
     }
 
     function renderBenchDashboard() {
@@ -1623,6 +1805,165 @@
       `).join('') || '<p class="text-xs text-slate-400">Catálogo vazio.</p>';
     }
 
+    // ==================== TECH LAB: DESBLOQUEIOS, PELÍCULAS & BENCHMARK ====================
+    function switchTechSubTab(sub) {
+      ['unlocks', 'protectors', 'benchmark'].forEach(s => {
+        document.getElementById(`techlab-sub-${s}`).classList.toggle('hidden', s !== sub);
+        const btn = document.getElementById(`subtab-btn-${s}`);
+        btn.className = s === sub
+          ? 'tech-sub-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition'
+          : 'tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
+      });
+    }
+
+    async function handleUnlockSubmit(e) {
+      e.preventDefault();
+      const toolVal = document.getElementById('ul-tool').value.trim();
+      const methodRaw = document.getElementById('ul-method').value.trim();
+      const payload = {
+        brand: document.getElementById('ul-brand').value,
+        model: document.getElementById('ul-model').value.trim(),
+        lock_type: document.getElementById('ul-type').value,
+        method: toolVal ? `[${toolVal}] ${methodRaw}` : methodRaw
+      };
+      const { error } = await supabaseClient.from('unlock_guides').insert([payload]);
+      if (error) {
+        alert('Erro ao salvar procedimento: ' + error.message);
+        return;
+      }
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    function renderUnlockList() {
+      const container = document.getElementById('bench-unlocks-list');
+      if (!container) return;
+      const q = (document.getElementById('ul-search-input')?.value || '').toLowerCase().trim();
+      const list = cachedUnlocks.filter(u => !q || `${u.brand} ${u.model} ${u.lock_type} ${u.method}`.toLowerCase().includes(q));
+
+      container.innerHTML = list.map(u => `
+        <div class="glass-card rounded-2xl p-5 space-y-2 border border-amber-500/20">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[11px] font-bold">${escapeHTML(u.brand)} • ${escapeHTML(u.lock_type)}</span>
+              <h4 class="font-bold text-white text-base mt-1">${escapeHTML(u.model)}</h4>
+            </div>
+            <button type="button" onclick="deleteUnlockGuide(${u.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>
+          </div>
+          <p class="text-xs text-slate-300 bg-slateDark-950/90 p-3 rounded-xl border border-slate-800 leading-relaxed">${escapeHTML(u.method)}</p>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum procedimento de desbloqueio registado ainda.</p>';
+    }
+
+    async function deleteUnlockGuide(id) {
+      if (!confirm('Excluir este procedimento?')) return;
+      await supabaseClient.from('unlock_guides').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    async function handleProtectorSubmit(e) {
+      e.preventDefault();
+      const payload = {
+        primary_model: document.getElementById('sp-primary').value.trim(),
+        compatible_models: document.getElementById('sp-compat').value.trim(),
+        notes: document.getElementById('sp-notes').value.trim()
+      };
+      const { error } = await supabaseClient.from('screen_protectors').insert([payload]);
+      if (error) {
+        alert('Erro ao salvar compatibilidade: ' + error.message);
+        return;
+      }
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    function renderProtectorList() {
+      const container = document.getElementById('bench-protectors-list');
+      if (!container) return;
+      const q = (document.getElementById('sp-search-input')?.value || '').toLowerCase().trim();
+      const list = cachedProtectors.filter(p => !q || `${p.primary_model} ${p.compatible_models} ${p.notes || ''}`.toLowerCase().includes(q));
+
+      container.innerHTML = list.map(p => `
+        <div class="glass-card rounded-2xl p-4 space-y-2 border border-cyan-500/20">
+          <div class="flex justify-between items-start">
+            <h4 class="font-bold text-cyan-300 text-sm">📱 ${escapeHTML(p.primary_model)}</h4>
+            ${typeof p.id === 'number' ? `<button type="button" onclick="deleteProtector(${p.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>` : `<span class="text-[10px] text-slate-500">Padrão</span>`}
+          </div>
+          <p class="text-xs text-white font-semibold">Compatível com: <span class="text-emerald-300">${escapeHTML(p.compatible_models)}</span></p>
+          ${p.notes ? `<p class="text-[11px] text-slate-400">Obs.: ${escapeHTML(p.notes)}</p>` : ''}
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhuma película encontrada para esse modelo.</p>';
+    }
+
+    async function deleteProtector(id) {
+      await supabaseClient.from('screen_protectors').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    function initBenchmarkSelectors() {
+      const selA = document.getElementById('bench-comp-a');
+      const selB = document.getElementById('bench-comp-b');
+      if (!selA || !selB) return;
+
+      const optionsHtml = PROCESSOR_BENCHMARKS.map(p => `<option value="${p.id}">[${p.type}] ${p.name}</option>`).join('');
+      selA.innerHTML = optionsHtml;
+      selB.innerHTML = optionsHtml;
+      selA.value = 'sd685';
+      selB.value = 'hg99';
+      renderProcessorComparison();
+    }
+
+    function renderProcessorComparison() {
+      const idA = document.getElementById('bench-comp-a')?.value;
+      const idB = document.getElementById('bench-comp-b')?.value;
+      const box = document.getElementById('processor-comparison-result');
+      if (!box) return;
+
+      const a = PROCESSOR_BENCHMARKS.find(p => p.id === idA) || PROCESSOR_BENCHMARKS[0];
+      const b = PROCESSOR_BENCHMARKS.find(p => p.id === idB) || PROCESSOR_BENCHMARKS[1];
+      const maxScore = Math.max(a.score, b.score, 1);
+      const pctA = Math.round((a.score / maxScore) * 100);
+      const pctB = Math.round((b.score / maxScore) * 100);
+
+      box.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-slateDark-950 border border-cyan-500/30 space-y-2.5 text-xs">
+            <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">${a.type}</span>
+            <h4 class="font-bold text-white text-base">${a.name}</h4>
+            <p class="text-slate-400"><strong>Núcleos:</strong> ${a.cores} • <strong>Litografia:</strong> ${a.litho}</p>
+            <p class="text-slate-400"><strong>GPU:</strong> ${a.gpu}</p>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Benchmark (${a.scale})</span>
+                <strong class="text-cyan-400">${a.score.toLocaleString('pt-BR')} pts</strong>
+              </div>
+              <div class="w-full h-3 bg-slateDark-800 rounded-full overflow-hidden">
+                <div class="h-full bg-cyan-400" style="width: ${pctA}%"></div>
+              </div>
+            </div>
+            <p class="text-emerald-300 pt-1"><strong>Indicação:</strong> ${a.ideal}</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slateDark-950 border border-purple-500/30 space-y-2.5 text-xs">
+            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">${b.type}</span>
+            <h4 class="font-bold text-white text-base">${b.name}</h4>
+            <p class="text-slate-400"><strong>Núcleos:</strong> ${b.cores} • <strong>Litografia:</strong> ${b.litho}</p>
+            <p class="text-slate-400"><strong>GPU:</strong> ${b.gpu}</p>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Benchmark (${b.scale})</span>
+                <strong class="text-purple-400">${b.score.toLocaleString('pt-BR')} pts</strong>
+              </div>
+              <div class="w-full h-3 bg-slateDark-800 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-400" style="width: ${pctB}%"></div>
+              </div>
+            </div>
+            <p class="text-emerald-300 pt-1"><strong>Indicação:</strong> ${b.ideal}</p>
+          </div>
+        </div>
+      `;
+    }
+
     // ==================== COMPRAS, VENDAS & CONTROLE DA STORE ====================
     function renderTradeModule() {
       const totalSales = cachedTrades.filter(t => t.operation_type === 'venda').reduce((a, b) => a + Number(b.total_price || 0), 0);
@@ -1668,7 +2009,7 @@
             <p class="text-slate-400">Custo: ${formatCurrency(item.cost_price)} • Venda: <strong class="text-emerald-400">${formatCurrency(item.sell_price)}</strong></p>
           </div>
           <div class="flex items-center gap-2">
-            <button type="button" onclick="toggleItemInStore(${item.id}, ${!item.show_in_store})" class="px-2 py-1 rounded-lg bg-slateDark-800 hover:bg-purple-500/20 text-purple-300 text-[11px] font-semibold" title="Alternar visibilidade na LABTECH Store">
+            <button type="button" onclick="toggleItemInStore(${item.id}, ${!item.show_in_store})" class="px-2 py-1 rounded-lg bg-slateDark-800 hover:bg-purple-500/20 text-purple-300 text-[11px] font-semibold">
               ${item.show_in_store ? 'Ocultar' : 'Publicar'}
             </button>
             <span class="px-2.5 py-1 rounded-lg font-bold ${item.qty <= 1 ? 'bg-amber-500/20 text-amber-300' : 'bg-slateDark-800 text-white'}">${item.qty} un.</span>
