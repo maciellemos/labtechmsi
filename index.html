@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>LABTECH_MSI | Laboratório de Eletrônica e Informática - Ceará-Mirim/RN</title>
-  <meta name="description" content="Assistência técnica especializada em reparo de placas, notebooks, smartphones, placas de vídeo e consoles na Rua 8 de Dezembro, Ceará-Mirim/RN." />
+  <title>LABTECH_MSI | Laboratório de Eletrônica, Informática & Store - Ceará-Mirim/RN</title>
+  <meta name="description" content="Assistência técnica especializada em reparo de placas, notebooks, smartphones, placas de vídeo, consoles e loja de acessórios na Rua 8 de Dezembro, Ceará-Mirim/RN." />
   <meta name="theme-color" content="#090d16" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -74,17 +74,19 @@
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+      <nav class="hidden md:flex items-center gap-5 text-sm font-medium text-slate-300">
         <a href="#servicos" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Serviços</a>
+        <a href="#loja" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition font-semibold text-cyan-300">🛍️ Store</a>
         <a href="#rastrear-os" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Acompanhar OS & PIX</a>
         <a href="#orcamento" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Orçamento</a>
         <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition">@labtechmsicm</a>
       </nav>
 
       <div class="flex items-center gap-2">
-        <span id="cloud-sync-badge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Nuvem Ativa
-        </span>
+        <button type="button" onclick="openCartModal()" class="relative px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition flex items-center gap-1.5">
+          <span>🛒</span>
+          <span id="header-cart-count">0</span>
+        </button>
         <button type="button" onclick="openInstallModal()" class="px-3 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition flex items-center gap-1.5">
           <span>📲 App</span>
         </button>
@@ -110,11 +112,14 @@
             Diagnóstico preciso e reparo avançado para <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">seus equipamentos</span>.
           </h1>
           <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
-            Manutenção de notebooks, smartphones, placas de vídeo, desktops e consoles com bancada equipada, agilidade, transparência e acompanhamento online da sua Ordem de Serviço.
+            Manutenção de notebooks, smartphones, placas de vídeo, desktops e consoles com bancada equipada, loja de acessórios/upgrades e acompanhamento online da sua Ordem de Serviço.
           </p>
           <div class="flex flex-wrap gap-3 pt-2">
             <a href="#rastrear-os" class="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">
-              🔍 Consultar Minha OS / Pagar PIX
+              🔍 Consultar Minha OS / PIX
+            </a>
+            <a href="#loja" class="px-5 py-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 font-bold text-sm transition">
+              🛍️ LABTECH Store
             </a>
             <a href="#orcamento" class="px-5 py-3 rounded-xl glass-card hover:border-cyan-400/50 text-white font-semibold text-sm transition">
               Solicitar Orçamento
@@ -145,7 +150,7 @@
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-cyan-400 font-bold">✓</span>
-                <span>Consulta online em tempo real da OS e QR Code PIX com valor automático.</span>
+                <span>Venda de SSDs, memórias, carregadores, cabos e acessórios testados na bancada.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-cyan-400 font-bold">📍</span>
@@ -189,6 +194,32 @@
           <p class="text-sm text-slate-400 mt-2">PS4, PS5, Xbox e Nintendo: troca de porta HDMI, limpeza, metal líquido e fonte.</p>
         </div>
       </div>
+    </section>
+
+    <!-- ==================== LABTECH STORE (VITRINE PÚBLICA) ==================== -->
+    <section id="loja" class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-800/80">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-purple-400 text-xs font-bold uppercase tracking-wider">Acessórios, Upgrades & Peças • Pronta Entrega</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">🛍️ LABTECH Store</h2>
+          <p class="text-sm text-slate-400 mt-1">Adicione os itens ao carrinho e pague via PIX ou retire na Rua 8 de Dezembro, Ceará-Mirim/RN.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <input id="store-search-input" oninput="renderPublicStore()" type="text" placeholder="🔍 Buscar SSD, carregador, cabo..." class="px-4 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-purple-400" />
+          <select id="store-category-filter" onchange="renderPublicStore()" class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+            <option value="">Todas Categorias</option>
+            <option value="Acessório">Acessórios</option>
+            <option value="Hardware / Upgrade">Hardware / Upgrades</option>
+            <option value="Peça Reparo">Peças de Reparo</option>
+            <option value="Insumo Bancada">Insumos / Pastas Térmicas</option>
+          </select>
+          <button type="button" onclick="openCartModal()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5">
+            <span>🛒 Ver Carrinho (<span id="store-btn-cart-count">0</span>)</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="public-store-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
     </section>
 
     <!-- ACOMPANHAMENTO DE OS + PAGAMENTO PIX -->
@@ -283,7 +314,7 @@
         🛠️ Ordens de Serviço (OS)
       </button>
       <button type="button" id="tab-btn-trade" onclick="switchBenchTab('trade')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🛒 Compras & Vendas
+        🛒 Compras, Vendas & Store
       </button>
       <button type="button" id="tab-btn-knowledge" onclick="switchBenchTab('knowledge')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
         🧠 Base de Defeitos
@@ -418,29 +449,29 @@
       <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ABA 3: COMPRAS & VENDAS -->
+    <!-- ABA 3: COMPRAS, VENDAS & ESTOQUE DA STORE -->
     <div id="bench-tab-trade" class="hidden space-y-6">
       <div id="trade-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
 
       <div class="grid lg:grid-cols-2 gap-6">
         <div class="glass-card rounded-2xl p-6">
-          <h3 class="font-bold text-white text-lg mb-4">📦 Cadastrar Item no Estoque</h3>
+          <h3 class="font-bold text-white text-lg mb-4">📦 Cadastrar Produto / Peça (Estoque & Store)</h3>
           <form onsubmit="handleInventoryCreate(event)" class="grid sm:grid-cols-2 gap-3">
             <div class="sm:col-span-2">
               <label class="block text-xs text-slate-400 mb-1">Nome da Peça / Produto *</label>
-              <input id="inv-name" type="text" required placeholder="Ex: SSD NVMe 256GB / Tela iPhone 11 / Pasta Térmica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+              <input id="inv-name" type="text" required placeholder="Ex: SSD NVMe 256GB / Carregador Tipo-C 65W / Cabo HDMI 2.1" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
             </div>
             <div>
               <label class="block text-xs text-slate-400 mb-1">Categoria</label>
               <select id="inv-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
-                <option value="Peça Reparo">Peça de Reparo</option>
-                <option value="Hardware / Upgrade">Hardware / Upgrade</option>
                 <option value="Acessório">Acessório</option>
+                <option value="Hardware / Upgrade">Hardware / Upgrade</option>
+                <option value="Peça Reparo">Peça de Reparo</option>
                 <option value="Insumo Bancada">Insumo Bancada</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs text-slate-400 mb-1">Qtd. Inicial</label>
+              <label class="block text-xs text-slate-400 mb-1">Qtd. em Estoque *</label>
               <input id="inv-qty" type="number" min="0" value="1" required class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
             </div>
             <div>
@@ -450,6 +481,21 @@
             <div>
               <label class="block text-xs text-slate-400 mb-1">Preço de Venda (R$) *</label>
               <input id="inv-sell" type="number" step="0.01" min="0" required placeholder="150.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Exibir na LABTECH Store?</label>
+              <select id="inv-show-store" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="true">🛍️ Sim — Vitrine Pública</option>
+                <option value="false">🔒 Não — Uso Interno Bancada</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Link da Foto (URL Opcional)</label>
+              <input id="inv-image" type="url" placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Descrição Curta para o Cliente (Opcional)</label>
+              <input id="inv-desc" type="text" placeholder="Ex: Garantia de 90 dias, alta velocidade de leitura e gravação." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
             </div>
             <div class="sm:col-span-2 flex justify-end pt-2">
               <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
@@ -502,7 +548,7 @@
 
       <div class="grid lg:grid-cols-2 gap-6">
         <div class="glass-card rounded-2xl p-6 space-y-3">
-          <h3 class="font-bold text-white text-base">📦 Estoque de Peças & Produtos</h3>
+          <h3 class="font-bold text-white text-base">📦 Estoque & Controle da Vitrine Store</h3>
           <div id="bench-inventory-list" class="space-y-2.5"></div>
         </div>
         <div class="glass-card rounded-2xl p-6 space-y-3">
@@ -636,7 +682,7 @@
 
   <!-- RODAPÉ -->
   <footer class="border-t border-slate-800/80 py-8 px-4 text-center text-xs text-slate-400 space-y-1.5">
-    <p class="font-bold text-slate-300">LABTECH_MSI — Laboratório de Eletrônica e Manutenção</p>
+    <p class="font-bold text-slate-300">LABTECH_MSI — Laboratório de Eletrônica, Manutenção & Store</p>
     <p>Rua 8 de Dezembro, Ceará-Mirim, Rio Grande do Norte — CEP 59570-000</p>
     <p>
       WhatsApp: <a href="https://wa.me/5584991216849" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">(84) 99121-6849</a> •
@@ -651,13 +697,13 @@
       <span class="text-base">🏠</span>
       <span>Início</span>
     </a>
+    <a href="#loja" onclick="switchAppMode('client')" class="flex flex-col items-center text-purple-300 hover:text-purple-200">
+      <span class="text-base">🛍️</span>
+      <span>Store</span>
+    </a>
     <a href="#rastrear-os" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400">
       <span class="text-base">🔍</span>
       <span>Minha OS</span>
-    </a>
-    <a href="#orcamento" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400">
-      <span class="text-base">📝</span>
-      <span>Orçar</span>
     </a>
     <button type="button" onclick="requestBenchAccess()" class="flex flex-col items-center text-amber-300">
       <span class="text-base">🔒</span>
@@ -668,6 +714,50 @@
       <span>Bot IA</span>
     </button>
   </nav>
+
+  <!-- MODAL CARRINHO LABTECH STORE -->
+  <div id="cart-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl p-6 w-full max-w-lg border border-purple-500/30 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-lg">🛒 Carrinho LABTECH Store</h3>
+        <button type="button" onclick="closeModal('cart-modal')" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div id="cart-items-container" class="space-y-2.5 text-xs"></div>
+
+      <div id="cart-checkout-section" class="hidden space-y-4 pt-3 border-t border-slate-800">
+        <div class="flex justify-between items-center text-base font-extrabold">
+          <span class="text-slate-300">Total do Pedido:</span>
+          <span id="cart-total-display" class="text-emerald-400 text-xl">R$ 0,00</span>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Seu Nome para Retirada / Entrega *</label>
+          <input id="cart-customer-name" type="text" placeholder="Ex: Carlos Eduardo" class="w-full px-3.5 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+        </div>
+
+        <div id="cart-pix-box" class="hidden p-4 rounded-xl bg-slateDark-950 border border-cyan-500/30 flex flex-col sm:flex-row items-center gap-4">
+          <img id="cart-pix-qr" src="" alt="QR Code PIX Loja" class="w-32 h-32 rounded-lg bg-white p-1.5 shrink-0" />
+          <div class="space-y-2 text-xs w-full">
+            <p class="font-bold text-cyan-300 uppercase">Pagar Pedido via PIX</p>
+            <p class="text-slate-300">Chave: <strong id="cart-pix-key" class="text-white select-all"></strong></p>
+            <button type="button" id="cart-copy-pix-btn" class="w-full py-2 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold">
+              📋 Copiar PIX Copia e Cola
+            </button>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-2.5">
+          <button type="button" onclick="showCartPix()" class="py-2.5 px-4 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold text-xs transition">
+            💠 Gerar QR Code PIX
+          </button>
+          <button type="button" onclick="checkoutCartWhatsApp()" class="py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">
+            📲 Finalizar no WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- WIDGET CHATBOT FLUTUANTE -->
   <div class="fixed bottom-16 md:bottom-6 right-4 z-50">
@@ -704,7 +794,7 @@
         <h3 class="font-bold text-white text-lg">🔒 Login Bancada OS</h3>
         <button type="button" onclick="closeModal('login-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
-      <p class="text-xs text-slate-400">Entre com seu e-mail e senha cadastrados no Supabase para gerenciar as Ordens de Serviço.</p>
+      <p class="text-xs text-slate-400">Entre com seu e-mail e senha cadastrados no Supabase para gerenciar a bancada e a loja.</p>
       <form onsubmit="handleBenchLogin(event)" class="space-y-3">
         <div>
           <label class="block text-xs text-slate-400 mb-1">E-mail do Técnico</label>
@@ -753,7 +843,7 @@
         <button type="button" onclick="closeModal('install-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Adicione este sistema à tela inicial do seu celular para acompanhar OS ou gerenciar a bancada como um aplicativo:
+        Adicione este sistema à tela inicial do seu celular para acompanhar OS, comprar na Store ou gerenciar a bancada como um aplicativo:
       </p>
       <div class="space-y-2.5 text-xs text-slate-300 bg-slateDark-950/80 p-4 rounded-xl border border-slate-800">
         <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito e selecione <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar aplicativo"</strong>.</p>
@@ -779,6 +869,8 @@
     let cachedCatalog = [];
     let cachedKnowledge = [];
     let cachedInventory = [];
+    let publicStoreItems = [];
+    let shoppingCart = [];
     let cachedTrades = [];
     let cachedPix = { pix_key: '84991216849', pix_receiver: 'MACIEL LEMOS DA CAMARA' };
 
@@ -860,6 +952,181 @@
       return rawPayload + computeCRC16(rawPayload);
     }
 
+    // ==================== LABTECH STORE (VITRINE PÚBLICA & CARRINHO) ====================
+    async function loadPublicStore() {
+      const { data } = await supabaseClient
+        .from('inventory')
+        .select('*')
+        .eq('show_in_store', true)
+        .gt('qty', 0)
+        .order('name', { ascending: true });
+
+      publicStoreItems = data || [];
+      renderPublicStore();
+    }
+
+    function getCategoryIcon(cat) {
+      if (cat === 'Hardware / Upgrade') return '💾';
+      if (cat === 'Peça Reparo') return '🔌';
+      if (cat === 'Insumo Bancada') return '🧪';
+      return '🎧';
+    }
+
+    function renderPublicStore() {
+      const grid = document.getElementById('public-store-grid');
+      if (!grid) return;
+
+      const query = (document.getElementById('store-search-input')?.value || '').toLowerCase().trim();
+      const catFilter = document.getElementById('store-category-filter')?.value || '';
+
+      const items = publicStoreItems.filter(p => {
+        const matchesCat = !catFilter || p.category === catFilter;
+        const text = `${p.name} ${p.description || ''} ${p.category}`.toLowerCase();
+        const matchesQuery = !query || text.includes(query);
+        return matchesCat && matchesQuery;
+      });
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div class="sm:col-span-2 lg:col-span-4 glass-card rounded-2xl p-8 text-center space-y-2">
+            <p class="text-slate-300 font-semibold">Nenhum produto disponível nesta busca no momento.</p>
+            <p class="text-xs text-slate-400">Consulte disponibilidade de peças ou encomendas diretamente no WhatsApp (84) 99121-6849.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="glass-card hover:border-purple-400/50 rounded-2xl p-4 flex flex-col justify-between gap-3 transition">
+          <div class="space-y-3">
+            <div class="h-36 rounded-xl bg-slateDark-950 border border-slate-800 flex items-center justify-center overflow-hidden">
+              ${item.image_url
+                ? `<img src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.name)}" class="w-full h-full object-cover" onerror="this.style.display='none'" />`
+                : `<span class="text-4xl">${getCategoryIcon(item.category)}</span>`
+              }
+            </div>
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[10px] uppercase font-bold text-purple-300">${escapeHTML(item.category)}</span>
+                <span class="text-[10px] text-emerald-400 font-semibold">${item.qty} em estoque</span>
+              </div>
+              <h3 class="font-bold text-white text-base mt-1 leading-snug">${escapeHTML(item.name)}</h3>
+              ${item.description ? `<p class="text-xs text-slate-400 mt-1 line-clamp-2">${escapeHTML(item.description)}</p>` : ''}
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+            <span class="text-lg font-extrabold text-emerald-400">${formatCurrency(item.sell_price)}</span>
+            <button type="button" onclick="addToCart(${item.id})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90 text-slate-950 font-extrabold text-xs transition">
+              + Adicionar
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateCartBadges() {
+      const totalItems = shoppingCart.reduce((acc, item) => acc + item.qty, 0);
+      const b1 = document.getElementById('header-cart-count');
+      const b2 = document.getElementById('store-btn-cart-count');
+      if (b1) b1.textContent = totalItems;
+      if (b2) b2.textContent = totalItems;
+    }
+
+    function addToCart(productId) {
+      const product = publicStoreItems.find(p => p.id === productId);
+      if (!product) return;
+
+      const existing = shoppingCart.find(c => c.id === productId);
+      if (existing) {
+        if (existing.qty < product.qty) {
+          existing.qty += 1;
+        } else {
+          alert('Quantidade máxima disponível em estoque atingida.');
+          return;
+        }
+      } else {
+        shoppingCart.push({
+          id: product.id,
+          name: product.name,
+          price: Number(product.sell_price),
+          maxQty: Number(product.qty),
+          qty: 1
+        });
+      }
+      updateCartBadges();
+      openCartModal();
+    }
+
+    function changeCartQty(productId, delta) {
+      const idx = shoppingCart.findIndex(c => c.id === productId);
+      if (idx === -1) return;
+      const item = shoppingCart[idx];
+      const next = item.qty + delta;
+      if (next <= 0) {
+        shoppingCart.splice(idx, 1);
+      } else if (next <= item.maxQty) {
+        item.qty = next;
+      }
+      updateCartBadges();
+      renderCartModal();
+    }
+
+    function openCartModal() {
+      document.getElementById('cart-pix-box').classList.add('hidden');
+      renderCartModal();
+      openModal('cart-modal');
+    }
+
+    function renderCartModal() {
+      const container = document.getElementById('cart-items-container');
+      const checkoutSec = document.getElementById('cart-checkout-section');
+
+      if (shoppingCart.length === 0) {
+        container.innerHTML = `<p class="text-center text-slate-400 py-6">Seu carrinho da LABTECH Store está vazio.</p>`;
+        checkoutSec.classList.add('hidden');
+        return;
+      }
+
+      checkoutSec.classList.remove('hidden');
+      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      document.getElementById('cart-total-display').textContent = formatCurrency(total);
+
+      container.innerHTML = shoppingCart.map(item => `
+        <div class="p-3 rounded-xl bg-slateDark-950 border border-slate-800 flex items-center justify-between gap-2">
+          <div>
+            <p class="font-bold text-white text-sm">${escapeHTML(item.name)}</p>
+            <p class="text-slate-400">${formatCurrency(item.price)} cada</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="changeCartQty(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-slateDark-800 text-white font-bold">-</button>
+            <span class="font-bold text-white px-1">${item.qty}</span>
+            <button type="button" onclick="changeCartQty(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-slateDark-800 text-white font-bold">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function showCartPix() {
+      await loadPixSettings();
+      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const txid = 'STORE' + Math.floor(1000 + Math.random() * 9000);
+      const pixCode = generatePixBrCode(cachedPix.pix_key, cachedPix.pix_receiver, total, txid);
+
+      document.getElementById('cart-pix-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}`;
+      document.getElementById('cart-pix-key').textContent = cachedPix.pix_key;
+      document.getElementById('cart-copy-pix-btn').onclick = () => copyPixCode(pixCode);
+      document.getElementById('cart-pix-box').classList.remove('hidden');
+    }
+
+    function checkoutCartWhatsApp() {
+      const custName = document.getElementById('cart-customer-name').value.trim() || 'Cliente Store';
+      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const lines = shoppingCart.map(i => `• ${i.qty}x ${i.name} (${formatCurrency(i.price * i.qty)})`).join('\n');
+      const msg = `*PEDIDO LABTECH STORE*\n*Cliente:* ${custName}\n\n*Itens:*\n${lines}\n\n*Total:* ${formatCurrency(total)}\n*Chave PIX:* ${cachedPix.pix_key}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== MODO CLIENTE: CONSULTA DE OS & PIX ====================
     function selectServiceAndScroll(category) {
       const select = document.getElementById('quote-device');
       if (select) select.value = category;
@@ -1002,6 +1269,7 @@
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     }
 
+    // ==================== AUTENTICAÇÃO & BANCADA OS ====================
     function switchAppMode(mode) {
       const clientView = document.getElementById('client-app-view');
       const benchView = document.getElementById('bench-app-view');
@@ -1014,6 +1282,7 @@
       } else {
         benchView.classList.add('hidden');
         clientView.classList.remove('hidden');
+        loadPublicStore();
       }
     }
 
@@ -1120,6 +1389,7 @@
       cachedInventory = invRes.data || [];
       cachedTrades = tradeRes.data || [];
       await loadPixSettings();
+      await loadPublicStore();
 
       renderBenchDashboard();
       renderTradeModule();
@@ -1279,7 +1549,7 @@
 
       document.getElementById('bench-operational-metrics').innerHTML = `
         <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Vendas de Peças / Acessórios</span>
+          <span class="text-slate-400">Vendas de Peças / Store</span>
           <span class="font-bold text-emerald-400">${formatCurrency(totalSales)}</span>
         </div>
         <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
@@ -1287,8 +1557,8 @@
           <span class="font-bold text-rose-400">${formatCurrency(totalPurchases)}</span>
         </div>
         <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs">
-          <span class="text-slate-400">Itens em Estoque / Base Defeitos</span>
-          <span class="font-bold text-cyan-400">${cachedInventory.length} itens • ${cachedKnowledge.length} casos</span>
+          <span class="text-slate-400">Produtos na Store / Base Defeitos</span>
+          <span class="font-bold text-cyan-400">${publicStoreItems.length} na loja • ${cachedKnowledge.length} casos</span>
         </div>
       `;
 
@@ -1353,6 +1623,7 @@
       `).join('') || '<p class="text-xs text-slate-400">Catálogo vazio.</p>';
     }
 
+    // ==================== COMPRAS, VENDAS & CONTROLE DA STORE ====================
     function renderTradeModule() {
       const totalSales = cachedTrades.filter(t => t.operation_type === 'venda').reduce((a, b) => a + Number(b.total_price || 0), 0);
       const totalPurchases = cachedTrades.filter(t => t.operation_type === 'compra').reduce((a, b) => a + Number(b.total_price || 0), 0);
@@ -1387,11 +1658,19 @@
       document.getElementById('bench-inventory-list').innerHTML = cachedInventory.map(item => `
         <div class="p-3.5 rounded-xl bg-slateDark-950/90 border ${item.qty <= 1 ? 'border-amber-500/40' : 'border-slate-800'} flex items-center justify-between gap-2 text-xs">
           <div>
-            <span class="text-[10px] uppercase font-bold text-cyan-400">${escapeHTML(item.category)}</span>
-            <p class="font-bold text-white text-sm">${escapeHTML(item.name)}</p>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] uppercase font-bold text-cyan-400">${escapeHTML(item.category)}</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${item.show_in_store ? 'bg-purple-500/20 text-purple-300' : 'bg-slate-800 text-slate-400'}">
+                ${item.show_in_store ? '🛍️ Na Store' : '🔒 Interno'}
+              </span>
+            </div>
+            <p class="font-bold text-white text-sm mt-0.5">${escapeHTML(item.name)}</p>
             <p class="text-slate-400">Custo: ${formatCurrency(item.cost_price)} • Venda: <strong class="text-emerald-400">${formatCurrency(item.sell_price)}</strong></p>
           </div>
           <div class="flex items-center gap-2">
+            <button type="button" onclick="toggleItemInStore(${item.id}, ${!item.show_in_store})" class="px-2 py-1 rounded-lg bg-slateDark-800 hover:bg-purple-500/20 text-purple-300 text-[11px] font-semibold" title="Alternar visibilidade na LABTECH Store">
+              ${item.show_in_store ? 'Ocultar' : 'Publicar'}
+            </button>
             <span class="px-2.5 py-1 rounded-lg font-bold ${item.qty <= 1 ? 'bg-amber-500/20 text-amber-300' : 'bg-slateDark-800 text-white'}">${item.qty} un.</span>
             <button type="button" onclick="deleteInventoryItem(${item.id})" class="text-slate-500 hover:text-rose-400">✕</button>
           </div>
@@ -1432,7 +1711,10 @@
         category: document.getElementById('inv-category').value,
         qty: parseInt(document.getElementById('inv-qty').value, 10) || 0,
         cost_price: parseFloat(document.getElementById('inv-cost').value) || 0,
-        sell_price: parseFloat(document.getElementById('inv-sell').value) || 0
+        sell_price: parseFloat(document.getElementById('inv-sell').value) || 0,
+        show_in_store: document.getElementById('inv-show-store').value === 'true',
+        image_url: document.getElementById('inv-image').value.trim(),
+        description: document.getElementById('inv-desc').value.trim()
       };
       const { error } = await supabaseClient.from('inventory').insert([payload]);
       if (error) {
@@ -1440,6 +1722,11 @@
         return;
       }
       e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    async function toggleItemInStore(id, nextState) {
+      await supabaseClient.from('inventory').update({ show_in_store: nextState }).eq('id', id);
       await refreshAllBenchData();
     }
 
@@ -1495,6 +1782,7 @@
       await refreshAllBenchData();
     }
 
+    // ==================== BASE DE DEFEITOS ====================
     async function handleKnowledgeSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('save-kb-btn');
@@ -1688,6 +1976,7 @@
       window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
     }
 
+    // ==================== FINANCEIRO & CATÁLOGO ====================
     async function handleFinanceSubmit(e) {
       e.preventDefault();
       await supabaseClient.from('finance').insert([{
@@ -1731,6 +2020,7 @@
       document.getElementById('os-price').value = item.price;
     }
 
+    // ==================== CHATBOT DE TRIAGEM ====================
     let chatState = { step: 0, device: '', symptom: '', model: '', name: '' };
 
     function toggleChatbot() {
@@ -1830,6 +2120,7 @@
         currentUser = data.session.user;
       }
       await loadPixSettings();
+      await loadPublicStore();
     });
 
     if ('serviceWorker' in navigator) {
