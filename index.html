@@ -3215,14 +3215,15 @@ PLACA: ... | SINTOMA: ... | MINUTO: 14:25 | SOLUCAO: ..." class="w-full px-3 py-
       window.open(url, '_blank');
     }
 
-    // --- BIBLIOTECA YOUTUBE EM 3 PASSOS ---
+
+// --- BIBLIOTECA YOUTUBE AVANÇADA (PROTOCOLO COMPLETO + TEMPERATURA + DICAS) ---
     function copyYouTubeExtractionPrompt() {
       const ytUrl = (document.getElementById('yt-source-url')?.value || '').trim();
       if (!ytUrl) { alert('Cole primeiro o link da aula do YouTube no Passo 1.'); return; }
       const promptText =
-`Analise este vídeo técnico de manutenção eletrônica (${ytUrl}) e extraia TODOS os defeitos solucionados nele.
-Responda EXATAMENTE uma linha por defeito, seguindo estritamente este formato (sem texto extra antes ou depois):
-PLACA: [Modelo da placa ou aparelho] | SINTOMA: [Sintoma e consumo na fonte] | MINUTO: [MM:SS] | SOLUCAO: [Causa raiz e componente reparado/trocado]`;
+`Atue como engenheiro especialista em reparo de placas e micro-soldagem. Analise este vídeo técnico (${ytUrl}) e extraia TODOS os defeitos solucionados nele com riqueza de detalhes técnicos.
+Responda EXATAMENTE uma linha por defeito, seguindo estritamente este formato (use " -> " para separar as etapas do passo a passo, sem quebras de linha dentro do mesmo defeito):
+PLACA: [Modelo da placa/aparelho] | SINTOMA: [Sintoma e consumo na fonte] | MINUTO: [MM:SS] | PASSOS: [1. Medição inicial -> 2. Teste/Malha -> 3. Isolamento/Componente] | SOLDA_TEMP: [Temperatura/vazão de ar, ferro, fluxo ou "N/A"] | DICAS: [Dicas de ouro, tensões de referência ou cuidados citados no vídeo]`;
 
       navigator.clipboard.writeText(promptText).then(() => {
         document.getElementById('yt-copy-feedback')?.classList.remove('hidden');
@@ -3242,37 +3243,23 @@ PLACA: [Modelo da placa ou aparelho] | SINTOMA: [Sintoma e consumo na fonte] | M
       if (!rawUrl) { alert('Informe o link do YouTube no Passo 1.'); return; }
       if (!rawText) { alert('Cole o resumo gerado pela IA no Passo 2.'); return; }
 
-      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('PLACA:') && l.includes('SOLUCAO:'));
+      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('PLACA:') && (l.includes('PASSOS:') || l.includes('SOLUCAO:')));
       if (!lines.length) {
-        alert('Nenhuma linha válida encontrada. Certifique-se de colar exatamente o formato gerado pelo comando do Passo 1.');
+        alert('Nenhuma linha válida encontrada. Use o botão "Copiar Comando Pronto" do Passo 1 para gerar o formato exato.');
         return;
       }
 
       const records = lines.map(line => {
         const getField = (label) => {
-          const m = line.match(new RegExp(`${label}:\\s*([^|]+)`));
-          return m ? m[1].trim() : '';
-        };
-        const placa = getField('PLACA') || 'Placa / Equipamento';
-        const sintoma = getField('SINTOMA') || 'Defeito técnico';
-        const minuto = getField('MINUTO') || '00:00';
-        const solucao = getField('SOLUCAO') || '';
+          const m = line.match(new RegExp(`${label}:\\s*([^\vert{}]+)`)); return m ? m[1].trim() : ''; }; const placa = getField('PLACA') \vert{}\vert{} 'Placa / Equipamento'; const sintoma = getField('SINTOMA') \vert{}\vert{} 'Defeito técnico'; const minuto = getField('MINUTO') \vert{}\vert{} '00:00'; const passos = getField('PASSOS') \vert{}\vert{} getField('SOLUCAO') \vert{}\vert{} ''; const soldaTemp = getField('SOLDA_TEMP') \vert{}\vert{} 'Não especificado'; const dicas = getField('DICAS') \vert{}\vert{} '';  const structuredNotes = `PASSOS: ${passos} || SOLDA: ${soldaTemp} \vert{}\vert{} DICAS:${dicas}`;
         const secs = parseTimestampToSeconds(minuto);
         const sep = rawUrl.includes('?') ? '&' : '?';
+
         return {
           category: 'YouTube Defeito',
           brand_model: placa,
           title: `${sintoma} (⏱️ ${minuto})`,
-          drive_url: `${rawUrl}${sep}t=${secs}s`,
-          notes: solucao
-        };
-      });
-
-      const { error } = await supabaseClient.from('drive_archive').insert(records);
-      if (error) { alert('Erro ao salvar defeitos: ' + error.message); return; }
-
-      document.getElementById('yt-ai-bulk-text').value = '';
-      alert(`${records.length} defeito(s) salvos na sua Biblioteca da Bancada!`);
+          drive_url: `${rawUrl}${sep}t=${secs}s`, notes: structuredNotes }; });  const { error } = await supabaseClient.from('drive_archive').insert(records); if (error) { alert('Erro ao salvar defeitos: ' + error.message); return; }  document.getElementById('yt-ai-bulk-text').value = ''; alert(`${records.length} protocolo(s) técnico(s) salvos na sua Biblioteca!`);
       await loadReturnsAndDrive();
       renderYouTubeLibrary();
     }
@@ -3283,46 +3270,89 @@ PLACA: [Modelo da placa ou aparelho] | SINTOMA: [Sintoma e consumo na fonte] | M
       const q = (document.getElementById('yt-library-search')?.value || '').toLowerCase().trim();
       const items = (cachedDriveArchive || []).filter(d =>
         d.category === 'YouTube Defeito' &&
-        (!q || `${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase().includes(q))
+        (!q || `${d.brand_model} ${d.title}${d.notes || ''}`.toLowerCase().includes(q))
       );
 
-      el.innerHTML = items.map(item => `
-        <div class="p-4 rounded-xl bg-slateDark-950 border border-rose-500/30 flex flex-col justify-between gap-2.5 text-xs">
-          <div class="space-y-1">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold text-[10px]">${escapeHTML(item.brand_model)}</span>
-              <button type="button" onclick="deleteDriveItem(${item.id})" class="text-slate-500 hover:text-rose-400">✕</button>
+      el.innerHTML = items.map(item => {
+        const rawNotes = item.notes || '';
+        let passos = rawNotes, solda = '', dicas = '';
+        if (rawNotes.includes('||')) {
+          const parts = rawNotes.split('||').map(p => p.trim());
+          passos = (parts.find(p => p.startsWith('PASSOS:')) || '').replace('PASSOS:', '').trim();
+          solda = (parts.find(p => p.startsWith('SOLDA:')) || '').replace('SOLDA:', '').trim();
+          dicas = (parts.find(p => p.startsWith('DICAS:')) || '').replace('DICAS:', '').trim();
+        }
+        const stepsList = passos.split('->').map(s => s.trim()).filter(Boolean);
+
+        return `
+          <div class="p-4 rounded-xl bg-slateDark-950 border border-rose-500/30 flex flex-col justify-between gap-3 text-xs">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold text-[10px]">${escapeHTML(item.brand_model)}</span>
+                <button type="button" onclick="deleteDriveItem(${item.id})" class="text-slate-500 hover:text-rose-400" title="Remover">✕</button>
+              </div>
+              <h4 class="font-bold text-white text-sm">${escapeHTML(item.title)}</h4>
+
+              ${stepsList.length > 1
+                ? `<div class="p-2.5 rounded-lg bg-slateDark-900/90 border border-slate-800 space-y-1">
+                    <div class="text-[11px] font-bold text-cyan-400">📋 Passo a Passo do Reparo:</div>
+                    ${stepsList.map(st => `<div class="text-slate-300">• ${escapeHTML(st)}</div>`).join('')}
+                   </div>`
+                : `<p class="text-slate-300">🛠️ <strong>Solução:</strong> ${escapeHTML(passos || '-')}</p>`
+              }
+
+              ${solda && solda !== 'N/A' && solda !== 'Não especificado'
+                ? `<div class="px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">🌡️ <strong>Estação / Solda:</strong> ${escapeHTML(solda)}</div>`
+                : ''
+              }
+
+              ${dicas
+                ? `<div class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">💡 <strong>Dica do Técnico:</strong> ${escapeHTML(dicas)}</div>`
+                : ''
+              }
             </div>
-            <h4 class="font-bold text-white text-sm">${escapeHTML(item.title)}</h4>
-            <p class="text-slate-300">🛠️ <strong>Solução:</strong> ${escapeHTML(item.notes || '-')}</p>
+            <a href="${escapeHTML(item.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold transition">
+              ▶️ Abrir Vídeo no Segundo Exato ↗
+            </a>
           </div>
-          <a href="${escapeHTML(item.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold transition">
-            ▶️ Abrir Vídeo no Segundo Exato ↗
-          </a>
-        </div>
-      `).join('') || '<p class="text-xs text-slate-400 col-span-full">Nenhum defeito do YouTube salvo ainda. Siga os Passos 1 e 2 acima!</p>';
+        `;
+      }).join('') || '<p class="text-xs text-slate-400 col-span-full">Nenhum protocolo do YouTube salvo ainda. Siga os Passos 1 e 2 acima!</p>';
     }
 
-    // --- COPILOTO DE DIAGNÓSTICO IA & LEITOR PDF ---
+    // --- COPILOTO DE DIAGNÓSTICO IA (INTEGRADO COM SUA BIBLIOTECA DO YOUTUBE) ---
     function runBenchDiagnosticSimulation() {
-      const model = document.getElementById('diag-board-model')?.value || 'Equipamento não especificado';
+      const model = (document.getElementById('diag-board-model')?.value || '').trim();
       const scenario = document.getElementById('diag-scenario')?.value;
-      const notes = document.getElementById('diag-notes')?.value || '';
+      const notes = (document.getElementById('diag-notes')?.value || '').trim();
 
       const guides = {
-        'no-power': `🔍 ROTEIRO DE BANCADA — ${model} (0.00A / Não Liga)\n1. Inspeção Visual & Conector: Verificar jack DC / USB-C, fusíveis de entrada e mosfets de proteção (1º e 2º mosfets da linha VIN/B+).\n2. Teste de Continuidade (Escala Diodo): Conferir se há curto na malha B+ antes de injetar tensão.\n3. Gate dos Mosfets de Entrada: Medir tensão no pino ACDRV / Gate (deve estar ~24V a 25V em notebooks de 19V). Se estiver 0V, checar CI Charger (ACDET / ACOK).\n4. Tensões Primárias (Always): Verificar presença de +3V_ALW e +5V_ALW nas bobinas primárias e tensão no botão Power (3.3V zerando ao pressionar).`,
-        'short-bplus': `⚡ ROTEIRO DE BANCADA — ${model} (Curto Total na Linha Principal)\n1. Isolamento: NÃO manter 19V plugado. Ajustar fonte assimétrica para 1.0V e limite de 2.0A a 3.0A.\n2. Detecção Térmica: Aplicar breu (rosin) ou álcool isopropílico nos capacitores cerâmicos da linha B+, mosfets de alta do VCore/GPU e CI Charger.\n3. Injeção Controlada: Injetar 1V no ponto pós-resistor shunt (PR) e observar qual componente aquece primeiro.\n4. Pós-remoção: Confirmar retorno da resistência normal (escala de diodo > 0.350V) antes de alimentar com tensão nominal.`,
-        'low-current': `🔋 ROTEIRO DE BANCADA — ${model} (Consumo Travado 0.01A - 0.08A)\n1. Malhas LDO: Medir saídas LDO de 3.3V e 5V do PWM primário (VREG3 / VREG5) ou saídas VREG do PMIC.\n2. Cristal Oscilador (RTC 32.768kHz): Conferir oscilação no osciloscópio — ausência trava a sequência de start do PCH/CPU.\n3. Comunicação SPI / BIOS: Verificar alimentação no pino 8 da BIOS (3.3V ou 1.8V) e atividade de clock/dados nos pinos 1, 2, 5 e 6 ao pressionar Power.\n4. Sinais de Habilitação: Checar RSMRST#, PWRBTN# e SLP_S3# / PS_HOLD.`,
-        'no-video': `🖥️ ROTEIRO DE BANCADA — ${model} (Liga sem Vídeo / Backlight)\n1. Diferenciar Imagem vs Backlight: Iluminar a tela com lanterna lateral para confirmar se há imagem no fundo.\n2. Sequência de Memória & VCore: Conferir tensão nas bobinas de RAM (1.2V/1.35V/1.1V), VCore e GFX Core.\n3. Circuito LVDS / eDP: Medir no conector da tela: +19V/+VBAT (B+ Backlight), +3.3V_LCD (VDD), BL_ON (Enable) e PWM_DIM.\n4. Regravação de BIOS / ME Region: Se todas as bobinas subirem e não houver reset de vídeo, testar regravação de BIOS limpa.`,
-        'no-charge': `⚡ ROTEIRO DE BANCADA — ${model} (Falha de Carga / USB-C)\n1. Malhas CC1 / CC2: Medir condução reversa nos pinos CC1 e CC2 do conector USB-C (valores alterados indicam falha no CI controlador USB-C / Tristar / Hydra).\n2. OVP (Over Voltage Protection): Checar tensão na entrada e saída do CI OVP.\n3. CI Charger / IF-PMIC: Verificar tensões de VBUS, PMID, SYS e comunicação I2C (SDA/SCL) com a bateria conectada.`
+        'no-power': `🔍 ROTEIRO DE BANCADA — ${model || 'Placa'} (0.00A / Não Liga)\n1. Inspeção Visual & Conector: Verificar jack DC / USB-C, fusíveis de entrada e mosfets de proteção (1º e 2º mosfets da linha VIN/B+).\n2. Teste de Continuidade (Escala Diodo): Conferir se há curto na malha B+ antes de injetar tensão.\n3. Gate dos Mosfets de Entrada: Medir tensão no pino ACDRV / Gate (~24V-25V em notebooks de 19V). Se estiver 0V, checar CI Charger (ACDET / ACOK).\n4. Tensões Primárias (Always): Verificar presença de +3V_ALW e +5V_ALW nas bobinas primárias e tensão no botão Power (3.3V zerando ao pressionar).`,
+        'short-bplus': `⚡ ROTEIRO DE BANCADA — ${model || 'Placa'} (Curto Total na Linha Principal)\n1. Isolamento: NÃO manter 19V plugado. Ajustar fonte assimétrica para 1.0V e limite de 2.0A a 3.0A.\n2. Detecção Térmica: Aplicar breu (rosin) ou álcool isopropílico nos capacitores cerâmicos da linha B+, mosfets de alta do VCore/GPU e CI Charger.\n3. Injeção Controlada: Injetar 1V no ponto pós-resistor shunt (PR) e observar qual componente aquece primeiro.\n4. Pós-remoção: Confirmar retorno da resistência normal (escala de diodo > 0.350V) antes de alimentar com tensão nominal.`,
+        'low-current': `🔋 ROTEIRO DE BANCADA — ${model || 'Placa'} (Consumo Travado 0.01A - 0.08A)\n1. Malhas LDO: Medir saídas LDO de 3.3V e 5V do PWM primário (VREG3 / VREG5) ou saídas VREG do PMIC.\n2. Cristal Oscilador (RTC 32.768kHz): Conferir oscilação no osciloscópio — ausência trava a sequência de start do PCH/CPU.\n3. Comunicação SPI / BIOS: Verificar alimentação no pino 8 da BIOS (3.3V ou 1.8V) e atividade de clock/dados ao pressionar Power.\n4. Sinais de Habilitação: Checar RSMRST#, PWRBTN# e SLP_S3# / PS_HOLD.`,
+        'no-video': `🖥️ ROTEIRO DE BANCADA — ${model || 'Placa'} (Liga sem Vídeo / Backlight)\n1. Diferenciar Imagem vs Backlight: Iluminar a tela com lanterna lateral para confirmar se há imagem no fundo.\n2. Sequência de Memória & VCore: Conferir tensão nas bobinas de RAM (1.2V/1.35V/1.1V), VCore e GFX Core.\n3. Circuito LVDS / eDP: Medir no conector da tela: +19V/+VBAT (B+ Backlight), +3.3V_LCD (VDD), BL_ON (Enable) e PWM_DIM.\n4. Regravação de BIOS / ME Region: Se todas as bobinas subirem e não houver reset de vídeo, testar regravação de BIOS limpa.`,
+        'no-charge': `⚡ ROTEIRO DE BANCADA — ${model || 'Placa'} (Falha de Carga / USB-C)\n1. Malhas CC1 / CC2: Medir condução reversa nos pinos CC1 e CC2 do conector USB-C (valores alterados indicam falha no CI controlador USB-C / Tristar / Hydra).\n2. OVP (Over Voltage Protection): Checar tensão na entrada e saída do CI OVP.\n3. CI Charger / IF-PMIC: Verificar tensões de VBUS, PMID, SYS e comunicação I2C (SDA/SCL) com a bateria conectada.`
       };
+const keywords = `${model} ${notes}`.toLowerCase().split(/\s+/).filter(w => w.length >= 3);
+      const relatedCases = (cachedDriveArchive || []).filter(d => {
+        if (d.category !== 'YouTube Defeito') return false;
+        const hay = `${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase();
+        return keywords.some(k => hay.includes(k));
+      }).slice(0, 3);
+      
+
+      let relatedBlock = '';
+      if (relatedCases.length) {
+        relatedBlock = `\n\n📺 CASOS REAIS ENCONTRADOS NA SUA BIBLIOTECA DO YOUTUBE:\n` +
+          relatedCases.map(c => `• [${c.brand_model}] ${c.title} ->${c.notes}`).join('\n');
+      }
 
       const out = document.getElementById('diag-simulation-output');
       if (out) {
-        out.textContent = (guides[scenario] || '') + (notes ? `\n\n📌 Observação da Bancada: ${notes}` : '');
+        out.textContent = (guides[scenario] || '') +
+          (notes ? `\n\n📌 Observação da Bancada: ${notes}` : '') +
+          relatedBlock;
       }
     }
-
     function copyDeepAIPrompt() {
       const model = document.getElementById('diag-board-model')?.value || 'Placa não informada';
       const scenarioText = document.getElementById('diag-scenario')?.selectedOptions[0]?.text || '';
