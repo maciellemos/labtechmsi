@@ -1145,6 +1145,69 @@ PLACA: ... | SINTOMA: ... | PASSOS: ... | SOLDA_TEMP: ... | DICAS: ..." class="w
 
     <!-- ABA 6: FINANCEIRO -->
     <div id="bench-tab-finance" class="hidden space-y-6">
+     <!-- GRÁFICO COMPARATIVO: CONTAS A PAGAR VS RECEBER -->
+<div class="glass-card rounded-2xl p-6 border border-emerald-500/30 space-y-4">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <div>
+      <h3 class="font-bold text-white text-lg">📊 Gráfico Financeiro: Entradas vs. Saídas</h3>
+      <p class="text-xs text-slate-400">Comparativo visual automático entre contas recebidas, a receber, pagas e a pagar.</p>
+    </div>
+    <span id="fin-chart-balance-badge" class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs">
+      Saldo Projetado: R$ 0,00
+    </span>
+  </div>
+
+  <div id="fin-visual-chart" class="space-y-3 pt-2">
+    <!-- Renderizado via JS -->
+  </div>
+</div>
+
+<!-- SIMULADOR DE METAS & PLANO DE AÇÃO (CHECKLIST DE FATURAMENTO) -->
+<div class="glass-card rounded-2xl p-6 border border-amber-500/30 space-y-5">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h3 class="font-bold text-white text-lg">🎯 Simulador de Faturamento & Plano de Ação Mensal</h3>
+      <p class="text-xs text-slate-400">Defina sua meta (ex: R$ 5.000,00) e marque as ações na checklist abaixo para simular como bater e superar o objetivo.</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-xs text-slate-300 font-bold">Meta do Mês (R$):</label>
+      <input id="goal-target-input" type="number" step="100" value="5000" oninput="recalcGoalSimulator()" class="w-32 px-3 py-2 rounded-xl bg-slateDark-950 border border-amber-500/50 text-amber-300 font-extrabold text-sm text-right" />
+      <button type="button" onclick="saveGoalSimulation()" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
+        💾 Salvar Plano
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de Progresso da Meta -->
+  <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-2">
+    <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+      <span class="text-slate-300">Simulado na Checklist: <strong id="goal-simulated-total" class="text-emerald-400 text-sm">R$ 0,00</strong></span>
+      <span id="goal-status-text" class="font-bold text-amber-300">Faltam R$ 5.000,00 (0%)</span>
+    </div>
+    <div class="w-full h-3.5 rounded-full bg-slate-800 overflow-hidden">
+      <div id="goal-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- Tabela Checklist de Alavancas de Faturamento -->
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse text-xs">
+      <thead>
+        <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+          <th class="py-2.5 px-2">Ativo</th>
+          <th class="py-2.5 px-2">Frente / Estratégia de Faturamento</th>
+          <th class="py-2.5 px-2">Ação Prática para Destravar</th>
+          <th class="py-2.5 px-2 text-center">Qtd. Mês</th>
+          <th class="py-2.5 px-2 text-right">Ticket Médio (R$)</th>
+          <th class="py-2.5 px-2 text-right">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody id="goal-checklist-tbody" class="divide-y divide-slate-800/70">
+        <!-- Linhas geradas via JS -->
+      </tbody>
+    </table>
+  </div>
+</div> 
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro Manual</h3>
         <form onsubmit="handleFinanceSubmit(event)" class="grid sm:grid-cols-4 gap-4">
@@ -3536,6 +3599,144 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         renderYouTubeLibrary();
       }
     };
+    // --- GRÁFICO FINANCEIRO (PAGAR VS RECEBER) ---
+    function renderFinancialChart(records) {
+      const container = document.getElementById('fin-visual-chart');
+      const badge = document.getElementById('fin-chart-balance-badge');
+      if (!container) return;
+
+      const list = records || [];
+      const recebido = list.filter(r => r.type === 'receber' && r.status === 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const aReceber = list.filter(r => r.type === 'receber' && r.status !== 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const pago = list.filter(r => r.type === 'pagar' && r.status === 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const aPagar = list.filter(r => r.type === 'pagar' && r.status !== 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+
+      const totalEntradas = recebido + aReceber;
+      const totalSaidas = pago + aPagar;
+      const saldo = totalEntradas - totalSaidas;
+      const maxVal = Math.max(totalEntradas, totalSaidas, 1);
+
+      const fmt = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      if (badge) {
+        badge.textContent = 'Saldo Projetado: ' + fmt(saldo);
+        badge.className = saldo >= 0
+          ? 'px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs'
+          : 'px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 font-bold text-xs';
+      }
+
+      const bars = [
+        { label: '✅ Já Recebido', value: recebido, color: 'bg-emerald-500', text: 'text-emerald-300' },
+        { label: '⏳ A Receber (Clientes/OS)', value: aReceber, color: 'bg-cyan-500', text: 'text-cyan-300' },
+        { label: '💸 Já Pago (Despesas/Peças)', value: pago, color: 'bg-amber-500', text: 'text-amber-300' },
+        { label: '🚨 A Pagar (Vencimentos)', value: aPagar, color: 'bg-rose-500', text: 'text-rose-300' }
+      ];
+
+      container.innerHTML = bars.map(b => {
+        const pct = Math.min(100, Math.round((b.value / maxVal) * 100));
+        return `
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-300 font-semibold">${b.label}</span>
+              <span class="font-bold ${b.text}">${fmt(b.value)}</span>
+            </div>
+            <div class="w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
+              <div class="h-full ${b.color} rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- SIMULADOR DE METAS & CHECKLIST DE FATURAMENTO ---
+    let goalLevers = [
+      { id: 'micro', checked: true, name: '🔬 Micro-soldagem / Reparo de Placas', action: 'Divulgar casos resolvidos (Poco X3, Moto G, iPhone) e captar placas de lojistas', qty: 4, ticket: 380 },
+      { id: 'tela_bat', checked: true, name: '📱 Troca de Telas, Baterias & Conectores', action: 'Oferecer película 3D + revisão de carga em toda troca de frontal', qty: 8, ticket: 180 },
+      { id: 'info', checked: true, name: '💻 Informática (Formatação, SSD & Limpeza)', action: 'Combo manutenção preventiva + troca de pasta térmica + upgrade SSD', qty: 6, ticket: 160 },
+      { id: 'diversos', checked: true, name: '🔊 Caixas de Som Bluetooth & Smartwatches', action: 'Anunciar troca de bateria/conector JBL e reparo de relógios na região', qty: 4, ticket: 140 },
+      { id: 'store', checked: true, name: '🛍️ Venda de Aparelhos Loja & Acessórios', action: 'Revisar aparelhos de vitrine/sucata recuperada + kits carregador turbo', qty: 2, ticket: 350 },
+      { id: 'parceria', checked: false, name: '🤝 Pacote B2B / Lojistas Parceiros', action: 'Fechar tabela fechada semanal de micro-soldagem com 2 lojas vizinhas', qty: 3, ticket: 220 }
+    ];
+
+    function renderGoalChecklist() {
+      const tbody = document.getElementById('goal-checklist-tbody');
+      if (!tbody) return;
+      const fmt = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      tbody.innerHTML = goalLevers.map((item, idx) => {
+        const sub = item.checked ? (item.qty * item.ticket) : 0;
+        return `
+          <tr class="${item.checked ? 'bg-slateDark-950/60' : 'opacity-50'} hover:bg-slate-900/60 transition">
+            <td class="py-2.5 px-2">
+              <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleGoalLever(${idx}, this.checked)" class="w-4 h-4 accent-emerald-500 cursor-pointer" />
+            </td>
+            <td class="py-2.5 px-2 font-bold text-white">${item.name}</td>
+            <td class="py-2.5 px-2 text-slate-400">${item.action}</td>
+            <td class="py-2.5 px-2 text-center">
+              <input type="number" min="0" value="${item.qty}" oninput="updateGoalLever(${idx}, 'qty', this.value)" class="w-16 px-2 py-1 rounded bg-slateDark-900 border border-slate-700 text-white text-center font-bold" />
+            </td>
+            <td class="py-2.5 px-2 text-right">
+              <input type="number" min="0" step="10" value="${item.ticket}" oninput="updateGoalLever(${idx}, 'ticket', this.value)" class="w-24 px-2 py-1 rounded bg-slateDark-900 border border-slate-700 text-cyan-300 text-right font-bold" />
+            </td>
+            <td class="py-2.5 px-2 text-right font-extrabold ${item.checked ? 'text-emerald-400' : 'text-slate-500'}">${fmt(sub)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      recalcGoalSimulator();
+    }
+
+    function toggleGoalLever(idx, isChecked) {
+      goalLevers[idx].checked = isChecked;
+      renderGoalChecklist();
+    }
+
+    function updateGoalLever(idx, field, val) {
+      goalLevers[idx][field] = Math.max(0, Number(val || 0));
+      renderGoalChecklist();
+    }
+
+    function recalcGoalSimulator() {
+      const target = Math.max(1, Number(document.getElementById('goal-target-input')?.value || 5000));
+      const total = goalLevers.reduce((acc, item) => acc + (item.checked ? item.qty * item.ticket : 0), 0);
+      const pct = Math.min(100, Math.round((total / target) * 100));
+      const diff = target - total;
+      const fmt = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      const totalEl = document.getElementById('goal-simulated-total');
+      const statusEl = document.getElementById('goal-status-text');
+      const barEl = document.getElementById('goal-progress-bar');
+
+      if (totalEl) totalEl.textContent = fmt(total);
+      if (barEl) barEl.style.width = pct + '%';
+      if (statusEl) {
+        if (diff <= 0) {
+          statusEl.textContent = '🚀 Meta batida! Superávit de ' + fmt(Math.abs(diff)) + ' (' + Math.round((total / target) * 100) + '%)';
+          statusEl.className = 'font-bold text-emerald-400';
+        } else {
+          statusEl.textContent = 'Faltam ' + fmt(diff) + ' para a meta (' + pct + '%)';
+          statusEl.className = 'font-bold text-amber-300';
+        }
+      }
+    }
+
+    async function saveGoalSimulation() {
+      const target = Number(document.getElementById('goal-target-input')?.value || 5000);
+      const monthLabel = new Date().toLocaleDateString('pt-BR', { month: '2-digit', year: 'numeric' });
+      try {
+        const { error } = await supabaseClient.from('revenue_goals').insert([{
+          month_label: monthLabel,
+          target_amount: target,
+          plan_json: goalLevers
+        }]);
+        if (error) throw error;
+        alert('Plano de meta (' + monthLabel + ') salvo na nuvem com sucesso!');
+      } catch (e) {
+        localStorage.setItem('labtech_goal_plan', JSON.stringify({ target, goalLevers }));
+        alert('Plano salvo localmente no navegador! (Rode o SQL revenue_goals no Supabase para sincronizar na nuvem).');
+      }
+    }
+    renderGoalChecklist();
   </script>
   
 </body>
