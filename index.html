@@ -796,6 +796,27 @@ PLACA: ... | SINTOMA: ... | PASSOS: ... | SOLDA_TEMP: ... | DICAS: ..." class="w
       </div>
     </div>
   </div>
+  <!-- BLOCO E: CONSULTA RÁPIDA DE FICHAS TÉCNICAS & BENCHMARKS -->
+  <div class="glass-card rounded-2xl p-6 border border-sky-500/30 space-y-4">
+    <div>
+      <h3 class="font-bold text-white text-lg">📊 Consulta Rápida: Fichas Técnicas & Benchmarks de Hardware</h3>
+      <p class="text-xs text-slate-400">Digite o modelo do smartphone, CPU ou GPU para abrir diretamente a ficha técnica (memória, SoC, bateria) ou pontuações de benchmark.</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-2">
+      <input id="bench-hw-query" type="text" placeholder="Ex: Poco X3 Pro, Galaxy S25, Ryzen 7 5700X, RTX 4060..." class="flex-1 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-xs font-bold">
+      <button type="button" onclick="openHwLookup('tudocelular')" class="px-3 py-2.5 rounded-xl bg-sky-600/20 hover:bg-sky-600/40 border border-sky-500/40 text-sky-300 transition">📱 TudoCelular</button>
+      <button type="button" onclick="openHwLookup('antutu')" class="px-3 py-2.5 rounded-xl bg-orange-600/20 hover:bg-orange-600/40 border border-orange-500/40 text-orange-300 transition">🔥 AnTuTu</button>
+      <button type="button" onclick="openHwLookup('geekbench')" class="px-3 py-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/40 text-purple-300 transition">⚡ Geekbench</button>
+      <button type="button" onclick="openHwLookup('cpubenchmark')" class="px-3 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-300 transition">🧠 PassMark CPU</button>
+      <button type="button" onclick="openHwLookup('3dmark')" class="px-3 py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/40 border border-rose-500/40 text-rose-300 transition">🎮 3DMark</button>
+      <button type="button" onclick="openHwLookup('userbenchmark')" class="px-3 py-2.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/40 border border-cyan-500/40 text-cyan-300 transition">💻 UserBench</button>
+      <button type="button" onclick="openHwLookup('corona')" class="px-3 py-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/40 text-amber-300 transition">☀️ Corona Render</button>
+    </div>
+  </div>
 </div>
     <!-- ABA 3: COMPRAS, VENDAS & STORE -->
     <div id="bench-tab-trade" class="hidden space-y-6">
@@ -3483,6 +3504,21 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       await loadReturnsAndDrive();
       renderYouTubeLibrary();
     }
+    // --- CONSULTA RÁPIDA DE FICHAS TÉCNICAS & BENCHMARKS ---
+    function openHwLookup(site) {
+      const q = (document.getElementById('bench-hw-query')?.value || '').trim();
+      const enc = encodeURIComponent(q);
+      const urls = {
+        tudocelular: q ? 'https://www.tudocelular.com/?s=' + enc : 'https://www.tudocelular.com/',
+        antutu: q ? 'https://www.google.com/search?q=site:antutu.com+' + enc : 'https://www.antutu.com/web/ranking',
+        geekbench: q ? 'https://browser.geekbench.com/search?q=' + enc : 'https://browser.geekbench.com/android_devices/samsung-sm-s936n',
+        cpubenchmark: q ? 'https://www.google.com/search?q=site:cpubenchmark.net+' + enc : 'https://www.cpubenchmark.net/',
+        '3dmark': q ? 'https://www.google.com/search?q=site:benchmarks.ul.com/pt-br/3dmark+' + enc : 'https://benchmarks.ul.com/pt-br/3dmark',
+        userbenchmark: q ? 'https://www.google.com/search?q=site:userbenchmark.com+' + enc : 'https://www.userbenchmark.com/',
+        corona: q ? 'https://www.google.com/search?q=site:chaos.com/pt/corona/benchmark+' + enc : 'https://www.chaos.com/pt/corona/benchmark'
+      };
+      window.open(urls[site], '_blank', 'noopener,noreferrer');
+    }
     // Integra a nova aba no seletor existente
     const _prevSwitchBenchTab2 = window.switchBenchTab;
     window.switchBenchTab = function(tabName) {
@@ -3501,5 +3537,6 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       }
     };
   </script>
+  
 </body>
 </html>
