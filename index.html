@@ -669,10 +669,22 @@
                 <option value="false">🔒 Não — Uso Interno Bancada</option>
               </select>
             </div>
-            <div>
-              <label class="block text-xs text-slate-400 mb-1">Link da Foto (URL Opcional)</label>
-              <input id="inv-image" type="url" placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
-            </div>
+            <div class="sm:col-span-2 p-3 rounded-xl bg-slateDark-950/70 border border-slate-700/80 space-y-2">
+                    <label class="block text-xs text-slate-300 font-semibold">📸 Foto do Produto (Galeria / Câmera / PC ou Link)</label>
+                    <div class="flex flex-wrap items-center gap-3">
+                      <label class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">
+                        📁 Escolher Foto
+                        <input id="inv-image-file" type="file" accept="image/*" onchange="processProductImageFile(event)" class="hidden" />
+                      </label>
+                      <input id="inv-image-url-helper" type="url" oninput="syncProductImageUrl(this.value)" placeholder="Ou cole um link https://... aqui" class="flex-1 min-w-[180px] px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+                      <button type="button" id="inv-image-clear-btn" onclick="clearProductImagePreview()" class="hidden px-2.5 py-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 text-xs font-bold">✕ Limpar</button>
+                    </div>
+                    <input id="inv-image" type="hidden" />
+                    <div id="inv-image-preview-box" class="hidden pt-2 flex items-center gap-3">
+                      <img id="inv-image-preview" src="" alt="Pré-visualização" class="w-16 h-16 object-cover rounded-lg border border-cyan-500/40 bg-slateDark-900" />
+                      <span id="inv-image-status" class="text-[11px] text-emerald-400">Imagem pronta para salvar!</span>
+                    </div>
+                  </div>
             <div class="sm:col-span-2">
               <label class="block text-xs text-slate-400 mb-1">Descrição Curta para o Cliente (Opcional)</label>
               <input id="inv-desc" type="text" placeholder="Ex: Garantia de 90 dias, alta velocidade de leitura e gravação." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
@@ -2906,6 +2918,58 @@
       renderCoursesList();
     };
     setTimeout(renderCoursesList, 1800);
+ // ==================== UPLOAD E COMPRESSÃO DE IMAGEM DO PRODUTO ====================
+    function processProductImageFile(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = new Image();
+        img.onload = function() {
+          const maxSide = 600;
+          let w = img.width, h = img.height;
+          if (w > maxSide || h > maxSide) {
+            if (w > h) { h = Math.round((h * maxSide) / w); w = maxSide; }
+            else { w = Math.round((w * maxSide) / h); h = maxSide; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.78);
+
+          document.getElementById('inv-image').value = compressedDataUrl;
+          document.getElementById('inv-image-url-helper').value = '';
+          document.getElementById('inv-image-preview').src = compressedDataUrl;
+          document.getElementById('inv-image-status').textContent = `Foto otimizada (${w}x${h}px) pronta para salvar!`;
+          document.getElementById('inv-image-preview-box').classList.remove('hidden');
+          document.getElementById('inv-image-clear-btn').classList.remove('hidden');
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function syncProductImageUrl(val) {
+      const url = (val || '').trim();
+      document.getElementById('inv-image').value = url;
+      if (url) {
+        document.getElementById('inv-image-preview').src = url;
+        document.getElementById('inv-image-status').textContent = 'Link de imagem carregado.';
+        document.getElementById('inv-image-preview-box').classList.remove('hidden');
+        document.getElementById('inv-image-clear-btn').classList.remove('hidden');
+      } else {
+        clearProductImagePreview();
+      }
+    }
+
+    function clearProductImagePreview() {
+      document.getElementById('inv-image').value = '';
+      if (document.getElementById('inv-image-file')) document.getElementById('inv-image-file').value = '';
+      if (document.getElementById('inv-image-url-helper')) document.getElementById('inv-image-url-helper').value = '';
+      document.getElementById('inv-image-preview-box')?.classList.add('hidden');
+      document.getElementById('inv-image-clear-btn')?.classList.add('hidden');
+    }
   </script>
 </body>
 </html>
