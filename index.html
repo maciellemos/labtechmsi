@@ -447,6 +447,37 @@
             <label class="block text-xs text-slate-400 mb-1">Laudo Técnico / Serviço Executado</label>
             <input id="os-diagnosis" type="text" placeholder="Ex: Troca de CI PWM e limpeza ultrassônica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
           </div>
+          <!-- CALCULADORA DE ORÇAMENTO, PEÇAS, TRANSPORTE & LUCRO -->
+<div class="sm:col-span-2 lg:col-span-4 p-4 rounded-2xl bg-slateDark-950/90 border border-cyan-500/30 space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-400">🧮 Calculadora de Orçamento & Lucro Líquido (Pós-Diagnóstico)</h4>
+    <span id="os-profit-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-extrabold">Lucro Líquido: R$ 0,00</span>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+    <div>
+      <label class="block text-[11px] text-slate-400 mb-1">Peça do Estoque (Opcional)</label>
+      <select id="os-part-select" onchange="onOsPartChange()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs">
+        <option value="">-- Sem peça / Avulso --</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-[11px] text-slate-400 mb-1">Custo da Peça (R$)</label>
+      <input id="os-part-cost" type="number" step="0.01" min="0" value="0" oninput="recalcOsBudget()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-rose-300 text-xs" />
+    </div>
+    <div>
+      <label class="block text-[11px] text-slate-400 mb-1">Transporte / Frete / Uber (R$)</label>
+      <input id="os-transport-cost" type="number" step="0.01" min="0" value="0" oninput="recalcOsBudget()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-amber-300 text-xs" />
+    </div>
+    <div>
+      <label class="block text-[11px] text-slate-400 mb-1">Mão de Obra / Bancada (R$)</label>
+      <input id="os-labor-value" type="number" step="0.01" min="0" value="0" oninput="recalcOsBudget()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-cyan-300 text-xs" />
+    </div>
+    <div>
+      <label class="block text-[11px] text-slate-400 mb-1">Link Fotos/Vídeo Microscópio</label>
+      <input id="os-media-url" type="url" placeholder="https://drive.google.com/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs" />
+    </div>
+  </div>
+</div>
           <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-2 pt-2">
             <button id="save-os-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
               Salvar Ordem de Serviço na Nuvem
@@ -457,7 +488,96 @@
 
       <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
+<!-- ABA: RETORNOS & GARANTIA -->
+<div id="bench-tab-returns" class="hidden space-y-6">
+  <div class="glass-card rounded-2xl p-6">
+    <h3 class="font-bold text-white text-lg mb-4">🔄 Registrar Retorno / Garantia (90 Dias)</h3>
+    <form onsubmit="handleReturnSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Nº da OS Original *</label>
+        <input id="ret-order-id" type="text" required placeholder="Ex: OS-2026-001" onblur="autofillReturnFromOs()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 font-mono text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Cliente *</label>
+        <input id="ret-client" type="text" required placeholder="Nome do cliente" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Equipamento / Modelo *</label>
+        <input id="ret-device" type="text" required placeholder="Modelo do aparelho" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Custo Extra no Retorno (R$)</label>
+        <input id="ret-extra-cost" type="number" step="0.01" min="0" value="0" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-rose-300 text-sm" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-slate-400 mb-1">Motivo do Retorno (Relato do Cliente) *</label>
+        <input id="ret-reason" type="text" required placeholder="Ex: Voltou a desligar após 15 dias..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-slate-400 mb-1">Diagnóstico Técnico do Retorno</label>
+        <input id="ret-findings" type="text" placeholder="Ex: Solda fria no PWM / Mau uso / Peça com defeito" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+        <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition">
+          Registrar Retorno na Garantia
+        </button>
+      </div>
+    </form>
+  </div>
 
+  <div class="glass-card rounded-2xl p-6 space-y-4">
+    <h3 class="font-bold text-white text-base">📋 Histórico de Retornos & Garantias</h3>
+    <div id="bench-returns-list" class="space-y-3"></div>
+  </div>
+</div>
+
+<!-- ABA: ACERVO GOOGLE DRIVE (5TB) -->
+<div id="bench-tab-drive" class="hidden space-y-6">
+  <div class="glass-card rounded-2xl p-6">
+    <h3 class="font-bold text-white text-lg mb-4">☁️ Indexar Arquivo / Pasta do Google Drive (5TB)</h3>
+    <form onsubmit="handleDriveSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+        <select id="drv-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+          <option value="Esquema Elétrico">Esquema Elétrico</option>
+          <option value="Boardview">Boardview</option>
+          <option value="BIOS / Dump">BIOS / Dump</option>
+          <option value="Curso / Apostila">Curso / Apostila</option>
+          <option value="Ferramenta / Software">Ferramenta / Software</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Marca / Placa / Modelo *</label>
+        <input id="drv-model" type="text" required placeholder="Ex: Dell LA-B012P / iPhone 11 / Samsung A54" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-slate-400 mb-1">Título do Arquivo / Pasta *</label>
+        <input id="drv-title" type="text" required placeholder="Ex: Esquema + Boardview Completo + BIOS Clear ME" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-slate-400 mb-1">Link Direto do Google Drive *</label>
+        <input id="drv-url" type="url" required placeholder="https://drive.google.com/drive/folders/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 text-sm" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-slate-400 mb-1">Observações Técnicas</label>
+        <input id="drv-notes" type="text" placeholder="Ex: Senha do ZIP: labtech / Testado 100%" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+        <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+          Salvar Link no Acervo
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="glass-card rounded-2xl p-6 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h3 class="font-bold text-white text-base">🗂️ Biblioteca Técnica LABTECH_MSI</h3>
+      <input id="drv-search" type="text" oninput="renderDriveArchive()" placeholder="Buscar placa, modelo, BIOS, esquema..." class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs w-64" />
+    </div>
+    <div id="bench-drive-list" class="grid md:grid-cols-2 gap-4"></div>
+  </div>
+</div>
     <!-- ABA 3: COMPRAS, VENDAS & STORE -->
     <div id="bench-tab-trade" class="hidden space-y-6">
       <div id="trade-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
@@ -2473,6 +2593,200 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
+// ==================== CALCULADORA DE LUCRO, RETORNOS & ACERVO DRIVE ====================
+    let cachedReturns = [];
+    let cachedDriveArchive = [];
+
+    function populateOsPartsSelect() {
+      const sel = document.getElementById('os-part-select');
+      if (!sel || typeof cachedInventory === 'undefined') return;
+      const currentVal = sel.value;
+      sel.innerHTML = `<option value="">-- Sem peça / Avulso --</option>` +
+        cachedInventory.map(i => `<option value="${i.id}" data-cost="${i.cost_price || 0}" data-sell="${i.sell_price || 0}">${escapeHTML(i.name)} (Est: ${i.qty} | Custo: R$ ${Number(i.cost_price || 0).toFixed(2)})</option>`).join('');
+      if (currentVal) sel.value = currentVal;
+    }
+
+    function onOsPartChange() {
+      const sel = document.getElementById('os-part-select');
+      const opt = sel?.options[sel.selectedIndex];
+      if (opt && opt.value) {
+        document.getElementById('os-part-cost').value = Number(opt.dataset.cost || 0).toFixed(2);
+      } else {
+        document.getElementById('os-part-cost').value = '0';
+      }
+      recalcOsBudget();
+    }
+
+    function recalcOsBudget() {
+      const partCost = parseFloat(document.getElementById('os-part-cost')?.value) || 0;
+      const transportCost = parseFloat(document.getElementById('os-transport-cost')?.value) || 0;
+      const laborVal = parseFloat(document.getElementById('os-labor-value')?.value) || 0;
+      const totalClient = partCost + transportCost + laborVal;
+      const priceInput = document.getElementById('os-price');
+      if (priceInput && totalClient > 0) {
+        priceInput.value = totalClient.toFixed(2);
+      }
+      const finalPrice = parseFloat(priceInput?.value) || 0;
+      const netProfit = finalPrice - partCost - transportCost;
+      const badge = document.getElementById('os-profit-badge');
+      if (badge) {
+        badge.textContent = `Lucro Líquido: ${formatCurrency(netProfit)}`;
+        badge.className = `px-2.5 py-1 rounded-lg text-xs font-extrabold ${netProfit >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
+      }
+      return { partCost, transportCost, laborVal, netProfit };
+    }
+
+    document.getElementById('bench-os-form')?.addEventListener('submit', () => {
+      setTimeout(async () => {
+        const osNum = document.getElementById('os-number')?.value?.trim();
+        if (!osNum) return;
+        const { partCost, transportCost, laborVal, netProfit } = recalcOsBudget();
+        const partId = document.getElementById('os-part-select')?.value || null;
+        const mediaUrl = document.getElementById('os-media-url')?.value?.trim() || null;
+        await supabaseClient.from('orders').update({
+          part_id: partId ? Number(partId) : null,
+          part_cost: partCost,
+          transport_cost: transportCost,
+          labor_value: laborVal,
+          net_profit: netProfit,
+          media_url: mediaUrl
+        }).eq('id', osNum);
+      }, 900);
+    });
+
+    async function loadReturnsAndDrive() {
+      populateOsPartsSelect();
+      const [retRes, drvRes] = await Promise.all([
+        supabaseClient.from('warranty_returns').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('drive_archive').select('*').order('created_at', { ascending: false })
+      ]);
+      cachedReturns = retRes.data || [];
+      cachedDriveArchive = drvRes.data || [];
+      renderReturnsList();
+      renderDriveArchive();
+    }
+
+    function autofillReturnFromOs() {
+      const osId = document.getElementById('ret-order-id')?.value?.trim();
+      if (!osId || typeof cachedOrders === 'undefined') return;
+      const found = cachedOrders.find(o => String(o.id).toLowerCase() === osId.toLowerCase());
+      if (found) {
+        document.getElementById('ret-client').value = found.client || '';
+        document.getElementById('ret-device').value = found.model || '';
+      }
+    }
+
+    async function handleReturnSubmit(e) {
+      e.preventDefault();
+      const payload = {
+        original_order_id: document.getElementById('ret-order-id').value.trim(),
+        client_name: document.getElementById('ret-client').value.trim(),
+        device_model: document.getElementById('ret-device').value.trim(),
+        extra_cost: parseFloat(document.getElementById('ret-extra-cost').value) || 0,
+        return_reason: document.getElementById('ret-reason').value.trim(),
+        technical_findings: document.getElementById('ret-findings').value.trim(),
+        status: 'Em Análise'
+      };
+      const { error } = await supabaseClient.from('warranty_returns').insert([payload]);
+      if (error) { alert('Erro ao registrar retorno: ' + error.message); return; }
+      e.target.reset();
+      await loadReturnsAndDrive();
+    }
+
+    async function updateReturnStatus(id, newStatus) {
+      await supabaseClient.from('warranty_returns').update({
+        status: newStatus,
+        resolved_at: newStatus === 'Entregue' ? new Date().toISOString() : null
+      }).eq('id', id);
+      await loadReturnsAndDrive();
+    }
+
+    function renderReturnsList() {
+      const el = document.getElementById('bench-returns-list');
+      if (!el) return;
+      el.innerHTML = cachedReturns.map(r => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-amber-500/30 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold">OS: ${escapeHTML(r.original_order_id || '-')}</span>
+              <span class="font-bold text-white text-sm">${escapeHTML(r.client_name)} — ${escapeHTML(r.device_model)}</span>
+            </div>
+            <p class="text-amber-300"><strong>Motivo:</strong> ${escapeHTML(r.return_reason)}</p>
+            ${r.technical_findings ? `<p class="text-slate-400"><strong>Laudo Retorno:</strong> ${escapeHTML(r.technical_findings)}</p>` : ''}
+            ${Number(r.extra_cost) > 0 ? `<p class="text-rose-400 font-semibold">Custo Extra Bancada: - ${formatCurrency(r.extra_cost)}</p>` : ''}
+          </div>
+          <div class="flex items-center gap-2">
+            <select onchange="updateReturnStatus(${r.id}, this.value)" class="px-3 py-1.5 rounded-lg bg-slateDark-900 border border-slate-700 text-white text-xs font-semibold">
+              <option value="Em Análise" ${r.status === 'Em Análise' ? 'selected' : ''}>🔍 Em Análise</option>
+              <option value="Reparado" ${r.status === 'Reparado' ? 'selected' : ''}>✅ Reparado</option>
+              <option value="Sem Defeito" ${r.status === 'Sem Defeito' ? 'selected' : ''}>ℹ️ Sem Defeito</option>
+              <option value="Entregue" ${r.status === 'Entregue' ? 'selected' : ''}>📦 Entregue</option>
+            </select>
+          </div>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum retorno registrado na garantia.</p>';
+    }
+
+    async function handleDriveSubmit(e) {
+      e.preventDefault();
+      const payload = {
+        category: document.getElementById('drv-category').value,
+        brand_model: document.getElementById('drv-model').value.trim(),
+        title: document.getElementById('drv-title').value.trim(),
+        drive_url: document.getElementById('drv-url').value.trim(),
+        notes: document.getElementById('drv-notes').value.trim()
+      };
+      const { error } = await supabaseClient.from('drive_archive').insert([payload]);
+      if (error) { alert('Erro ao salvar link no acervo: ' + error.message); return; }
+      e.target.reset();
+      await loadReturnsAndDrive();
+    }
+
+    async function deleteDriveItem(id) {
+      if (!confirm('Remover este link do acervo?')) return;
+      await supabaseClient.from('drive_archive').delete().eq('id', id);
+      await loadReturnsAndDrive();
+    }
+
+    function renderDriveArchive() {
+      const el = document.getElementById('bench-drive-list');
+      if (!el) return;
+      const q = (document.getElementById('drv-search')?.value || '').toLowerCase().trim();
+      const list = cachedDriveArchive.filter(d => !q || `${d.category} ${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase().includes(q));
+      el.innerHTML = list.map(d => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 flex flex-col justify-between gap-3 text-xs">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold text-[10px]">${escapeHTML(d.category)}</span>
+              <button type="button" onclick="deleteDriveItem(${d.id})" class="text-slate-500 hover:text-rose-400">✕</button>
+            </div>
+            <p class="text-emerald-400 font-bold">${escapeHTML(d.brand_model || '')}</p>
+            <h4 class="font-bold text-white text-sm">${escapeHTML(d.title)}</h4>
+            ${d.notes ? `<p class="text-slate-400">${escapeHTML(d.notes)}</p>` : ''}
+          </div>
+          <a href="${escapeHTML(d.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold transition">
+            ☁️ Abrir Pasta / Arquivo no Google Drive ↗
+          </a>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum esquema, BIOS ou pasta indexada ainda.</p>';
+    }
+
+    const _origSwitchBenchTab = window.switchBenchTab;
+    window.switchBenchTab = function(tabName) {
+      if (typeof _origSwitchBenchTab === 'function') _origSwitchBenchTab(tabName);
+      ['returns', 'drive'].forEach(t => {
+        document.getElementById('bench-tab-' + t)?.classList.toggle('hidden', t !== tabName);
+        const btn = document.getElementById('tab-btn-' + t);
+        if (btn) {
+          btn.classList.toggle('bg-cyan-500', t === tabName);
+          btn.classList.toggle('text-slate-950', t === tabName);
+          btn.classList.toggle('bg-slateDark-800', t !== tabName);
+          btn.classList.toggle('text-slate-300', t !== tabName);
+        }
+      });
+      loadReturnsAndDrive();
+    };
+    setTimeout(loadReturnsAndDrive, 1500);
   </script>
 </body>
 </html>
