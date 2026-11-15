@@ -761,7 +761,41 @@ PLACA: ... | SINTOMA: ... | MINUTO: 14:25 | SOLUCAO: ..." class="w-full px-3 py-
       </div>
     </div>
   </div>
+<!-- BLOCO D: IMPORTADOR DE APOSTILAS & MANUAIS TÉCNICOS PARA A BASE DA IA -->
+  <div class="glass-card rounded-2xl p-6 border border-indigo-500/30 space-y-4">
+    <div>
+      <h3 class="font-bold text-white text-lg">📚 Absorver Apostila / Manual Técnico (Base de Conhecimento IA)</h3>
+      <p class="text-xs text-slate-400">Transforme apostilas de cursos, tabelas de condução reversa e manuais de serviço em regras que o Copiloto IA consulta nos diagnósticos futuros.</p>
+    </div>
 
+    <div class="grid md:grid-cols-2 gap-4">
+      <!-- Etapa 1 -->
+      <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-indigo-500 text-white font-extrabold text-xs">1º PASSO</span>
+          <span class="text-xs font-bold text-white">Copie o comando e envie junto com o PDF da apostila no Gemini</span>
+        </div>
+        <input id="manual-source-name" type="text" placeholder="Nome da Apostila (Ex: Apostila Microsoldagem Xiaomi / Tabela iPhone)" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs" />
+        <button type="button" onclick="copyManualExtractionPrompt()" class="w-full px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">
+          📋 Copiar Comando para Ler Apostila PDF
+        </button>
+        <p id="manual-copy-feedback" class="hidden text-[11px] text-emerald-400 font-semibold">✅ Comando copiado! Abra o Gemini, anexe o PDF da apostila, cole o comando e envie.</p>
+      </div>
+
+      <!-- Etapa 2 -->
+      <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-xs">2º PASSO</span>
+          <span class="text-xs font-bold text-white">Cole o conhecimento extraído pela IA para salvar na bancada</span>
+        </div>
+        <textarea id="manual-ai-bulk-text" rows="3" placeholder="Cole aqui as linhas extraídas da apostila no formato:
+PLACA: ... | SINTOMA: ... | PASSOS: ... | SOLDA_TEMP: ... | DICAS: ..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs font-mono"></textarea>
+        <button type="button" onclick="saveParsedManualKnowledge()" class="w-full px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">
+          🧠 Absorver & Salvar na Base da IA
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
     <!-- ABA 3: COMPRAS, VENDAS & STORE -->
     <div id="bench-tab-trade" class="hidden space-y-6">
@@ -3396,7 +3430,59 @@ const keywords = `${model} ${notes}`.toLowerCase().split(/\s+/).filter(w => w.le
       }
       placeholder?.classList.add('hidden');
     }
+// --- IMPORTADOR DE APOSTILAS & MANUAIS TÉCNICOS ---
+    function copyManualExtractionPrompt() {
+      const manualName = (document.getElementById('manual-source-name')?.value || 'Apostila Técnica').trim();
+      const promptText =
+`Atue como engenheiro especialista em eletrônica, leitura de esquemas e micro-soldagem. Analise o arquivo PDF anexo ("${manualName}") e extraia TODOS os protocolos de diagnóstico, tabelas de tensão/consumo, valores de condução reversa (escala de diodo), sequências de start e defeitos crônicos ensinados no material.
+Responda EXATAMENTE uma linha por tópico/defeito, seguindo estritamente este formato (use " -> " para separar etapas, sem quebras de linha dentro do mesmo item):
+PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisada] | PASSOS: [1. Medição/Valor esperado -> 2. Análise de sinal/tensão -> 3. Procedimento de reparo] | SOLDA_TEMP: [Temperatura, vazão de ar, liga de solda ou "N/A"] | DICAS: [Valores de referência em mV/V, pinos críticos ou alertas da apostila]`;
 
+      navigator.clipboard.writeText(promptText).then(() => {
+        document.getElementById('manual-copy-feedback')?.classList.remove('hidden');
+      });
+    }
+
+    async function saveParsedManualKnowledge() {
+      const manualName = (document.getElementById('manual-source-name')?.value || 'Apostila Técnica').trim();
+      const rawText = (document.getElementById('manual-ai-bulk-text')?.value || '').trim();
+      if (!rawText) { alert('Cole primeiro o conteúdo extraído da apostila no 2º Passo.'); return; }
+
+      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('PLACA:') && l.includes('PASSOS:'));
+      if (!lines.length) {
+        alert('Nenhuma linha válida encontrada. Use o botão "Copiar Comando para Ler Apostila PDF" no 1º Passo.');
+        return;
+      }
+
+      const records = lines.map(line => {
+        const getField = (label) => {
+          const rx = new RegExp(label + ':\\s*([^|]+)');
+          const m = line.match(rx);
+          return m ? m[1].trim() : '';
+        };
+        const placa = getField('PLACA') || manualName;
+        const sintoma = getField('SINTOMA') || 'Protocolo de Apostila';
+        const passos = getField('PASSOS') || '';
+        const soldaTemp = getField('SOLDA_TEMP') || 'N/A';
+        const dicas = getField('DICAS') || '';
+
+        return {
+          category: 'YouTube Defeito',
+          brand_model: placa,
+          title: '📚 [' + manualName + '] ' + sintoma,
+          drive_url: '#apostila',
+          notes: 'PASSOS: ' + passos + ' || SOLDA: ' + soldaTemp + ' || DICAS: ' + dicas
+        };
+      });
+
+      const { error } = await supabaseClient.from('drive_archive').insert(records);
+      if (error) { alert('Erro ao salvar conhecimento da apostila: ' + error.message); return; }
+
+      document.getElementById('manual-ai-bulk-text').value = '';
+      alert(records.length + ' protocolo(s) da apostila "' + manualName + '" absorvidos pela Bancada IA!');
+      await loadReturnsAndDrive();
+      renderYouTubeLibrary();
+    }
     // Integra a nova aba no seletor existente
     const _prevSwitchBenchTab2 = window.switchBenchTab;
     window.switchBenchTab = function(tabName) {
