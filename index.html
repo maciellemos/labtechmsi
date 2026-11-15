@@ -334,6 +334,9 @@
 <button type="button" id="tab-btn-drive" onclick="switchBenchTab('drive')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
   ☁️ Acervo Drive (5TB)
 </button>
+<button type="button" id="tab-btn-courses" onclick="switchBenchTab('courses')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
+  🎓 Meus Cursos
+</button>
     </div>
 
     <!-- ABA 1: VISÃO GERAL & BI -->
@@ -576,6 +579,54 @@
       <input id="drv-search" type="text" oninput="renderDriveArchive()" placeholder="Buscar placa, modelo, BIOS, esquema..." class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs w-64" />
     </div>
     <div id="bench-drive-list" class="grid md:grid-cols-2 gap-4"></div>
+  </div>
+</div>
+<!-- ABA: MEUS CURSOS & PLATAFORMAS -->
+<div id="bench-tab-courses" class="hidden space-y-6">
+  <div class="glass-card rounded-2xl p-6">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+      <div>
+        <h3 class="font-bold text-white text-lg">🎓 Central de Cursos & Aulas Online</h3>
+        <p class="text-xs text-slate-400">Salve links diretos das suas aulas (Hotmart, Kiwify, CTCASB, etc.) para estudar direto na bancada sem precisar baixar.</p>
+      </div>
+    </div>
+    <form onsubmit="handleCourseSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Plataforma *</label>
+        <select id="crs-platform" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+          <option value="Hotmart">🔥 Hotmart</option>
+          <option value="Kiwify">🥝 Kiwify</option>
+          <option value="CTCASB">🛠️ CTCASB</option>
+          <option value="Google Drive / YouTube">☁️ Google Drive / YouTube</option>
+          <option value="Outra Plataforma">🌐 Outra Plataforma</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Nome do Curso *</label>
+        <input id="crs-title" type="text" required placeholder="Ex: Reparo de Placas Notebook Avançado" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-slate-400 mb-1">Link da Área de Membros / Aula *</label>
+        <input id="crs-url" type="url" required placeholder="https://go.hotmart.com/... ou https://dashboard.kiwify.com.br/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 text-sm" />
+      </div>
+      <div class="sm:col-span-3">
+        <label class="block text-xs text-slate-400 mb-1">Módulo Atual / Anotações de Estudo</label>
+        <input id="crs-notes" type="text" placeholder="Ex: Parei na Aula 12 - Análise de PWM 3V e 5V / Login: meuemail@gmail.com" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+      </div>
+      <div class="flex items-end">
+        <button type="submit" class="w-full px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition">
+          + Adicionar Curso
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="glass-card rounded-2xl p-6 space-y-4">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h3 class="font-bold text-white text-base">📚 Meus Cursos Salvos</h3>
+      <input id="crs-search" type="text" oninput="renderCoursesList()" placeholder="Filtrar curso, plataforma ou módulo..." class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs w-64" />
+    </div>
+    <div id="bench-courses-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
   </div>
 </div>
     <!-- ABA 3: COMPRAS, VENDAS & STORE -->
@@ -2787,6 +2838,74 @@
       loadReturnsAndDrive();
     };
     setTimeout(loadReturnsAndDrive, 1500);
+ // ==================== CENTRAL DE CURSOS (HOTMART, KIWIFY, CTCASB) ====================
+    async function handleCourseSubmit(e) {
+      e.preventDefault();
+      const payload = {
+        category: 'Curso Online',
+        brand_model: document.getElementById('crs-platform').value,
+        title: document.getElementById('crs-title').value.trim(),
+        drive_url: document.getElementById('crs-url').value.trim(),
+        notes: document.getElementById('crs-notes').value.trim()
+      };
+      const { error } = await supabaseClient.from('drive_archive').insert([payload]);
+      if (error) { alert('Erro ao salvar curso: ' + error.message); return; }
+      e.target.reset();
+      await loadReturnsAndDrive();
+      renderCoursesList();
+    }
+
+    async function updateCourseProgress(id, currentNotes) {
+      const updated = prompt('Atualize o módulo/aula onde você parou:', currentNotes || '');
+      if (updated === null) return;
+      await supabaseClient.from('drive_archive').update({ notes: updated.trim() }).eq('id', id);
+      await loadReturnsAndDrive();
+      renderCoursesList();
+    }
+
+    function renderCoursesList() {
+      const el = document.getElementById('bench-courses-list');
+      if (!el) return;
+      const q = (document.getElementById('crs-search')?.value || '').toLowerCase().trim();
+      const courses = cachedDriveArchive.filter(d =>
+        d.category === 'Curso Online' &&
+        (!q || `${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase().includes(q))
+      );
+
+      el.innerHTML = courses.map(c => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-purple-500/30 flex flex-col justify-between gap-3 text-xs">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold text-[10px]">${escapeHTML(c.brand_model || 'Plataforma')}</span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="updateCourseProgress(${c.id}, '${escapeHTML(c.notes || '').replace(/'/g, "\\'")}')" class="text-cyan-400 hover:underline text-[11px]">✏️ Progresso</button>
+                <button type="button" onclick="deleteDriveItem(${c.id})" class="text-slate-500 hover:text-rose-400">✕</button>
+              </div>
+            </div>
+            <h4 class="font-bold text-white text-sm">${escapeHTML(c.title)}</h4>
+            <p class="text-slate-400">${c.notes ? `📌 ${escapeHTML(c.notes)}` : 'Sem anotação de módulo ainda.'}</p>
+          </div>
+          <a href="${escapeHTML(c.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition">
+            ▶️ Assistir Aula na Plataforma ↗
+          </a>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400 col-span-full">Nenhum curso cadastrado ainda. Adicione seus links da Hotmart, Kiwify ou CTCASB acima!</p>';
+    }
+
+    const _prevSwitchBenchTab = window.switchBenchTab;
+    window.switchBenchTab = function(tabName) {
+      if (typeof _prevSwitchBenchTab === 'function') _prevSwitchBenchTab(tabName);
+      document.getElementById('bench-tab-courses')?.classList.toggle('hidden', tabName !== 'courses');
+      const btn = document.getElementById('tab-btn-courses');
+      if (btn) {
+        btn.classList.toggle('bg-cyan-500', tabName === 'courses');
+        btn.classList.toggle('text-slate-950', tabName === 'courses');
+        btn.classList.toggle('bg-slateDark-800', tabName !== 'courses');
+        btn.classList.toggle('text-slate-300', tabName !== 'courses');
+      }
+      renderCoursesList();
+    };
+    setTimeout(renderCoursesList, 1800);
   </script>
 </body>
 </html>
