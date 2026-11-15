@@ -3235,9 +3235,8 @@ PLACA: [Modelo da placa/aparelho] | SINTOMA: [Sintoma e consumo na fonte] | MINU
       if (parts.length === 3) return (parts[0] * 3600) + (parts[1] * 60) + (parts[2] || 0);
       if (parts.length === 2) return (parts[0] * 60) + (parts[1] || 0);
       return 0;
-    }
-
-    async function saveParsedYouTubeDefects() {
+    } 
+async function saveParsedYouTubeDefects() {
       const rawUrl = (document.getElementById('yt-source-url')?.value || '').trim();
       const rawText = (document.getElementById('yt-ai-bulk-text')?.value || '').trim();
       if (!rawUrl) { alert('Informe o link do YouTube no Passo 1.'); return; }
@@ -3251,15 +3250,35 @@ PLACA: [Modelo da placa/aparelho] | SINTOMA: [Sintoma e consumo na fonte] | MINU
 
       const records = lines.map(line => {
         const getField = (label) => {
-          const m = line.match(new RegExp(`${label}:\\s*([^\vert{}]+)`)); return m ? m[1].trim() : ''; }; const placa = getField('PLACA') \vert{}\vert{} 'Placa / Equipamento'; const sintoma = getField('SINTOMA') \vert{}\vert{} 'Defeito técnico'; const minuto = getField('MINUTO') \vert{}\vert{} '00:00'; const passos = getField('PASSOS') \vert{}\vert{} getField('SOLUCAO') \vert{}\vert{} ''; const soldaTemp = getField('SOLDA_TEMP') \vert{}\vert{} 'Não especificado'; const dicas = getField('DICAS') \vert{}\vert{} '';  const structuredNotes = `PASSOS: ${passos} || SOLDA: ${soldaTemp} \vert{}\vert{} DICAS:${dicas}`;
+          const rx = new RegExp(label + ':\\s*([^|]+)');
+          const m = line.match(rx);
+          return m ? m[1].trim() : '';
+        };
+        const placa = getField('PLACA') || 'Placa / Equipamento';
+        const sintoma = getField('SINTOMA') || 'Defeito técnico';
+        const minuto = getField('MINUTO') || '00:00';
+        const passos = getField('PASSOS') || getField('SOLUCAO') || '';
+        const soldaTemp = getField('SOLDA_TEMP') || 'Não especificado';
+        const dicas = getField('DICAS') || '';
+
+        const structuredNotes = 'PASSOS: ' + passos + ' || SOLDA: ' + soldaTemp + ' || DICAS: ' + dicas;
         const secs = parseTimestampToSeconds(minuto);
         const sep = rawUrl.includes('?') ? '&' : '?';
 
         return {
           category: 'YouTube Defeito',
           brand_model: placa,
-          title: `${sintoma} (⏱️ ${minuto})`,
-          drive_url: `${rawUrl}${sep}t=${secs}s`, notes: structuredNotes }; });  const { error } = await supabaseClient.from('drive_archive').insert(records); if (error) { alert('Erro ao salvar defeitos: ' + error.message); return; }  document.getElementById('yt-ai-bulk-text').value = ''; alert(`${records.length} protocolo(s) técnico(s) salvos na sua Biblioteca!`);
+          title: sintoma + ' (⏱️ ' + minuto + ')',
+          drive_url: rawUrl + sep + 't=' + secs + 's',
+          notes: structuredNotes
+        };
+      });
+
+      const { error } = await supabaseClient.from('drive_archive').insert(records);
+      if (error) { alert('Erro ao salvar defeitos: ' + error.message); return; }
+
+      document.getElementById('yt-ai-bulk-text').value = '';
+      alert(records.length + ' protocolo(s) técnico(s) salvos na sua Biblioteca!');
       await loadReturnsAndDrive();
       renderYouTubeLibrary();
     }
@@ -3270,7 +3289,7 @@ PLACA: [Modelo da placa/aparelho] | SINTOMA: [Sintoma e consumo na fonte] | MINU
       const q = (document.getElementById('yt-library-search')?.value || '').toLowerCase().trim();
       const items = (cachedDriveArchive || []).filter(d =>
         d.category === 'YouTube Defeito' &&
-        (!q || `${d.brand_model} ${d.title}${d.notes || ''}`.toLowerCase().includes(q))
+        (!q || (d.brand_model + ' ' + d.title + ' ' + (d.notes || '')).toLowerCase().includes(q))
       );
 
       el.innerHTML = items.map(item => {
@@ -3318,6 +3337,8 @@ PLACA: [Modelo da placa/aparelho] | SINTOMA: [Sintoma e consumo na fonte] | MINU
         `;
       }).join('') || '<p class="text-xs text-slate-400 col-span-full">Nenhum protocolo do YouTube salvo ainda. Siga os Passos 1 e 2 acima!</p>';
     }
+              
+               
 
     // --- COPILOTO DE DIAGNÓSTICO IA (INTEGRADO COM SUA BIBLIOTECA DO YOUTUBE) ---
     function runBenchDiagnosticSimulation() {
