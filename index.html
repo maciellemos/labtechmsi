@@ -4267,7 +4267,7 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       loadInvestmentPlans();
     }
 
-   const _prevSwitchBenchTab5 = window.switchBenchTab;
+  const _prevSwitchBenchTab5 = window.switchBenchTab;
     window.switchBenchTab = function(tabName) {
       if (typeof _prevSwitchBenchTab5 === 'function') {
         try { _prevSwitchBenchTab5(tabName); } catch (e) {}
@@ -4276,10 +4276,13 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       if (invTab) {
         if (tabName === 'investments') {
           document.querySelectorAll('[id^="bench-tab-"]').forEach(el => el.classList.add('hidden'));
+          if (invTab.parentElement) invTab.parentElement.classList.remove('hidden');
           invTab.classList.remove('hidden');
+          invTab.style.display = 'block';
           loadInvestmentPlans();
         } else {
           invTab.classList.add('hidden');
+          invTab.style.display = '';
         }
       }
     };
