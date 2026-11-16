@@ -346,6 +346,9 @@
       <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
               🚀 Investimentos & Metas
             </button>
+      <button type="button" id="tab-btn-suppliers" onclick="switchBenchTab('suppliers')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
+          🏪 Fornecedores & Cotação
+        </button>
         </div>
 
         <!-- BARRA DE NAVEGAÇÃO POR 5 SETORES -->
@@ -361,13 +364,32 @@
         <div class="hidden">
     </div
       
-      <!-- ABA: PLANEJAMENTO DE INVESTIMENTOS FUTUROS -->
+   <!-- ABA: PLANEJAMENTO DE INVESTIMENTOS FUTUROS -->
         <div id="bench-tab-investments" class="bench-tab-content hidden space-y-6">
+          <!-- PAINEL FIXO: LOJAS & FORNECEDORES FAVORITOS -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">🏪 Fornecedores & Lojas Fixas (Acesso Rápido)</h3>
+                <p class="text-xs text-slate-400">Sites salvos permanentemente — não somem quando você exclui um item das metas.</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <input id="fav-store-name" type="text" placeholder="Nome da Loja (ex: HCell)" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" />
+                <input id="fav-store-url" type="url" placeholder="https://..." class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" />
+                <button type="button" onclick="addFavoriteStore()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg px-3 py-1.5 text-xs transition">
+                  + Fixar Site
+                </button>
+              </div>
+            </div>
+            <div id="favorite-stores-bar" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- PAINEL DE METAS DE EQUIPAMENTOS -->
           <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
             <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
               <div>
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">🚀 Planejamento de Investimentos Futuros</h3>
-                <p class="text-xs text-slate-400">Cadastre equipamentos, salve os links das lojas e acompanhe quanto falta para investir.</p>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">🚀 Metas de Equipamentos & Bancada</h3>
+                <p class="text-xs text-slate-400">Adicione os equipamentos futuros, salve o link do anúncio específico e acompanhe quanto falta investir.</p>
               </div>
               <div class="flex gap-3 text-xs">
                 <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
@@ -385,7 +407,6 @@
               </div>
             </div>
 
-            <!-- Formulário de Cadastro -->
             <div class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800 mb-6">
               <input id="inv-name" type="text" placeholder="Equipamento (ex: Microscópio Trinocular)" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
               <input id="inv-price" type="number" step="0.01" placeholder="Valor Alvo (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
@@ -396,14 +417,85 @@
                 <option value="Baixa">🟢 Prioridade Baixa</option>
               </select>
               <button type="button" onclick="addInvestmentPlan()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg px-4 py-2 text-xs transition">
-                + Salvar Item
+                + Adicionar Meta
               </button>
-              <input id="inv-url" type="url" placeholder="Link do anúncio/site salvo (https://...)" class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <input id="inv-url" type="url" placeholder="Link direto do anúncio (opcional: https://...)" class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
               <input id="inv-notes" type="text" placeholder="Observações / Modelo / Especificação..." class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
             </div>
 
-            <!-- Lista de Investimentos -->
             <div id="investment-plans-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+        </div>
+
+        <!-- ABA: FORNECEDORES & COTAÇÃO DE PEÇAS -->
+        <div id="bench-tab-suppliers" class="bench-tab-content hidden space-y-6">
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">🏪 Fornecedores & Histórico de Preços de Peças</h3>
+                <p class="text-xs text-slate-400">Pesquise uma peça (ex: Tela J7 Prime) para comparar automaticamente a opção <strong class="text-emerald-400">Mais em Conta</strong> e a <strong class="text-cyan-400">Melhor Qualidade</strong>.</p>
+              </div>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Tecell</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Luan Cell</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Ramon</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Português</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Sonimar</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-4 mb-6">
+              <label class="block text-xs font-bold text-cyan-300 mb-2">🔎 Pesquisa Rápida para Orçamento (Digite o modelo ou peça):</label>
+              <input id="sup-search-input" type="text" oninput="filterSupplierQuotes()" placeholder="Ex: Tela J7 Prime, Bateria Moto G22, Conector A31..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white mb-4" />
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-4">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">💲 Opção 1: Mais em Conta (Econômica)</span>
+                  <div id="sup-best-budget" class="mt-2 text-xs text-slate-300">Digite ou selecione uma peça para ver o menor preço registrado.</div>
+                </div>
+                <div class="bg-cyan-950/30 border border-cyan-500/30 rounded-xl p-4">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400">⭐ Opção 2: Melhor Qualidade (Premium/Original)</span>
+                  <div id="sup-best-quality" class="mt-2 text-xs text-slate-300">Digite ou selecione uma peça para ver a melhor qualidade registrada.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800 mb-6">
+              <input id="sup-part-name" type="text" placeholder="Peça (ex: Tela J7 Prime)" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <input id="sup-name" list="suppliers-datalist" type="text" placeholder="Fornecedor (ex: Tecell)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <datalist id="suppliers-datalist">
+                <option value="Tecell">
+                <option value="Luan Cell">
+                <option value="Ramon">
+                <option value="Português">
+                <option value="Sonimar">
+              </datalist>
+              <select id="sup-quality" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                <option value="Mais em Conta">💲 Mais em Conta</option>
+                <option value="Melhor Qualidade">⭐ Melhor Qualidade</option>
+              </select>
+              <input id="sup-price" type="number" step="0.01" placeholder="Valor Pago/Cotado (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <button type="button" onclick="addSupplierQuote()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg px-4 py-2 text-xs transition">
+                + Salvar Preço
+              </button>
+              <input id="sup-notes" type="text" placeholder="Observação (ex: Com aro, 90 dias garantia, retirada centro...)" class="md:col-span-6 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-slate-800 text-slate-400">
+                    <th class="py-2 px-3">Peça / Modelo</th>
+                    <th class="py-2 px-3">Fornecedor</th>
+                    <th class="py-2 px-3">Qualidade</th>
+                    <th class="py-2 px-3">Valor Peça</th>
+                    <th class="py-2 px-3">Observações</th>
+                    <th class="py-2 px-3 text-right">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="supplier-quotes-tbody" class="divide-y divide-slate-800/70"></tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -4169,8 +4261,63 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
 
     // Carrega os dados do gráfico assim que o sistema inicia
     setTimeout(loadFinancialRecordsForChart, 1200);
-    // --- ABA DE PLANEJAMENTO DE INVESTIMENTOS FUTUROS ---
+   // --- ABA DE PLANEJAMENTO DE INVESTIMENTOS FUTUROS ---
+    const DEFAULT_FAVORITE_STORES = [
+      { name: 'TechFelipe', url: 'https://www.techfelipe.com.br/' },
+      { name: '99Fix', url: 'https://www.99fix.com.br/' },
+      { name: 'HCell Equipamentos', url: 'https://www.hcell.com.br/equipamentos/' },
+      { name: 'Lojas Griffin', url: 'https://lojasgriffin.com/' },
+      { name: 'Mirão Ferramentas', url: 'https://www.mirao.com.br/smartphones/ferramentas.html' },
+      { name: 'AliExpress', url: 'https://pt.aliexpress.com/' },
+      { name: 'Shopee', url: 'https://shopee.com.br/' }
+    ];
+
+    function getFavoriteStores() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('labtech_fav_stores') || 'null');
+        return Array.isArray(saved) && saved.length ? saved : DEFAULT_FAVORITE_STORES;
+      } catch {
+        return DEFAULT_FAVORITE_STORES;
+      }
+    }
+
+    function renderFavoriteStores() {
+      const bar = document.getElementById('favorite-stores-bar');
+      if (!bar) return;
+      const stores = getFavoriteStores();
+      bar.innerHTML = stores.map((s, idx) => `
+        <div class="inline-flex items-center bg-slate-800/90 border border-slate-700 rounded-xl overflow-hidden text-xs">
+          <a href="${s.url}" target="_blank" class="px-3 py-2 text-cyan-300 hover:bg-slate-700/80 font-semibold flex items-center gap-1.5 transition">
+            🔗 ${s.name}
+          </a>
+          <button type="button" onclick="removeFavoriteStore(${idx})" title="Remover atalho" class="px-2 py-2 text-slate-500 hover:text-rose-400 hover:bg-slate-700/50 transition">
+            ×
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function addFavoriteStore() {
+      const name = document.getElementById('fav-store-name').value.trim();
+      const url = document.getElementById('fav-store-url').value.trim();
+      if (!name || !url) return alert('Preencha o nome da loja e o link (https://...).');
+      const stores = getFavoriteStores();
+      stores.push({ name, url });
+      localStorage.setItem('labtech_fav_stores', JSON.stringify(stores));
+      document.getElementById('fav-store-name').value = '';
+      document.getElementById('fav-store-url').value = '';
+      renderFavoriteStores();
+    }
+
+    function removeFavoriteStore(index) {
+      const stores = getFavoriteStores();
+      stores.splice(index, 1);
+      localStorage.setItem('labtech_fav_stores', JSON.stringify(stores));
+      renderFavoriteStores();
+    }
+
     async function loadInvestmentPlans() {
+      renderFavoriteStores();
       const { data, error } = await supabaseClient
         .from('investment_plans')
         .select('*')
@@ -4181,7 +4328,7 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         return;
       }
 
-      const items = data || [];
+      const items = (data || []).filter(i => i.category !== 'Fornecedor / Loja');
       let totalTarget = 0, totalSaved = 0;
 
       items.forEach(i => {
@@ -4225,12 +4372,12 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
             </div>
             <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px]">
               <div class="flex flex-wrap gap-1.5">
-                ${item.store_url ? `<a href="${item.store_url}" target="_blank" class="px-2.5 py-1 rounded-lg bg-cyan-600/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-600/30">🔗 Abrir Link Salvo</a>` : ''}
+                ${item.store_url ? `<a href="${item.store_url}" target="_blank" class="px-2.5 py-1 rounded-lg bg-cyan-600/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-600/30">🔗 Ver Anúncio Salvo</a>` : ''}
                 <a href="https://pt.aliexpress.com/wholesale?SearchText=${q}" target="_blank" class="px-2 py-1 rounded-lg bg-orange-600/20 text-orange-300 hover:bg-orange-600/30">🔎 AliExpress</a>
                 <a href="https://lista.mercadolivre.com.br/${q}" target="_blank" class="px-2 py-1 rounded-lg bg-yellow-600/20 text-yellow-300 hover:bg-yellow-600/30">🔎 Mercado Livre</a>
                 <a href="https://www.google.com/search?tbm=shop&q=${q}" target="_blank" class="px-2 py-1 rounded-lg bg-blue-600/20 text-blue-300 hover:bg-blue-600/30">🔎 Google Shopping</a>
               </div>
-              <button type="button" onclick="deleteInvestmentPlan('${item.id}')" class="text-rose-400 hover:text-rose-300 px-2 py-1">Excluir</button>
+              <button type="button" onclick="deleteInvestmentPlan('${item.id}')" class="text-rose-400 hover:text-rose-300 px-2 py-1">Excluir Meta</button>
             </div>
           </div>
         `;
@@ -4249,7 +4396,7 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
 
       const { error } = await supabaseClient
         .from('investment_plans')
-        .insert([{ item_name, target_price, saved_amount, priority, store_url, notes }]);
+        .insert([{ item_name, category: 'Equipamento / Bancada', target_price, saved_amount, priority, store_url, notes }]);
 
       if (error) return alert('Erro ao salvar: ' + error.message);
 
@@ -4262,28 +4409,171 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
     }
 
     async function deleteInvestmentPlan(id) {
-      if (!confirm('Remover este item do planejamento?')) return;
+      if (!confirm('Remover esta meta de equipamento? (Os sites fixos no topo continuam salvos)')) return;
       await supabaseClient.from('investment_plans').delete().eq('id', id);
       loadInvestmentPlans();
     }
 
-  const _prevSwitchBenchTab5 = window.switchBenchTab;
+    // --- ABA DE FORNECEDORES & COTAÇÃO DE PEÇAS ---
+    let allSupplierQuotes = [];
+
+    async function loadSupplierQuotes() {
+      const { data, error } = await supabaseClient
+        .from('supplier_quotes')
+        .select('*')
+        .order('updated_at', { ascending: false });
+
+      if (error) {
+        console.error('Erro ao carregar supplier_quotes:', error);
+        return;
+      }
+
+      allSupplierQuotes = data || [];
+      filterSupplierQuotes();
+    }
+
+    function filterSupplierQuotes() {
+      const term = (document.getElementById('sup-search-input')?.value || '').trim().toLowerCase();
+      const filtered = term
+        ? allSupplierQuotes.filter(q =>
+            (q.part_name || '').toLowerCase().includes(term) ||
+            (q.supplier_name || '').toLowerCase().includes(term) ||
+            (q.notes || '').toLowerCase().includes(term)
+          )
+        : allSupplierQuotes;
+
+      const budgetItems = filtered
+        .filter(q => q.quality_tier === 'Mais em Conta')
+        .sort((a, b) => Number(a.price) - Number(b.price));
+
+      const qualityItems = filtered
+        .filter(q => q.quality_tier === 'Melhor Qualidade')
+        .sort((a, b) => Number(a.price) - Number(b.price));
+
+      const budgetBox = document.getElementById('sup-best-budget');
+      const qualityBox = document.getElementById('sup-best-quality');
+
+      if (budgetBox) {
+        if (budgetItems.length) {
+          const best = budgetItems[0];
+          budgetBox.innerHTML = `
+            <div class="flex items-baseline justify-between">
+              <strong class="text-white text-sm">${best.part_name} — ${best.supplier_name}</strong>
+              <span class="text-emerald-400 font-extrabold text-base">R$ ${Number(best.price).toFixed(2)}</span>
+            </div>
+            <p class="text-slate-400 mt-1">${best.notes || 'Sem observações'} (${budgetItems.length} cotação(ões) nessa linha)</p>
+          `;
+        } else {
+          budgetBox.innerHTML = `<span class="text-slate-400">Nenhuma cotação "Mais em Conta" encontrada para essa busca.</span>`;
+        }
+      }
+
+      if (qualityBox) {
+        if (qualityItems.length) {
+          const best = qualityItems[0];
+          qualityBox.innerHTML = `
+            <div class="flex items-baseline justify-between">
+              <strong class="text-white text-sm">${best.part_name} — ${best.supplier_name}</strong>
+              <span class="text-cyan-400 font-extrabold text-base">R$ ${Number(best.price).toFixed(2)}</span>
+            </div>
+            <p class="text-slate-400 mt-1">${best.notes || 'Sem observações'} (${qualityItems.length} cotação(ões) nessa linha)</p>
+          `;
+        } else {
+          qualityBox.innerHTML = `<span class="text-slate-400">Nenhuma cotação "Melhor Qualidade" encontrada para essa busca.</span>`;
+        }
+      }
+
+      const tbody = document.getElementById('supplier-quotes-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = filtered.map(q => {
+        const isPremium = q.quality_tier === 'Melhor Qualidade';
+        const badge = isPremium
+          ? `<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">⭐ Melhor Qualidade</span>`
+          : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">💲 Mais em Conta</span>`;
+
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="py-2.5 px-3 font-semibold text-white cursor-pointer hover:text-cyan-300" onclick="document.getElementById('sup-search-input').value='${q.part_name.replace(/'/g, "\\'")}'; filterSupplierQuotes();">${q.part_name}</td>
+            <td class="py-2.5 px-3 text-slate-200 font-medium">${q.supplier_name}</td>
+            <td class="py-2.5 px-3">${badge}</td>
+            <td class="py-2.5 px-3 font-bold text-amber-400">R$ ${Number(q.price).toFixed(2)}</td>
+            <td class="py-2.5 px-3 text-slate-400">${q.notes || '-'}</td>
+            <td class="py-2.5 px-3 text-right space-x-2">
+              <button type="button" onclick="quickUpdateSupplierPrice('${q.id}', ${Number(q.price)})" class="text-cyan-400 hover:text-cyan-300">Atualizar R$</button>
+              <button type="button" onclick="deleteSupplierQuote('${q.id}')" class="text-rose-400 hover:text-rose-300">Excluir</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function addSupplierQuote() {
+      const part_name = document.getElementById('sup-part-name').value.trim();
+      const supplier_name = document.getElementById('sup-name').value.trim();
+      const quality_tier = document.getElementById('sup-quality').value;
+      const price = parseFloat(document.getElementById('sup-price').value) || 0;
+      const notes = document.getElementById('sup-notes').value.trim();
+
+      if (!part_name || !supplier_name || price <= 0) {
+        return alert('Preencha o nome da peça, o fornecedor e o valor.');
+      }
+
+      const { error } = await supabaseClient
+        .from('supplier_quotes')
+        .insert([{ part_name, supplier_name, quality_tier, price, notes }]);
+
+      if (error) return alert('Erro ao salvar cotação: ' + error.message);
+
+      document.getElementById('sup-price').value = '';
+      document.getElementById('sup-notes').value = '';
+      document.getElementById('sup-search-input').value = part_name;
+      loadSupplierQuotes();
+    }
+
+    async function quickUpdateSupplierPrice(id, currentPrice) {
+      const novo = prompt('Novo valor atualizado da peça (R$):', currentPrice);
+      if (novo === null) return;
+      const val = parseFloat(novo.replace(',', '.'));
+      if (isNaN(val) || val <= 0) return alert('Valor inválido.');
+      await supabaseClient
+        .from('supplier_quotes')
+        .update({ price: val, updated_at: new Date().toISOString() })
+        .eq('id', id);
+      loadSupplierQuotes();
+    }
+
+    async function deleteSupplierQuote(id) {
+      if (!confirm('Excluir este registro de preço?')) return;
+      await supabaseClient.from('supplier_quotes').delete().eq('id', id);
+      loadSupplierQuotes();
+    }
+
+    // GERENCIAMENTO UNIFICADO DAS NOVAS ABAS
+    const _prevSwitchBenchTabFinal = window.switchBenchTab;
     window.switchBenchTab = function(tabName) {
-      if (typeof _prevSwitchBenchTab5 === 'function') {
-        try { _prevSwitchBenchTab5(tabName); } catch (e) {}
+      if (typeof _prevSwitchBenchTabFinal === 'function') {
+        try { _prevSwitchBenchTabFinal(tabName); } catch (e) {}
       }
       const invTab = document.getElementById('bench-tab-investments');
-      if (invTab) {
-        if (tabName === 'investments') {
-          document.querySelectorAll('[id^="bench-tab-"]').forEach(el => el.classList.add('hidden'));
-          if (invTab.parentElement) invTab.parentElement.classList.remove('hidden');
-          invTab.classList.remove('hidden');
-          invTab.style.display = 'block';
-          loadInvestmentPlans();
-        } else {
-          invTab.classList.add('hidden');
-          invTab.style.display = '';
+      const supTab = document.getElementById('bench-tab-suppliers');
+
+      if (tabName === 'investments' || tabName === 'suppliers') {
+        document.querySelectorAll('[id^="bench-tab-"]').forEach(el => {
+          el.classList.add('hidden');
+          el.style.display = 'none';
+        });
+        const target = tabName === 'investments' ? invTab : supTab;
+        if (target) {
+          if (target.parentElement) target.parentElement.classList.remove('hidden');
+          target.classList.remove('hidden');
+          target.style.display = 'block';
         }
+        if (tabName === 'investments') loadInvestmentPlans();
+        if (tabName === 'suppliers') loadSupplierQuotes();
+      } else {
+        if (invTab) { invTab.classList.add('hidden'); invTab.style.display = ''; }
+        if (supTab) { supTab.classList.add('hidden'); supTab.style.display = ''; }
       }
     };
   </script>
