@@ -343,6 +343,9 @@
                     <button type="button" id="tab-btn-checklists" onclick="switchBenchTab('checklists')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
             ✅ Checklists & Bancada
           </button>
+      <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
+              🚀 Investimentos & Metas
+            </button>
         </div>
 
         <!-- BARRA DE NAVEGAÇÃO POR 5 SETORES -->
@@ -356,7 +359,53 @@
           <button type="button" onclick="selectSector('gestao')" class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💼 Gestão & Financeiro</button>
         </div>
         <div class="hidden">
-    </div>
+    </div
+      
+      <!-- ABA: PLANEJAMENTO DE INVESTIMENTOS FUTUROS -->
+        <div id="bench-tab-investments" class="bench-tab-content hidden space-y-6">
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">🚀 Planejamento de Investimentos Futuros</h3>
+                <p class="text-xs text-slate-400">Cadastre equipamentos, salve os links das lojas e acompanhe quanto falta para investir.</p>
+              </div>
+              <div class="flex gap-3 text-xs">
+                <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
+                  <span class="text-slate-400 block">Total Planejado</span>
+                  <strong id="inv-total-target" class="text-amber-400 text-sm">R$ 0,00</strong>
+                </div>
+                <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
+                  <span class="text-slate-400 block">Já Reservado</span>
+                  <strong id="inv-total-saved" class="text-emerald-400 text-sm">R$ 0,00</strong>
+                </div>
+                <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
+                  <span class="text-slate-400 block">Falta Investir</span>
+                  <strong id="inv-total-remaining" class="text-cyan-400 text-sm">R$ 0,00</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulário de Cadastro -->
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800 mb-6">
+              <input id="inv-name" type="text" placeholder="Equipamento (ex: Microscópio Trinocular)" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <input id="inv-price" type="number" step="0.01" placeholder="Valor Alvo (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <input id="inv-saved" type="number" step="0.01" placeholder="Já Guardado (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <select id="inv-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                <option value="Alta">🔴 Prioridade Alta</option>
+                <option value="Média">🟡 Prioridade Média</option>
+                <option value="Baixa">🟢 Prioridade Baixa</option>
+              </select>
+              <button type="button" onclick="addInvestmentPlan()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg px-4 py-2 text-xs transition">
+                + Salvar Item
+              </button>
+              <input id="inv-url" type="url" placeholder="Link do anúncio/site salvo (https://...)" class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+              <input id="inv-notes" type="text" placeholder="Observações / Modelo / Especificação..." class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+            </div>
+
+            <!-- Lista de Investimentos -->
+            <div id="investment-plans-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+        </div>
 
     <!-- ABA 1: VISÃO GERAL & BI -->
     <div id="bench-tab-overview" class="space-y-6">
@@ -4120,6 +4169,111 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
 
     // Carrega os dados do gráfico assim que o sistema inicia
     setTimeout(loadFinancialRecordsForChart, 1200);
+    // --- ABA DE PLANEJAMENTO DE INVESTIMENTOS FUTUROS ---
+    async function loadInvestmentPlans() {
+      const { data, error } = await supabaseClient
+        .from('investment_plans')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Erro ao carregar investment_plans:', error);
+        return;
+      }
+
+      const items = data || [];
+      let totalTarget = 0, totalSaved = 0;
+
+      items.forEach(i => {
+        if (i.status !== 'Comprado') {
+          totalTarget += Number(i.target_price || 0);
+          totalSaved += Number(i.saved_amount || 0);
+        }
+      });
+
+      const remaining = Math.max(0, totalTarget - totalSaved);
+      document.getElementById('inv-total-target').textContent = totalTarget.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('inv-total-saved').textContent = totalSaved.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('inv-total-remaining').textContent = remaining.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      const container = document.getElementById('investment-plans-list');
+      if (!container) return;
+
+      container.innerHTML = items.map(item => {
+        const target = Number(item.target_price || 0);
+        const saved = Number(item.saved_amount || 0);
+        const pct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
+        const q = encodeURIComponent(item.item_name);
+
+        return `
+          <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between gap-3">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <h4 class="font-bold text-white text-sm">${item.item_name}</h4>
+                <span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-slate-700">${item.priority}</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">${item.notes || 'Sem observações'}</p>
+              <div class="mt-3">
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-emerald-400">Guardado: R$ ${saved.toFixed(2)}</span>
+                  <span class="text-amber-400 font-semibold">Meta: R$ ${target.toFixed(2)} (${pct}%)</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-full" style="width: ${pct}%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px]">
+              <div class="flex flex-wrap gap-1.5">
+                ${item.store_url ? `<a href="${item.store_url}" target="_blank" class="px-2.5 py-1 rounded-lg bg-cyan-600/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-600/30">🔗 Abrir Link Salvo</a>` : ''}
+                <a href="https://pt.aliexpress.com/wholesale?SearchText=${q}" target="_blank" class="px-2 py-1 rounded-lg bg-orange-600/20 text-orange-300 hover:bg-orange-600/30">🔎 AliExpress</a>
+                <a href="https://lista.mercadolivre.com.br/${q}" target="_blank" class="px-2 py-1 rounded-lg bg-yellow-600/20 text-yellow-300 hover:bg-yellow-600/30">🔎 Mercado Livre</a>
+                <a href="https://www.google.com/search?tbm=shop&q=${q}" target="_blank" class="px-2 py-1 rounded-lg bg-blue-600/20 text-blue-300 hover:bg-blue-600/30">🔎 Google Shopping</a>
+              </div>
+              <button type="button" onclick="deleteInvestmentPlan('${item.id}')" class="text-rose-400 hover:text-rose-300 px-2 py-1">Excluir</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function addInvestmentPlan() {
+      const item_name = document.getElementById('inv-name').value.trim();
+      const target_price = parseFloat(document.getElementById('inv-price').value) || 0;
+      const saved_amount = parseFloat(document.getElementById('inv-saved').value) || 0;
+      const priority = document.getElementById('inv-priority').value;
+      const store_url = document.getElementById('inv-url').value.trim();
+      const notes = document.getElementById('inv-notes').value.trim();
+
+      if (!item_name) return alert('Informe o nome do equipamento.');
+
+      const { error } = await supabaseClient
+        .from('investment_plans')
+        .insert([{ item_name, target_price, saved_amount, priority, store_url, notes }]);
+
+      if (error) return alert('Erro ao salvar: ' + error.message);
+
+      document.getElementById('inv-name').value = '';
+      document.getElementById('inv-price').value = '';
+      document.getElementById('inv-saved').value = '';
+      document.getElementById('inv-url').value = '';
+      document.getElementById('inv-notes').value = '';
+      loadInvestmentPlans();
+    }
+
+    async function deleteInvestmentPlan(id) {
+      if (!confirm('Remover este item do planejamento?')) return;
+      await supabaseClient.from('investment_plans').delete().eq('id', id);
+      loadInvestmentPlans();
+    }
+
+    const _prevSwitchBenchTab5 = window.switchBenchTab;
+    window.switchBenchTab = function(tabName) {
+      if (typeof _prevSwitchBenchTab5 === 'function') _prevSwitchBenchTab5(tabName);
+      if (tabName === 'investments') {
+        loadInvestmentPlans();
+      }
+    };
   </script>
   
 
