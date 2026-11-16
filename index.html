@@ -444,21 +444,38 @@
               </div>
             </div>
 
-            <div class="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-4 mb-6">
-              <label class="block text-xs font-bold text-cyan-300 mb-2">🔎 Pesquisa Rápida para Orçamento (Digite o modelo ou peça):</label>
-              <input id="sup-search-input" type="text" oninput="filterSupplierQuotes()" placeholder="Ex: Tela J7 Prime, Bateria Moto G22, Conector A31..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white mb-4" />
+<div class="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-4 mb-6">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+                <div class="md:col-span-3">
+                  <label class="block text-xs font-bold text-cyan-300 mb-1.5">🔎 Pesquisa Rápida para Orçamento (Peça / Modelo):</label>
+                  <input id="sup-search-input" type="text" oninput="filterSupplierQuotes()" placeholder="Ex: Tela J7 Prime, Bateria Moto G22, Conector A31..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-amber-300 mb-1.5">🛠️ Sua Mão de Obra (R$):</label>
+                  <input id="sup-labor-fee" type="number" step="0.01" value="80" oninput="filterSupplierQuotes()" placeholder="Ex: 80.00" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg px-3 py-2 text-sm text-amber-300 font-bold" />
+                </div>
+              </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-4">
                   <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">💲 Opção 1: Mais em Conta (Econômica)</span>
-                  <div id="sup-best-budget" class="mt-2 text-xs text-slate-300">Digite ou selecione uma peça para ver o menor preço registrado.</div>
+                  <div id="sup-best-budget" class="mt-2 text-xs text-slate-300">Digite ou selecione uma peça para ver o cálculo.</div>
                 </div>
                 <div class="bg-cyan-950/30 border border-cyan-500/30 rounded-xl p-4">
                   <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400">⭐ Opção 2: Melhor Qualidade (Premium/Original)</span>
-                  <div id="sup-best-quality" class="mt-2 text-xs text-slate-300">Digite ou selecione uma peça para ver a melhor qualidade registrada.</div>
+                  <div id="sup-best-quality" class="mt-2 text-xs text-slate-300">Digite ou selecione uma peça para ver o cálculo.</div>
                 </div>
               </div>
-            </div>
+
+              <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-800">
+                <button type="button" onclick="sendQuoteToWhatsApp(false)" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition">
+                  📋 Copiar Orçamento
+                </button>
+                <button type="button" onclick="sendQuoteToWhatsApp(true)" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+                  📲 Enviar no WhatsApp
+                </button>
+              </div>
+            </div>            
 
             <div class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800 mb-6">
               <input id="sup-part-name" type="text" placeholder="Peça (ex: Tela J7 Prime)" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
@@ -4432,8 +4449,12 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       filterSupplierQuotes();
     }
 
+    let lastQuoteSummary = { part: '', budgetFinal: 0, qualityFinal: 0, budgetNotes: '', qualityNotes: '' };
+
     function filterSupplierQuotes() {
       const term = (document.getElementById('sup-search-input')?.value || '').trim().toLowerCase();
+      const labor = parseFloat(document.getElementById('sup-labor-fee')?.value) || 0;
+
       const filtered = term
         ? allSupplierQuotes.filter(q =>
             (q.part_name || '').toLowerCase().includes(term) ||
@@ -4453,15 +4474,29 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       const budgetBox = document.getElementById('sup-best-budget');
       const qualityBox = document.getElementById('sup-best-quality');
 
+      lastQuoteSummary = {
+        part: budgetItems[0]?.part_name || qualityItems[0]?.part_name || term || 'Serviço',
+        budgetFinal: 0,
+        qualityFinal: 0,
+        budgetNotes: '',
+        qualityNotes: ''
+      };
+
       if (budgetBox) {
         if (budgetItems.length) {
           const best = budgetItems[0];
+          const partCost = Number(best.price);
+          const finalClient = partCost + labor;
+          lastQuoteSummary.budgetFinal = finalClient;
+          lastQuoteSummary.budgetNotes = best.notes || '';
+
           budgetBox.innerHTML = `
             <div class="flex items-baseline justify-between">
-              <strong class="text-white text-sm">${best.part_name} — ${best.supplier_name}</strong>
-              <span class="text-emerald-400 font-extrabold text-base">R$ ${Number(best.price).toFixed(2)}</span>
+              <strong class="text-white text-sm">${best.part_name} (${best.supplier_name})</strong>
+              <span class="text-emerald-400 font-extrabold text-base">Cliente: R$ ${finalClient.toFixed(2)}</span>
             </div>
-            <p class="text-slate-400 mt-1">${best.notes || 'Sem observações'} (${budgetItems.length} cotação(ões) nessa linha)</p>
+            <p class="text-slate-300 mt-1">Peça: <strong>R$ ${partCost.toFixed(2)}</strong> + Mão de obra: <strong>R$ ${labor.toFixed(2)}</strong></p>
+            <p class="text-slate-400 mt-0.5">${best.notes || 'Sem observações'}</p>
           `;
         } else {
           budgetBox.innerHTML = `<span class="text-slate-400">Nenhuma cotação "Mais em Conta" encontrada para essa busca.</span>`;
@@ -4471,12 +4506,18 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
       if (qualityBox) {
         if (qualityItems.length) {
           const best = qualityItems[0];
+          const partCost = Number(best.price);
+          const finalClient = partCost + labor;
+          lastQuoteSummary.qualityFinal = finalClient;
+          lastQuoteSummary.qualityNotes = best.notes || '';
+
           qualityBox.innerHTML = `
             <div class="flex items-baseline justify-between">
-              <strong class="text-white text-sm">${best.part_name} — ${best.supplier_name}</strong>
-              <span class="text-cyan-400 font-extrabold text-base">R$ ${Number(best.price).toFixed(2)}</span>
+              <strong class="text-white text-sm">${best.part_name} (${best.supplier_name})</strong>
+              <span class="text-cyan-400 font-extrabold text-base">Cliente: R$ ${finalClient.toFixed(2)}</span>
             </div>
-            <p class="text-slate-400 mt-1">${best.notes || 'Sem observações'} (${qualityItems.length} cotação(ões) nessa linha)</p>
+            <p class="text-slate-300 mt-1">Peça: <strong>R$ ${partCost.toFixed(2)}</strong> + Mão de obra: <strong>R$ ${labor.toFixed(2)}</strong></p>
+            <p class="text-slate-400 mt-0.5">${best.notes || 'Sem observações'}</p>
           `;
         } else {
           qualityBox.innerHTML = `<span class="text-slate-400">Nenhuma cotação "Melhor Qualidade" encontrada para essa busca.</span>`;
@@ -4491,13 +4532,14 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         const badge = isPremium
           ? `<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">⭐ Melhor Qualidade</span>`
           : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">💲 Mais em Conta</span>`;
+        const totalSugerido = Number(q.price) + labor;
 
         return `
           <tr class="hover:bg-slate-800/40">
             <td class="py-2.5 px-3 font-semibold text-white cursor-pointer hover:text-cyan-300" onclick="document.getElementById('sup-search-input').value='${q.part_name.replace(/'/g, "\\'")}'; filterSupplierQuotes();">${q.part_name}</td>
             <td class="py-2.5 px-3 text-slate-200 font-medium">${q.supplier_name}</td>
             <td class="py-2.5 px-3">${badge}</td>
-            <td class="py-2.5 px-3 font-bold text-amber-400">R$ ${Number(q.price).toFixed(2)}</td>
+            <td class="py-2.5 px-3 font-bold text-amber-400">R$ ${Number(q.price).toFixed(2)} <span class="text-[11px] text-slate-400 font-normal">(Final: R$ ${totalSugerido.toFixed(2)})</span></td>
             <td class="py-2.5 px-3 text-slate-400">${q.notes || '-'}</td>
             <td class="py-2.5 px-3 text-right space-x-2">
               <button type="button" onclick="quickUpdateSupplierPrice('${q.id}', ${Number(q.price)})" class="text-cyan-400 hover:text-cyan-300">Atualizar R$</button>
@@ -4506,6 +4548,37 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
           </tr>
         `;
       }).join('');
+    }
+
+    function sendQuoteToWhatsApp(openWhatsApp) {
+      const { part, budgetFinal, qualityFinal, budgetNotes, qualityNotes } = lastQuoteSummary;
+      if (!budgetFinal && !qualityFinal) {
+        return alert('Pesquise ou selecione uma peça antes de gerar o orçamento.');
+      }
+
+      let msg = `*ORÇAMENTO - LABTECH_MSI* 🔧\n`;
+      msg += `*Serviço/Peça:* ${part}\n\n`;
+      if (budgetFinal > 0) {
+        msg += `💲 *Opção 1 (Linha Econômica):* R$ ${budgetFinal.toFixed(2)}\n`;
+        if (budgetNotes) msg += `_${budgetNotes}_\n`;
+        msg += `\n`;
+      }
+      if (qualityFinal > 0) {
+        msg += `⭐ *Opção 2 (Melhor Qualidade / Premium):* R$ ${qualityFinal.toFixed(2)}\n`;
+        if (qualityNotes) msg += `_${qualityNotes}_\n`;
+        msg += `\n`;
+      }
+      msg += `✅ *Serviço completo incluso (peça + instalação e testes).*`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(msg).catch(() => {});
+      }
+
+      if (openWhatsApp) {
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+      } else {
+        alert('Orçamento copiado para a área de transferência! Basta colar no WhatsApp do cliente.');
+      }
     }
 
     async function addSupplierQuote() {
