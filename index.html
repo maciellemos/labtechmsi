@@ -4090,7 +4090,38 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
     };
 
     renderDynamicChecklistItems();
+ // --- CARREGAMENTO E RENDERIZAÇÃO DO GRÁFICO FINANCEIRO (financial_records) ---
+    let allFinanceRecords = [];
+
+    async function loadFinancialRecordsForChart() {
+      const { data, error } = await supabaseClient
+        .from('financial_records')
+        .select('*')
+        .order('due_date', { ascending: true });
+
+      if (error) {
+        console.error('Erro ao carregar financial_records:', error);
+        return;
+      }
+      allFinanceRecords = data || [];
+      if (typeof renderFinancialChart === 'function') {
+        renderFinancialChart(allFinanceRecords);
+      }
+    }
+
+    // Dispara automaticamente ao abrir a aba Caixa & Peças ('finance') e ao carregar o painel
+    const _prevSwitchBenchTab4 = window.switchBenchTab;
+    window.switchBenchTab = function(tabName) {
+      if (typeof _prevSwitchBenchTab4 === 'function') _prevSwitchBenchTab4(tabName);
+      if (tabName === 'finance') {
+        loadFinancialRecordsForChart();
+      }
+    };
+
+    // Carrega os dados do gráfico assim que o sistema inicia
+    setTimeout(loadFinancialRecordsForChart, 1200);
   </script>
+  
 
   
 </body>
