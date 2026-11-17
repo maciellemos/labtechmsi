@@ -1304,56 +1304,116 @@ PLACA: ... | SINTOMA: ... | PASSOS: ... | SOLDA_TEMP: ... | DICAS: ..." class="w
             <!-- ABA 7: CHECKLISTS DIVERSOS & LEVANTAMENTO DE BANCADA -->
         <div id="bench-tab-checklists" class="hidden space-y-6">
           
-          <!-- BLOCO 1: CHECKLIST DE SERVIÇOS DIVERSOS -->
-          <div class="glass-card rounded-2xl p-6 border border-cyan-500/30 space-y-4">
-            <div>
-              <h3 class="font-bold text-white text-lg">✅ Checklist Técnico de Entrada & Saída (Serviços Diversos)</h3>
-              <p class="text-xs text-slate-400">Selecione o tipo de equipamento (Celular, PC/Notebook, Caixa de Som Bluetooth, Smartwatch ou Console) para carregar os testes específicos.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-4 gap-3">
-              <div>
-                <label class="block text-xs text-slate-400 mb-1">Tipo de Equipamento *</label>
-                <select id="chk-category" onchange="renderDynamicChecklistItems()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs font-bold">
-                  <option value="Celular">📱 Smartphone / Tablet</option>
-                  <option value="Informática">💻 Notebook / Desktop PC</option>
-                  <option value="Caixa de Som">🔊 Caixa de Som Bluetooth (JBL/Diversas)</option>
-                  <option value="Smartwatch">⌚ Smartwatch / Relógio Smart</option>
-                  <option value="Console">🎮 Console / Controle</option>
-                </select>
+         <!-- BLOCO 1: BANCADA INTEGRADA (CHECKLIST + FOTOS ENTRADA/SAÍDA + OS + WHATSAPP) -->
+            <div class="bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-5 mb-6 space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                  <h3 class="text-base font-bold text-white">📋 Bancada Integrada: Inspeção, Fotos (Entrada/Saída) & Status</h3>
+                  <p class="text-xs text-slate-400">Vincule uma OS para puxar o cliente, salvar fotos de vistoria e notificar no WhatsApp e Portal do Cliente.</p>
+                </div>
+                <span id="chk-linked-badge" class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-bold">
+                  Nenhuma OS vinculada
+                </span>
               </div>
-              <div>
-                <label class="block text-xs text-slate-400 mb-1">Nº OS (Opcional)</label>
-                <input id="chk-os-ref" type="text" placeholder="Ex: OS-2026-045" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
-              </div>
-              <div>
-                <label class="block text-xs text-slate-400 mb-1">Cliente *</label>
-                <input id="chk-client" type="text" placeholder="Nome do cliente" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
-              </div>
-              <div>
-                <label class="block text-xs text-slate-400 mb-1">Marca / Modelo *</label>
-                <input id="chk-model" type="text" placeholder="Ex: JBL Charge 4 / Apple Watch S7" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
-              </div>
-            </div>
 
-            <!-- Itens dinâmicos da checklist -->
-            <div id="chk-items-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5 p-4 rounded-xl bg-slateDark-950/90 border border-slate-800">
-              <!-- Preenchido via JS -->
-            </div>
+              <!-- 1. Vínculo com OS & Status -->
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div class="md:col-span-2">
+                  <label class="block text-xs font-bold text-cyan-300 mb-1">🔗 Selecionar OS / Cliente Cadastrado:</label>
+                  <select id="chk-os-select" onchange="onSelectOSForChecklist()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-semibold">
+                    <option value="">-- Selecione uma Ordem de Serviço ativa --</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-amber-300 mb-1">📌 Status Atual da OS:</label>
+                  <select id="chk-os-status" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg px-3 py-2 text-xs text-amber-300 font-bold">
+                    <option value="Orçamento Pendente">⏳ Orçamento Pendente</option>
+                    <option value="Orçamento Aprovado">✅ Orçamento Aprovado</option>
+                    <option value="Aguardando Peça">📦 Aguardando Peça</option>
+                    <option value="Em Bancada / Reparo">🔧 Em Bancada / Reparo</option>
+                    <option value="Pronto para Retirada">🎉 Pronto para Retirada</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-emerald-300 mb-1">📱 WhatsApp do Cliente:</label>
+                  <input id="chk-client-phone" type="text" placeholder="Ex: 84999999999" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+                </div>
+              </div>
 
-            <div class="flex flex-col sm:flex-row gap-3">
-              <input id="chk-obs" type="text" placeholder="Observações técnicas (ex: Carcaça arranhada, parafuso faltando, bateria inchada...)" class="flex-1 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
-              <button type="button" onclick="saveServiceChecklist()" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-xs transition">
-                💾 Salvar Checklist no Banco
-              </button>
-            </div>
+              <!-- 2. Fotos de Entrada e Saída -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-cyan-300">📸 Foto de Entrada (Estado Recebido)</span>
+                    <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">
+                      Capturar / Anexar
+                      <input type="file" accept="image/*" capture="environment" onchange="handleBenchPhotoUpload(event, 'entry')" class="hidden" />
+                    </label>
+                  </div>
+                  <div id="preview-photo-entry" class="h-40 rounded-lg bg-slate-950 border border-dashed border-slate-700 flex items-center justify-center text-xs text-slate-500 overflow-hidden">
+                    Sem foto de entrada anexada
+                  </div>
+                </div>
 
-            <!-- Histórico de Checklists Salvos -->
-            <div class="pt-3 border-t border-slate-800 space-y-2">
-              <h4 class="text-xs font-bold uppercase text-slate-400">Últimos Checklists Registrados</h4>
-              <div id="chk-history-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-emerald-300">📸 Foto de Saída (Testado & Fechado)</span>
+                    <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold">
+                      Capturar / Anexar
+                      <input type="file" accept="image/*" capture="environment" onchange="handleBenchPhotoUpload(event, 'exit')" class="hidden" />
+                    </label>
+                  </div>
+                  <div id="preview-photo-exit" class="h-40 rounded-lg bg-slate-950 border border-dashed border-slate-700 flex items-center justify-center text-xs text-slate-500 overflow-hidden">
+                    Sem foto de saída anexada
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Categoria e Checklist Técnico -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Tipo de Equipamento:</label>
+                  <select id="chk-category" onchange="renderDynamicChecklistItems()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                    <option value="Celular">📱 Celular</option>
+                    <option value="Informática">💻 Informática / Notebook</option>
+                    <option value="Caixa de Som">🔊 Caixa de Som</option>
+                    <option value="Smartwatch">⌚ Smartwatch</option>
+                    <option value="Console">🎮 Console</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Cliente:</label>
+                  <input id="chk-client" type="text" placeholder="Nome do cliente" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 mb-1">Modelo / Aparelho:</label>
+                  <input id="chk-model" type="text" placeholder="Ex: Poco X3 Pro" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+                </div>
+              </div>
+
+              <div id="chk-items-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Diagnóstico / Laudo Técnico de Bancada:</label>
+                <textarea id="chk-obs" rows="2" placeholder="Ex: Aparelho deu entrada com tela trincada e sem dar imagem. Após troca, todos os sensores testados OK." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white"></textarea>
+              </div>
+
+              <!-- 4. Ações Integradas -->
+              <div class="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-slate-800">
+                <button type="button" onclick="saveIntegratedBenchChecklist(false)" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-extrabold text-xs transition">
+                  💾 Salvar Checklist, Fotos & Status na OS
+                </button>
+                <button type="button" onclick="saveIntegratedBenchChecklist(true)" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition">
+                  📲 Salvar & Avisar Cliente no WhatsApp
+                </button>
+              </div>
+
+              <!-- Histórico de Checklists Salvos -->
+              <div class="pt-3 border-t border-slate-800 space-y-2">
+                <h4 class="text-xs font-bold uppercase text-slate-400">Últimos Checklists Registrados</h4>
+                <div id="chk-history-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+              </div>
             </div>
-          </div>
 
           <!-- BLOCO 2: LEVANTAMENTO FÍSICO DE BANCADA (CLIENTES, LOJA E SUCATAS) -->
           <div class="glass-card rounded-2xl p-6 border border-purple-500/30 space-y-4">
@@ -4649,7 +4709,224 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         if (supTab) { supTab.classList.add('hidden'); supTab.style.display = ''; }
       }
     };
+ // Garante o visual idêntico ao botão Checklists & Bancada
+    setTimeout(() => {
+      const refBtn = document.getElementById('tab-btn-investments');
+      const chkBtn = document.getElementById('tab-btn-checklists');
+      if (refBtn && chkBtn) {
+        chkBtn.className = refBtn.className;
+        chkBtn.style.backgroundColor = '#1e293b';
+      }
+    }, 300);
+    // --- INTEGRAÇÃO CHECKLIST + FOTOS ENTRADA/SAÍDA + ORDERS + WHATSAPP ---
+    let currentBenchPhotos = { entry: '', exit: '' };
+    let cachedBenchOrders = [];
+
+    async function populateChecklistOSDropdown() {
+      const sel = document.getElementById('chk-os-select');
+      if (!sel) return;
+
+      const { data, error } = await supabaseClient
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(60);
+
+      if (error || !data) return;
+      cachedBenchOrders = data;
+
+      sel.innerHTML = `<option value="">-- Selecione uma Ordem de Serviço ativa --</option>` +
+        data.map(os => {
+          const client = os.client || 'Cliente';
+          const device = os.model || 'Aparelho';
+          const status = os.status || 'Pendente';
+          const priceStr = os.price ? ` • R$ ${Number(os.price).toFixed(2)}` : '';
+          return `<option value="${os.id}">OS #${os.id} • ${client} — ${device} [${status}]${priceStr}</option>`;
+        }).join('');
+    }
+
+    function onSelectOSForChecklist() {
+      const osId = document.getElementById('chk-os-select')?.value;
+      const badge = document.getElementById('chk-linked-badge');
+      const os = cachedBenchOrders.find(o => String(o.id) === String(osId));
+
+      if (!os) {
+        if (badge) badge.textContent = 'Nenhuma OS vinculada';
+        return;
+      }
+
+      if (badge) {
+        badge.textContent = `Vinculada: OS #${os.id}`;
+        badge.className = 'px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold';
+      }
+
+      document.getElementById('chk-client').value = os.client || '';
+      document.getElementById('chk-model').value = os.model || '';
+      document.getElementById('chk-client-phone').value = os.phone || os.client_phone || '';
+
+      const catSelect = document.getElementById('chk-category');
+      if (catSelect && os.category) {
+        const match = Array.from(catSelect.options).find(opt => opt.value.toLowerCase() === os.category.toLowerCase());
+        if (match) {
+          catSelect.value = match.value;
+          if (typeof renderDynamicChecklistItems === 'function') renderDynamicChecklistItems();
+        }
+      }
+
+      const statusSelect = document.getElementById('chk-os-status');
+      if (statusSelect && os.status) {
+        const hasOption = Array.from(statusSelect.options).some(opt => opt.value === os.status);
+        if (!hasOption) {
+          const opt = document.createElement('option');
+          opt.value = os.status;
+          opt.textContent = os.status;
+          statusSelect.appendChild(opt);
+        }
+        statusSelect.value = os.status;
+      }
+
+      document.getElementById('chk-obs').value = os.observations || os.diagnosis || os.issue || '';
+
+      // Restaura itens marcados anteriormente, se houver
+      if (os.checklist_entry && typeof os.checklist_entry === 'object') {
+        document.querySelectorAll('.chk-item-status').forEach(sel => {
+          const savedVal = os.checklist_entry[sel.dataset.chkLabel];
+          if (savedVal) sel.value = savedVal;
+        });
+      }
+
+      currentBenchPhotos.entry = os.photo_entry_url || '';
+      currentBenchPhotos.exit = os.photo_exit_url || '';
+      renderBenchPhotoPreview('entry', currentBenchPhotos.entry);
+      renderBenchPhotoPreview('exit', currentBenchPhotos.exit);
+    }
+
+    function handleBenchPhotoUpload(event, type) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxW = 900;
+          const scale = Math.min(1, maxW / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+          currentBenchPhotos[type] = compressedDataUrl;
+          renderBenchPhotoPreview(type, compressedDataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderBenchPhotoPreview(type, dataUrl) {
+      const box = document.getElementById(`preview-photo-${type}`);
+      if (!box) return;
+      if (dataUrl) {
+        box.innerHTML = `<img src="${dataUrl}" alt="Foto ${type}" class="w-full h-full object-cover" />`;
+      } else {
+        box.innerHTML = type === 'entry' ? 'Sem foto de entrada anexada' : 'Sem foto de saída anexada';
+      }
+    }
+
+    async function saveIntegratedBenchChecklist(notifyWhatsApp) {
+      const osId = document.getElementById('chk-os-select')?.value;
+      const category = document.getElementById('chk-category')?.value || 'Celular';
+      const client_name = (document.getElementById('chk-client')?.value || '').trim();
+      const device_model = (document.getElementById('chk-model')?.value || '').trim();
+      const status = document.getElementById('chk-os-status')?.value || 'Em Bancada / Reparo';
+      const phoneRaw = (document.getElementById('chk-client-phone')?.value || '').replace(/\D/g, '');
+      const observations = (document.getElementById('chk-obs')?.value || '').trim();
+
+      if (!device_model) return alert('Informe o modelo do equipamento ou selecione uma OS.');
+
+      const checklist_json = {};
+      document.querySelectorAll('.chk-item-status').forEach(sel => {
+        checklist_json[sel.dataset.chkLabel] = sel.value;
+      });
+
+      const osObj = cachedBenchOrders.find(o => String(o.id) === String(osId));
+      const osCode = osObj?.id || 'Avulsa';
+
+      // 1. Grava no histórico de checklists técnicos
+      await supabaseClient.from('service_checklists').insert([{
+        os_ref: String(osCode),
+        category,
+        client_name,
+        device_model,
+        checklist_json,
+        observations
+      }]);
+
+      // 2. Atualiza a Ordem de Serviço vinculada na tabela 'orders'
+      if (osId) {
+        const updatePayload = {
+          status,
+          phone: phoneRaw || osObj?.phone || null,
+          client_phone: phoneRaw || osObj?.client_phone || null,
+          photo_entry_url: currentBenchPhotos.entry || null,
+          photo_exit_url: currentBenchPhotos.exit || null,
+          checklist_entry: checklist_json,
+          diagnosis: observations || osObj?.diagnosis || null,
+          observations
+        };
+
+        const { error } = await supabaseClient
+          .from('orders')
+          .update(updatePayload)
+          .eq('id', osId);
+
+        if (error) {
+          alert('Erro ao atualizar OS vinculada: ' + error.message);
+          return;
+        }
+      }
+
+      await populateChecklistOSDropdown();
+      if (typeof loadServiceChecklists === 'function') loadServiceChecklists();
+      if (typeof loadOrders === 'function') loadOrders();
+
+      if (notifyWhatsApp) {
+        const siteLink = window.location.origin + window.location.pathname;
+        const okItems = Object.entries(checklist_json).filter(([, v]) => v === 'OK').map(([k]) => k);
+        const defectItems = Object.entries(checklist_json).filter(([, v]) => v === 'Defeito').map(([k]) => k);
+        const priceInfo = osObj?.price ? `\n💰 *Valor do Serviço:* R$ ${Number(osObj.price).toFixed(2)}` : '';
+
+        let msg = `*ATUALIZAÇÃO DE SERVIÇO - LABTECH_MSI* 🔧\n`;
+        msg += `👤 *Cliente:* ${client_name || 'Cliente'}\n`;
+        msg += `📱 *Equipamento:* ${device_model} (OS #${osCode})\n`;
+        msg += `📌 *Status Atual:* *${status}*${priceInfo}\n\n`;
+
+        if (observations) msg += `📝 *Parecer Técnico:* ${observations}\n\n`;
+        if (defectItems.length) msg += `⚠️ *Itens com avaria/pendência:* ${defectItems.join(', ')}\n`;
+        if (okItems.length) msg += `✅ *Itens testados OK:* ${okItems.join(', ')}\n\n`;
+        if (currentBenchPhotos.entry || currentBenchPhotos.exit) {
+          msg += `📸 *Vistoria fotográfica (entrada/saída) registrada no sistema.*\n`;
+        }
+        msg += `🔎 *Acompanhe sua OS e fotos online:* ${siteLink}`;
+
+        const waNumber = phoneRaw.length >= 10 && !phoneRaw.startsWith('55') ? '55' + phoneRaw : phoneRaw;
+        const waUrl = waNumber
+          ? `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`
+          : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+
+        window.open(waUrl, '_blank');
+      } else {
+        alert('Checklist, fotos e status da OS salvos com sucesso!');
+      }
+    }
+
+    // Carrega automaticamente a lista de OS ao abrir a página e ao clicar na aba
+    setTimeout(populateChecklistOSDropdown, 1500);
   </script>
+  
   
 
   
