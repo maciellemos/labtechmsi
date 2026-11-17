@@ -4929,9 +4929,15 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
     setTimeout(populateChecklistOSDropdown, 1500);
    function forceOpenChecklistsTab() {
       const target = document.getElementById('bench-tab-checklists');
+      const overviewTab = document.getElementById('bench-tab-overview') || document.getElementById('bench-tab-orders');
       if (!target) return;
 
-      // 1. Esconde TODAS as outras abas do painel inteiro
+      // 1. Move #bench-tab-checklists para o mesmo nível das abas principais (fora de Desbloqueios)
+      if (overviewTab && overviewTab.parentElement && target.parentElement !== overviewTab.parentElement) {
+        overviewTab.parentElement.appendChild(target);
+      }
+
+      // 2. Esconde TODAS as outras abas do painel inteiro
       document.querySelectorAll('[id^="bench-tab-"]').forEach(tab => {
         if (tab.id !== 'bench-tab-checklists') {
           tab.classList.add('hidden');
@@ -4939,13 +4945,7 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         }
       });
 
-      // 2. Se o pai imediato for uma grid sobrando da aba anterior, neutraliza o grid
-      if (target.parentElement && target.parentElement.classList.contains('grid')) {
-        target.parentElement.classList.remove('grid', 'sm:grid-cols-2', 'hidden');
-        target.parentElement.style.setProperty('display', 'block', 'important');
-      }
-
-      // 3. Garante que toda a cadeia de pais até o body esteja visível
+      // 3. Garante que #bench-tab-checklists e seus pais diretos estejam visíveis
       let curr = target;
       while (curr && curr !== document.body) {
         curr.classList.remove('hidden');
@@ -4955,7 +4955,6 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         curr = curr.parentElement;
       }
       target.style.setProperty('display', 'block', 'important');
-
       // 4. Atualiza visual dos botões da barra
       document.querySelectorAll('.bench-tab-btn').forEach(btn => {
         btn.classList.remove('bg-cyan-500', 'text-slate-950');
