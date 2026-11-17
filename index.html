@@ -1043,10 +1043,15 @@
               <h3 class="font-bold text-white text-lg">📄 Leitor de Esquemas & Datasheets (PDF)</h3>
               <p class="text-xs text-slate-400">Abra o PDF do esquema direto na bancada.</p>
             </div>
-            <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">
-              📂 Abrir PDF Local
-              <input type="file" accept="application/pdf" onchange="loadLocalPDFViewer(event)" class="hidden" />
-            </label>
+            <div class="flex flex-wrap items-center gap-2">
+              <a href="https://www.latools.com.br/software/la-boardview" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold text-xs transition flex items-center gap-1.5">
+                🔌 LA-Boardview (Online) ↗
+              </a>
+              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">
+                📂 Abrir PDF Local
+                <input type="file" accept="application/pdf" onchange="loadLocalPDFViewer(event)" class="hidden" />
+              </label>
+            </div>
           </div>
           <div class="rounded-xl overflow-hidden border border-slate-700 bg-slateDark-950 h-[430px] flex items-center justify-center">
             <iframe id="bench-pdf-iframe" src="" class="hidden w-full h-full"></iframe>
