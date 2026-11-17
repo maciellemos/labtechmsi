@@ -1522,3 +1522,1960 @@
       </div>
     </div>
   </div>
+  <script>
+    const SUPABASE_URL = 'https://shhqlfxptomageoxlxbu.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_JumNMKTABz50bB040Gm_iQ_eWvvjTxB';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const WHATSAPP_NUMBER = '5584991216849';
+    let currentUser = null;
+    let cachedOrders = [];
+    let cachedFinance = [];
+    let cachedCatalog = [];
+    let cachedKnowledge = [];
+    let cachedInventory = [];
+    let cachedUnlocks = [];
+    let cachedProtectors = [];
+    let publicStoreItems = [];
+    let shoppingCart = [];
+    let cachedTrades = [];
+    let cachedReturns = [];
+    let cachedDriveArchive = [];
+    let allFinanceRecords = [];
+    let allBenchInventory = [];
+    let currentInvFilter = 'todos';
+    let allSupplierQuotes = [];
+    let lastQuoteSummary = { part: '', budgetFinal: 0, qualityFinal: 0, budgetNotes: '', qualityNotes: '' };
+    let currentBenchPhotos = { entry: '', exit: '' };
+    let cachedBenchOrders = [];
+    let cachedPix = { pix_key: '84991216849', pix_receiver: 'MACIEL LEMOS DA CAMARA' };
+
+    const DEFAULT_PROTECTORS = [
+      { id: 'def1', primary_model: 'Moto G22 / Moto E22', compatible_models: 'Moto E32 • Moto E32s • Realme C35 • Realme C31', notes: 'Tela 6.5" furo centralizado' },
+      { id: 'def2', primary_model: 'Redmi Note 12 4G / 5G', compatible_models: 'Poco X5 5G • Redmi Note 11 Pro • Poco X4 Pro', notes: 'Tela 6.67" borda preta fina' },
+      { id: 'def3', primary_model: 'Samsung Galaxy A03 / A03s / A03 Core', compatible_models: 'Galaxy A02s • Galaxy A04 • Galaxy A04e • Moto G10 / G20 / G30', notes: 'Entalhe em gota (V-notch)' },
+      { id: 'def4', primary_model: 'Samsung Galaxy A14 / A24 / A34', compatible_models: 'Galaxy A13 4G • Galaxy A23 • Galaxy M13 • Galaxy M23', notes: 'Entalhe gota 6.6"' },
+      { id: 'def5', primary_model: 'iPhone 13 / iPhone 13 Pro / iPhone 14', compatible_models: 'iPhone 13 • iPhone 13 Pro • iPhone 14 (6.1")', notes: 'Mesma dimensão frontal 6.1"' },
+      { id: 'def6', primary_model: 'iPhone 11 / iPhone XR', compatible_models: 'iPhone 11 • iPhone XR (6.1")', notes: 'Compatibilidade 100% idêntica' }
+    ];
+
+    const PROCESSOR_BENCHMARKS = [
+      { id: 'sd685', name: 'Snapdragon 685 (Redmi Note 12 / Note 13)', type: 'Smartphone', cores: '8 Núcleos (2.8 GHz)', litho: '6 nm', gpu: 'Adreno 610', score: 345000, scale: 'AnTuTu v10', ideal: 'Uso diário fluido, redes sociais e jogos leves' },
+      { id: 'hg85', name: 'MediaTek Helio G85 (Moto G23 / Redmi 12C / A05)', type: 'Smartphone', cores: '8 Núcleos (2.0 GHz)', litho: '12 nm', gpu: 'Mali-G52 MC2', score: 265000, scale: 'AnTuTu v10', ideal: 'Tarefas básicas, WhatsApp e aplicativos bancários' },
+      { id: 'hg99', name: 'MediaTek Helio G99 (Poco M5 / Galaxy A15 / A24)', type: 'Smartphone', cores: '8 Núcleos (2.2 GHz)', litho: '6 nm', gpu: 'Mali-G57 MC2', score: 420000, scale: 'AnTuTu v10', ideal: 'Multitarefa rápida, Free Fire / COD no médio-alto' },
+      { id: 'ex1380', name: 'Samsung Exynos 1380 (Galaxy A54 / A35)', type: 'Smartphone', cores: '8 Núcleos (2.4 GHz)', litho: '5 nm', gpu: 'Mali-G68 MP5', score: 595000, scale: 'AnTuTu v10', ideal: 'Alto desempenho, câmeras 4K e jogos pesados' },
+      { id: 'a15', name: 'Apple A15 Bionic (iPhone 13 / iPhone 14)', type: 'Smartphone', cores: '6 Núcleos (3.23 GHz)', litho: '5 nm', gpu: 'Apple GPU 4/5-core', score: 1280000, scale: 'AnTuTu v10', ideal: 'Edição de vídeo, jogos no máximo e longevidade' },
+      { id: 'r5_5500u', name: 'AMD Ryzen 5 5500U (Notebooks Lenovo / Acer)', type: 'Notebook', cores: '6 Núcleos / 12 Threads', litho: '7 nm', gpu: 'Radeon Vega 7', score: 13100, scale: 'PassMark CPU', ideal: 'Trabalho pesado, programação, AutoCAD 2D e jogos leves' },
+      { id: 'i5_12450h', name: 'Intel Core i5-12450H (Notebooks Gamer / Nitro)', type: 'Notebook', cores: '8 Núcleos / 12 Threads', litho: '10 nm (Intel 7)', gpu: 'Intel UHD + Dedicada', score: 17400, scale: 'PassMark CPU', ideal: 'Renderização, edição, jogos modernos e engenharia' },
+      { id: 'i3_1115g4', name: 'Intel Core i3-1115G4 (Notebooks Escritório)', type: 'Notebook', cores: '2 Núcleos / 4 Threads', litho: '10 nm SuperFin', gpu: 'Intel UHD Xe G4', score: 6150, scale: 'PassMark CPU', ideal: 'Pacote Office, navegação, estudos e sistemas PDV' },
+      { id: 'rtx3060', name: 'NVIDIA GeForce RTX 3060 12GB (Desktop GPU)', type: 'Placa de Vídeo', cores: '3584 CUDA Cores', litho: '8 nm Samsung', gpu: '12GB GDDR6 192-bit', score: 17150, scale: 'PassMark G3D', ideal: 'Jogos Full HD / Quad HD Ultra, Blender e IA local' },
+      { id: 'rx6600', name: 'AMD Radeon RX 6600 8GB (Desktop GPU)', type: 'Placa de Vídeo', cores: '1792 Stream Proc.', litho: '7 nm TSMC', gpu: '8GB GDDR6 128-bit', score: 15100, scale: 'PassMark G3D', ideal: 'Excelente custo-benefício em Full HD Alto/Ultra' }
+    ];
+
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function formatCurrency(val) {
+      return Number(val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function openModal(id) { document.getElementById(id)?.classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
+    function openInstallModal() { openModal('install-modal'); }
+
+    // ==================== PIX EMV ====================
+    function formatEMVField(id, value) {
+      return `${id}${String(value.length).padStart(2, '0')}${value}`;
+    }
+
+    function computeCRC16(payload) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < payload.length; i++) {
+        crc ^= payload.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) {
+          crc = (crc & 0x8000) !== 0 ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+        }
+      }
+      return crc.toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    function normalizeAscii(str, maxLen) {
+      return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 ]/g, '').trim().substring(0, maxLen).toUpperCase();
+    }
+
+    function generatePixBrCode(pixKey, receiverName, amount, txid) {
+      const cleanKey = String(pixKey || '').trim();
+      const merchantAccount = formatEMVField('26', formatEMVField('00', 'br.gov.bcb.pix') + formatEMVField('01', cleanKey));
+      const amountField = Number(amount) > 0 ? formatEMVField('54', Number(amount).toFixed(2)) : '';
+      const nameField = formatEMVField('59', normalizeAscii(receiverName || 'LABTECH MSI', 25) || 'LABTECH MSI');
+      const cleanTx = String(txid || 'LABTECH').replace(/[^A-Za-z0-9]/g, '').substring(0, 25) || '***';
+      const additionalData = formatEMVField('62', formatEMVField('05', cleanTx));
+      const rawPayload = formatEMVField('00', '01') + merchantAccount + formatEMVField('52', '0000') + formatEMVField('53', '986') + amountField + formatEMVField('58', 'BR') + nameField + formatEMVField('60', 'CEARA MIRIM') + additionalData + '6304';
+      return rawPayload + computeCRC16(rawPayload);
+    }
+
+    // ==================== LABTECH STORE ====================
+    async function loadPublicStore() {
+      const { data } = await supabaseClient.from('inventory').select('*').eq('show_in_store', true).gt('qty', 0).order('name', { ascending: true });
+      publicStoreItems = data || [];
+      renderPublicStore();
+    }
+
+    function getCategoryIcon(cat) {
+      if (cat === 'Hardware / Upgrade') return '💾';
+      if (cat === 'Peça Reparo') return '🔌';
+      if (cat === 'Insumo Bancada') return '🧪';
+      return '🎧';
+    }
+
+    function renderPublicStore() {
+      const grid = document.getElementById('public-store-grid');
+      if (!grid) return;
+      const query = (document.getElementById('store-search-input')?.value || '').toLowerCase().trim();
+      const catFilter = document.getElementById('store-category-filter')?.value || '';
+      const items = publicStoreItems.filter(p => (!catFilter || p.category === catFilter) && (!query || `${p.name} ${p.description || ''} ${p.category}`.toLowerCase().includes(query)));
+
+      if (!items.length) {
+        grid.innerHTML = `<div class="sm:col-span-2 lg:col-span-4 glass-card rounded-2xl p-8 text-center space-y-2"><p class="text-slate-300 font-semibold">Nenhum produto disponível nesta busca no momento.</p><p class="text-xs text-slate-400">Consulte disponibilidade no WhatsApp (84) 99121-6849.</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="glass-card hover:border-purple-400/50 rounded-2xl p-4 flex flex-col justify-between gap-3 transition">
+          <div class="space-y-3">
+            <div class="h-36 rounded-xl bg-slateDark-950 border border-slate-800 flex items-center justify-center overflow-hidden">
+              ${item.image_url ? `<img src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.name)}" class="w-full h-full object-cover" onerror="this.style.display='none'" />` : `<span class="text-4xl">${getCategoryIcon(item.category)}</span>`}
+            </div>
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[10px] uppercase font-bold text-purple-300">${escapeHTML(item.category)}</span>
+                <span class="text-[10px] text-emerald-400 font-semibold">${item.qty} em estoque</span>
+              </div>
+              <h3 class="font-bold text-white text-base mt-1 leading-snug">${escapeHTML(item.name)}</h3>
+              ${item.description ? `<p class="text-xs text-slate-400 mt-1 line-clamp-2">${escapeHTML(item.description)}</p>` : ''}
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+            <span class="text-lg font-extrabold text-emerald-400">${formatCurrency(item.sell_price)}</span>
+            <button type="button" onclick="addToCart(${item.id})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90 text-slate-950 font-extrabold text-xs transition">+ Adicionar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateCartBadges() {
+      const totalItems = shoppingCart.reduce((acc, item) => acc + item.qty, 0);
+      const b1 = document.getElementById('header-cart-count');
+      const b2 = document.getElementById('store-btn-cart-count');
+      if (b1) b1.textContent = totalItems;
+      if (b2) b2.textContent = totalItems;
+    }
+
+    function addToCart(productId) {
+      const product = publicStoreItems.find(p => p.id === productId);
+      if (!product) return;
+      const existing = shoppingCart.find(c => c.id === productId);
+      if (existing) {
+        if (existing.qty < product.qty) existing.qty += 1;
+        else return alert('Quantidade máxima disponível em estoque atingida.');
+      } else {
+        shoppingCart.push({ id: product.id, name: product.name, price: Number(product.sell_price), maxQty: Number(product.qty), qty: 1 });
+      }
+      updateCartBadges();
+      openCartModal();
+    }
+
+    function changeCartQty(productId, delta) {
+      const idx = shoppingCart.findIndex(c => c.id === productId);
+      if (idx === -1) return;
+      const next = shoppingCart[idx].qty + delta;
+      if (next <= 0) shoppingCart.splice(idx, 1);
+      else if (next <= shoppingCart[idx].maxQty) shoppingCart[idx].qty = next;
+      updateCartBadges();
+      renderCartModal();
+    }
+
+    function openCartModal() {
+      document.getElementById('cart-pix-box')?.classList.add('hidden');
+      renderCartModal();
+      openModal('cart-modal');
+    }
+
+    function renderCartModal() {
+      const container = document.getElementById('cart-items-container');
+      const checkoutSec = document.getElementById('cart-checkout-section');
+      if (!shoppingCart.length) {
+        container.innerHTML = `<p class="text-center text-slate-400 py-6">Seu carrinho da LABTECH Store está vazio.</p>`;
+        checkoutSec.classList.add('hidden');
+        return;
+      }
+      checkoutSec.classList.remove('hidden');
+      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      document.getElementById('cart-total-display').textContent = formatCurrency(total);
+      container.innerHTML = shoppingCart.map(item => `
+        <div class="p-3 rounded-xl bg-slateDark-950 border border-slate-800 flex items-center justify-between gap-2">
+          <div>
+            <p class="font-bold text-white text-sm">${escapeHTML(item.name)}</p>
+            <p class="text-slate-400">${formatCurrency(item.price)} cada</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="changeCartQty(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-slateDark-800 text-white font-bold">-</button>
+            <span class="font-bold text-white px-1">${item.qty}</span>
+            <button type="button" onclick="changeCartQty(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-slateDark-800 text-white font-bold">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function showCartPix() {
+      await loadPixSettings();
+      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const pixCode = generatePixBrCode(cachedPix.pix_key, cachedPix.pix_receiver, total, 'STORE' + Math.floor(1000 + Math.random() * 9000));
+      document.getElementById('cart-pix-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}`;
+      document.getElementById('cart-pix-key').textContent = cachedPix.pix_key;
+      document.getElementById('cart-copy-pix-btn').onclick = () => copyPixCode(pixCode);
+      document.getElementById('cart-pix-box').classList.remove('hidden');
+    }
+
+    function checkoutCartWhatsApp() {
+      const custName = document.getElementById('cart-customer-name').value.trim() || 'Cliente Store';
+      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const lines = shoppingCart.map(i => `• ${i.qty}x ${i.name} (${formatCurrency(i.price * i.qty)})`).join('\n');
+      const msg = `*PEDIDO LABTECH STORE*\n*Cliente:* ${custName}\n\n*Itens:*\n${lines}\n\n*Total:* ${formatCurrency(total)}\n*Chave PIX:* ${cachedPix.pix_key}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== CONSULTA DE OS & PIX ====================
+    function selectServiceAndScroll(category) {
+      const select = document.getElementById('quote-device');
+      if (select) select.value = category;
+      document.getElementById('orcamento')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleCustomerTrackSubmit(e) { e.preventDefault(); searchCustomerOS(); }
+
+    async function loadPixSettings() {
+      const { data } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
+      if (data) cachedPix = data;
+    }
+
+    async function searchCustomerOS() {
+      const inputEl = document.getElementById('customer-os-search');
+      const container = document.getElementById('customer-os-result');
+      if (!inputEl || !container) return;
+      const query = inputEl.value.trim().toUpperCase();
+      if (!query) {
+        container.innerHTML = `<p class="text-sm text-slate-400">Informe o código da Ordem de Serviço acima para consultar em tempo real.</p>`;
+        return;
+      }
+      container.innerHTML = `<p class="text-sm text-cyan-300 animate-pulse">Consultando Ordem de Serviço na nuvem...</p>`;
+      await loadPixSettings();
+      const { data: order, error } = await supabaseClient.from('orders').select('*').ilike('id', query).maybeSingle();
+      if (error) {
+        container.innerHTML = `<div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm">Erro ao consultar: ${escapeHTML(error.message)}</div>`;
+        return;
+      }
+      if (!order) {
+        container.innerHTML = `<div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm">Ordem de Serviço <strong>${escapeHTML(query)}</strong> não encontrada.</div>`;
+        return;
+      }
+      const steps = ['Entrada', 'Em Análise', 'Orçamento Enviado', 'Em Reparo', 'Pronto'];
+      const currentIdx = order.status === 'Entregue' ? 4 : Math.max(0, steps.indexOf(order.status));
+      const pixPayload = generatePixBrCode(cachedPix.pix_key, cachedPix.pix_receiver, order.price, order.id);
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixPayload)}`;
+
+      const timelineHtml = steps.map((step, idx) => {
+        const active = idx <= currentIdx;
+        return `<div class="flex-1 flex flex-col items-center text-center"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${active ? 'bg-cyan-500 text-slate-950' : 'bg-slateDark-800 text-slate-500 border border-slate-700'}">${active ? '✓' : idx + 1}</div><span class="text-[11px] mt-1.5 ${active ? 'text-cyan-300 font-semibold' : 'text-slate-500'}">${step}</span></div>`;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="p-5 rounded-2xl bg-slateDark-950/90 border border-slate-800 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(order.id)}</span>
+              <h3 class="text-lg font-bold text-white">${escapeHTML(order.category)} • ${escapeHTML(order.model)}</h3>
+              <p class="text-xs text-slate-400">Cliente: ${escapeHTML(order.client)}</p>
+            </div>
+            <div class="text-right">
+              <span class="inline-block px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-bold">${escapeHTML(order.status)}</span>
+              <p class="text-lg font-extrabold text-emerald-400 mt-1">${formatCurrency(order.price)}</p>
+            </div>
+          </div>
+          <div class="flex items-start justify-between gap-1 pt-1">${timelineHtml}</div>
+          <div class="grid md:grid-cols-2 gap-4 text-sm">
+            <div class="p-4 rounded-xl bg-slateDark-900 border border-slate-800 space-y-2">
+              <p class="text-xs font-bold uppercase text-slate-400">Relato & Laudo Técnico</p>
+              <p class="text-slate-300"><strong>Defeito:</strong> ${escapeHTML(order.issue)}</p>
+              <p class="text-slate-300"><strong>Diagnóstico:</strong> ${escapeHTML(order.diagnosis || 'Em avaliação na bancada.')}</p>
+              ${order.status === 'Orçamento Enviado' ? `<button type="button" onclick="approveCustomerQuote('${escapeHTML(order.id)}', '${escapeHTML(order.model)}', ${Number(order.price)})" class="mt-2 w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">✅ Aprovar Orçamento Agora</button>` : ''}
+            </div>
+            <div class="p-4 rounded-xl bg-slateDark-900 border border-cyan-500/25 flex flex-col sm:flex-row items-center gap-4">
+              <img src="${qrUrl}" alt="QR Code PIX" class="w-32 h-32 rounded-lg bg-white p-1.5 shrink-0" />
+              <div class="space-y-2 text-xs w-full">
+                <p class="font-bold text-cyan-300 uppercase">Pagamento PIX</p>
+                <p class="text-slate-300">Chave: <strong class="text-white select-all">${escapeHTML(cachedPix.pix_key)}</strong></p>
+                <button type="button" onclick="copyPixCode('${escapeHTML(pixPayload)}')" class="w-full py-2 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold transition">📋 Copiar PIX Copia e Cola</button>
+                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá LABTECH_MSI! Segue comprovante PIX referente à ${order.id} (${order.model}) no valor de ${formatCurrency(order.price)}.`)}" target="_blank" rel="noopener noreferrer" class="block text-center w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition">Enviar Comprovante</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function approveCustomerQuote(osId, model, price) {
+      const { error } = await supabaseClient.from('orders').update({ status: 'Em Reparo' }).eq('id', osId);
+      if (error) return alert('Não foi possível aprovar online: ' + error.message);
+      await searchCustomerOS();
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá LABTECH_MSI! Aprovo o orçamento da ${osId} (${model}) no valor de ${formatCurrency(price)}.`)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function copyPixCode(text) {
+      navigator.clipboard.writeText(text).then(() => alert('Código PIX Copia e Cola copiado!')).catch(() => alert('Código PIX: ' + text));
+    }
+
+    function handleQuoteSubmit(e) {
+      e.preventDefault();
+      const protocol = 'ORC-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('quote-protocol-preview').textContent = `Protocolo gerado: ${protocol}`;
+      const text = `*SOLICITAÇÃO DE ORÇAMENTO - LABTECH_MSI*\n*Protocolo:* ${protocol}\n*Cliente:* ${document.getElementById('quote-name').value.trim()}\n*Equipamento:* ${document.getElementById('quote-device').value}\n*Modelo:* ${document.getElementById('quote-model').value.trim()}\n*Problema:* ${document.getElementById('quote-issue').value.trim()}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== AUTENTICAÇÃO & NAVEGAÇÃO BANCADA ====================
+    function switchAppMode(mode) {
+      const clientView = document.getElementById('client-app-view');
+      const benchView = document.getElementById('bench-app-view');
+      if (mode === 'bench' && currentUser) {
+        clientView.classList.add('hidden');
+        benchView.classList.remove('hidden');
+        document.getElementById('bench-user-email').textContent = `Conectado como: ${currentUser.email}`;
+        refreshAllBenchData();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        benchView.classList.add('hidden');
+        clientView.classList.remove('hidden');
+        loadPublicStore();
+      }
+    }
+
+    function requestBenchAccess() {
+      if (currentUser) { switchAppMode('bench'); return; }
+      document.getElementById('login-error-msg').classList.add('hidden');
+      openModal('login-modal');
+    }
+
+    async function handleBenchLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('login-submit-btn');
+      const errEl = document.getElementById('login-error-msg');
+      btn.disabled = true;
+      btn.textContent = 'Autenticando...';
+      errEl.classList.add('hidden');
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: document.getElementById('bench-email-input').value.trim(),
+        password: document.getElementById('bench-password-input').value
+      });
+      btn.disabled = false;
+      btn.textContent = 'Entrar na Bancada';
+      if (error) {
+        errEl.textContent = 'E-mail ou senha inválidos.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      currentUser = data.user;
+      closeModal('login-modal');
+      switchAppMode('bench');
+    }
+
+    async function logoutBench() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      switchAppMode('client');
+    }
+
+    async function openPixConfigModal() {
+      await loadPixSettings();
+      document.getElementById('pix-key-input').value = cachedPix.pix_key || '';
+      document.getElementById('pix-receiver-input').value = cachedPix.pix_receiver || '';
+      openModal('pix-modal');
+    }
+
+    async function savePixConfig(e) {
+      e.preventDefault();
+      const pix_key = document.getElementById('pix-key-input').value.trim();
+      const pix_receiver = document.getElementById('pix-receiver-input').value.trim().toUpperCase();
+      const { error } = await supabaseClient.from('settings').upsert({ id: 1, pix_key, pix_receiver });
+      if (error) return alert('Erro ao salvar PIX: ' + error.message);
+      cachedPix = { id: 1, pix_key, pix_receiver };
+      closeModal('pix-modal');
+      alert('Chave PIX atualizada com sucesso!');
+    }
+
+    const ALL_BENCH_TABS = ['overview', 'orders', 'trade', 'knowledge', 'techlab', 'finance', 'catalog', 'returns', 'drive', 'courses', 'ailab', 'checklists', 'investments', 'suppliers'];
+
+    function switchBenchTab(tab) {
+      ALL_BENCH_TABS.forEach(t => {
+        const panel = document.getElementById(`bench-tab-${t}`);
+        if (panel) panel.classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (btn) {
+          btn.className = t === tab
+            ? 'bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition'
+            : 'bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
+        }
+      });
+
+      if (tab === 'returns' || tab === 'drive') loadReturnsAndDrive();
+      if (tab === 'courses') { loadReturnsAndDrive().then(renderCoursesList); }
+      if (tab === 'ailab') { populateReceiptOSSelect(); renderYouTubeLibrary(); }
+      if (tab === 'checklists') {
+        populateChecklistOSDropdown();
+        renderDynamicChecklistItems();
+        loadServiceChecklists();
+        loadBenchInventory();
+      }
+      if (tab === 'finance') {
+        renderGoalChecklist();
+        loadFinancialRecordsForChart();
+      }
+      if (tab === 'investments') loadInvestmentPlans();
+      if (tab === 'suppliers') loadSupplierQuotes();
+    }
+
+    function selectSector(sector) {
+      const sectorTabs = {
+        all: null,
+        celular: ['orders', 'techlab', 'knowledge', 'checklists', 'suppliers'],
+        informatica: ['orders', 'knowledge', 'checklists', 'drive', 'courses'],
+        software: ['techlab', 'ailab', 'courses', 'drive'],
+        reparos: ['checklists', 'orders', 'knowledge', 'returns'],
+        gestao: ['overview', 'trade', 'finance', 'catalog', 'investments', 'suppliers']
+      };
+
+      document.querySelectorAll('.sector-pill').forEach(pill => {
+        const isMatch = (pill.getAttribute('onclick') || '').includes(`'${sector}'`);
+        pill.classList.toggle('bg-cyan-500/20', isMatch);
+        pill.classList.toggle('border-cyan-500/40', isMatch);
+        pill.classList.toggle('text-cyan-300', isMatch);
+        pill.classList.toggle('bg-slateDark-900', !isMatch);
+        pill.classList.toggle('border-slate-700', !isMatch);
+        pill.classList.toggle('text-slate-300', !isMatch);
+      });
+
+      const allowed = sectorTabs[sector] || null;
+      document.querySelectorAll('.bench-tab-btn').forEach(btn => {
+        const key = btn.id.replace('tab-btn-', '');
+        btn.style.display = (!allowed || allowed.includes(key)) ? '' : 'none';
+      });
+
+      if (sector === 'celular') switchBenchTab('ailab');
+      else if (sector === 'informatica') switchBenchTab('ailab');
+      else if (sector === 'software') switchBenchTab('drive');
+      else if (sector === 'reparos') switchBenchTab('checklists');
+      else if (sector === 'gestao') switchBenchTab('finance');
+      else switchBenchTab('overview');
+    }
+
+    function getNextOsNumber() {
+      let maxSeq = 100;
+      cachedOrders.forEach(o => {
+        const parts = String(o.id).split('-');
+        const num = parseInt(parts[parts.length - 1], 10);
+        if (!isNaN(num) && num > maxSeq) maxSeq = num;
+      });
+      return `OS-2026-${maxSeq + 1}`;
+    }
+
+    async function refreshAllBenchData() {
+      const [ordersRes, financeRes, catalogRes, kbRes, invRes, tradeRes, ulRes, spRes] = await Promise.all([
+        supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('finance').select('*').order('id', { ascending: false }),
+        supabaseClient.from('catalog').select('*').order('id', { ascending: true }),
+        supabaseClient.from('knowledge_base').select('*').order('id', { ascending: false }),
+        supabaseClient.from('inventory').select('*').order('name', { ascending: true }),
+        supabaseClient.from('trade_history').select('*').order('id', { ascending: false }),
+        supabaseClient.from('unlock_guides').select('*').order('id', { ascending: false }),
+        supabaseClient.from('screen_protectors').select('*').order('id', { ascending: false })
+      ]);
+
+      cachedOrders = ordersRes.data || [];
+      cachedFinance = financeRes.data || [];
+      cachedCatalog = catalogRes.data || [];
+      cachedKnowledge = kbRes.data || [];
+      cachedInventory = invRes.data || [];
+      cachedTrades = tradeRes.data || [];
+      cachedUnlocks = ulRes.data || [];
+      cachedProtectors = [...(spRes.data || []), ...DEFAULT_PROTECTORS];
+      await loadPixSettings();
+      await loadPublicStore();
+
+      renderBenchDashboard();
+      renderTradeModule();
+      renderKnowledgeList();
+      renderUnlockList();
+      renderProtectorList();
+      initBenchmarkSelectors();
+      populateOsPartsSelect();
+    }
+
+    function renderBenchDashboard() {
+      const orders = cachedOrders;
+      const finance = cachedFinance;
+      const catalog = cachedCatalog;
+
+      const activeOrders = orders.filter(o => o.status !== 'Entregue').length;
+      const inRepair = orders.filter(o => o.status === 'Em Reparo' || o.status === 'Em Análise').length;
+      const readyCount = orders.filter(o => o.status === 'Pronto').length;
+      const totalIn = finance.filter(f => f.type === 'entrada').reduce((acc, f) => acc + Number(f.amount), 0);
+      const totalOut = finance.filter(f => f.type === 'saida').reduce((acc, f) => acc + Number(f.amount), 0);
+      const balance = totalIn - totalOut;
+      const approvedOrders = orders.filter(o => ['Em Reparo', 'Pronto', 'Entregue'].includes(o.status) && Number(o.price) > 0);
+      const avgTicket = approvedOrders.length ? approvedOrders.reduce((a, b) => a + Number(b.price), 0) / approvedOrders.length : 0;
+
+      document.getElementById('bench-kpi-grid').innerHTML = `
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">OS Ativas</p><p class="text-2xl font-extrabold text-white mt-1">${activeOrders}</p></div>
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Em Bancada</p><p class="text-2xl font-extrabold text-cyan-400 mt-1">${inRepair}</p></div>
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Prontos p/ Retirada</p><p class="text-2xl font-extrabold text-emerald-400 mt-1">${readyCount}</p></div>
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Ticket Médio (Aprovadas)</p><p class="text-2xl font-extrabold text-blue-400 mt-1">${formatCurrency(avgTicket)}</p></div>
+        <div class="glass-card p-4 rounded-2xl col-span-2 lg:col-span-1"><p class="text-xs text-slate-400">Saldo em Caixa</p><p class="text-2xl font-extrabold ${balance >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1">${formatCurrency(balance)}</p></div>
+      `;
+
+      const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const monthlyIn = new Array(12).fill(0);
+      const monthlyOut = new Array(12).fill(0);
+      finance.forEach(f => {
+        const parts = String(f.date || '').split('/');
+        const mIdx = parts.length === 3 ? parseInt(parts[1], 10) - 1 : -1;
+        if (mIdx >= 0 && mIdx < 12) {
+          if (f.type === 'entrada') monthlyIn[mIdx] += Number(f.amount || 0);
+          else monthlyOut[mIdx] += Number(f.amount || 0);
+        }
+      });
+
+      const maxMonthVal = Math.max(100, ...monthlyIn, ...monthlyOut);
+      document.getElementById('bench-monthly-chart').innerHTML = monthNames.map((mName, idx) => {
+        const hIn = Math.round((monthlyIn[idx] / maxMonthVal) * 100);
+        const hOut = Math.round((monthlyOut[idx] / maxMonthVal) * 100);
+        return `<div class="flex flex-col items-center h-full justify-end"><div class="w-full flex items-end justify-center gap-0.5 h-36"><div class="w-2.5 sm:w-3 bg-emerald-400/90 rounded-t" style="height:${Math.max(4, hIn)}%"></div><div class="w-2.5 sm:w-3 bg-rose-400/80 rounded-t" style="height:${Math.max(4, hOut)}%"></div></div><span class="text-[10px] text-slate-400 mt-1.5 font-semibold">${mName}</span></div>`;
+      }).join('');
+
+      document.getElementById('bench-monthly-summary').innerHTML = `<span>Acumulado Entradas: <strong class="text-emerald-400">${formatCurrency(totalIn)}</strong></span><span>Acumulado Saídas: <strong class="text-rose-400">${formatCurrency(totalOut)}</strong></span>`;
+
+      const totalOsCount = orders.length;
+      const solvedCount = orders.filter(o => o.status === 'Pronto' || o.status === 'Entregue').length;
+      const solvedPct = totalOsCount > 0 ? Math.round((solvedCount / totalOsCount) * 100) : 0;
+
+      document.getElementById('bench-solved-donut').innerHTML = `<div class="relative w-36 h-36 rounded-full flex items-center justify-center" style="background: conic-gradient(#10b981 ${solvedPct * 3.6}deg, #1e293b 0deg);"><div class="w-24 h-24 rounded-full bg-slateDark-950 flex flex-col items-center justify-center"><span class="text-2xl font-extrabold text-emerald-400">${solvedPct}%</span><span class="text-[10px] text-slate-400 uppercase font-bold">Solucionados</span></div></div>`;
+      document.getElementById('bench-solved-legend').innerHTML = `<div class="flex justify-between items-center px-3 py-1.5 rounded-lg bg-slateDark-950/80"><span class="text-slate-300">✅ Concluídos</span><strong class="text-emerald-400">${solvedCount}</strong></div><div class="flex justify-between items-center px-3 py-1.5 rounded-lg bg-slateDark-950/80"><span class="text-slate-300">🔧 Em Processo</span><strong class="text-cyan-400">${totalOsCount - solvedCount}</strong></div>`;
+
+      const pipelineStages = [
+        { title: '📥 Entrada', status: 'Entrada', badgeClass: 'bg-slate-700 text-slate-200' },
+        { title: '🔬 Diagnóstico', status: 'Em Análise', badgeClass: 'bg-amber-500/20 text-amber-300' },
+        { title: '💲 Orçamento Enviado', status: 'Orçamento Enviado', badgeClass: 'bg-purple-500/20 text-purple-300' }
+      ];
+      document.getElementById('bench-pipeline-columns').innerHTML = pipelineStages.map(stage => {
+        const list = orders.filter(o => o.status === stage.status);
+        const cardsHtml = list.map(o => `<div onclick="editBenchOrder('${escapeHTML(o.id)}'); switchBenchTab('orders');" class="cursor-pointer p-3 rounded-xl bg-slateDark-950/90 hover:border-cyan-500/40 border border-slate-800 transition space-y-1"><div class="flex justify-between items-center"><span class="text-[11px] font-mono text-cyan-400 font-bold">${escapeHTML(o.id)}</span><span class="text-[11px] font-bold text-emerald-400">${formatCurrency(o.price)}</span></div><p class="text-xs font-bold text-white truncate">${escapeHTML(o.model)}</p><p class="text-[11px] text-slate-400 truncate">${escapeHTML(o.client)} • ${escapeHTML(o.issue)}</p></div>`).join('') || `<p class="text-xs text-slate-500 italic py-4 text-center">Nenhum aparelho.</p>`;
+        return `<div class="p-4 rounded-2xl bg-slateDark-900/80 border border-slate-800 space-y-3"><div class="flex items-center justify-between border-b border-slate-800 pb-2"><h4 class="font-bold text-xs text-white">${stage.title}</h4><span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${stage.badgeClass}">${list.length}</span></div><div class="space-y-2 max-h-64 overflow-y-auto pr-1">${cardsHtml}</div></div>`;
+      }).join('');
+
+      const counts = {};
+      orders.forEach(o => { counts[o.category] = (counts[o.category] || 0) + 1; });
+      const totalOrders = orders.length || 1;
+      document.getElementById('bench-device-chart').innerHTML = Object.entries(counts).map(([cat, count]) => {
+        const pct = Math.round((count / totalOrders) * 100);
+        return `<div><div class="flex justify-between text-xs mb-1"><span class="text-slate-300 font-semibold">${escapeHTML(cat)}</span><span class="text-cyan-400 font-bold">${count} (${pct}%)</span></div><div class="w-full h-2.5 bg-slateDark-950 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500" style="width:${pct}%"></div></div></div>`;
+      }).join('') || '<p class="text-xs text-slate-400">Nenhuma OS cadastrada.</p>';
+
+      const totalSales = cachedTrades.filter(t => t.operation_type === 'venda').reduce((a, b) => a + Number(b.total_price || 0), 0);
+      const totalPurchases = cachedTrades.filter(t => t.operation_type === 'compra').reduce((a, b) => a + Number(b.total_price || 0), 0);
+      document.getElementById('bench-operational-metrics').innerHTML = `
+        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs"><span class="text-slate-400">Vendas de Peças / Store</span><span class="font-bold text-emerald-400">${formatCurrency(totalSales)}</span></div>
+        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs"><span class="text-slate-400">Compras de Peças</span><span class="font-bold text-rose-400">${formatCurrency(totalPurchases)}</span></div>
+        <div class="flex justify-between items-center p-3 rounded-xl bg-slateDark-950/70 text-xs"><span class="text-slate-400">Store / Base Defeitos</span><span class="font-bold text-cyan-400">${publicStoreItems.length} na loja • ${cachedKnowledge.length} casos</span></div>
+      `;
+
+      if (!document.getElementById('os-edit-id').value) document.getElementById('os-number').value = getNextOsNumber();
+
+      document.getElementById('bench-orders-list').innerHTML = orders.map(o => `
+        <div class="glass-card rounded-2xl p-5 space-y-3 border border-slate-800">
+          <div class="flex justify-between items-start gap-2">
+            <div>
+              <span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(o.id)}</span>
+              <h4 class="font-bold text-white">${escapeHTML(o.client)} — ${escapeHTML(o.model)}</h4>
+              <p class="text-xs text-slate-400">${escapeHTML(o.category)} • Tel: ${escapeHTML(o.phone)}</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">${escapeHTML(o.status)}</span>
+          </div>
+          <p class="text-xs text-slate-300"><strong>Defeito:</strong> ${escapeHTML(o.issue)}</p>
+          <p class="text-xs text-slate-400"><strong>Laudo:</strong> ${escapeHTML(o.diagnosis || 'Pendente')}</p>
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
+            <span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(o.price)}</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="editBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 text-slate-200 text-xs">Editar</button>
+              <button type="button" onclick="sendOsToKnowledge('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold">🧠 Salvar Caso</button>
+              <button type="button" onclick="markOrderReady('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold">Marcar Pronto</button>
+              <button type="button" onclick="sendOrderWhatsApp('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold">WhatsApp</button>
+              <button type="button" onclick="deleteBenchOrder('${escapeHTML(o.id)}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 text-xs">Excluir</button>
+            </div>
+          </div>
+        </div>
+      `).join('') || '<p class="text-sm text-slate-400">Nenhuma Ordem de Serviço registrada.</p>';
+
+      document.getElementById('bench-finance-list').innerHTML = finance.map(f => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 text-xs">
+          <div><p class="font-bold text-white">${escapeHTML(f.description)}</p><p class="text-slate-400">${escapeHTML(f.date)}</p></div>
+          <div class="flex items-center gap-3"><span class="font-extrabold ${f.type === 'entrada' ? 'text-emerald-400' : 'text-rose-400'}">${f.type === 'entrada' ? '+' : '-'} ${formatCurrency(f.amount)}</span><button type="button" onclick="deleteFinanceItem(${f.id})" class="text-slate-500 hover:text-rose-400">✕</button></div>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum lançamento financeiro.</p>';
+
+      document.getElementById('bench-catalog-list').innerHTML = catalog.map(c => `
+        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between gap-3">
+          <div><span class="text-[11px] text-cyan-400 font-bold">${escapeHTML(c.category)}</span><h4 class="font-bold text-white text-sm mt-0.5">${escapeHTML(c.name)}</h4></div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800"><span class="font-extrabold text-emerald-400 text-sm">${formatCurrency(c.price)}</span><div class="flex gap-1.5"><button type="button" onclick="useCatalogInOs(${c.id})" class="px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">Usar na OS</button><button type="button" onclick="deleteCatalogItem(${c.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs">✕</button></div></div>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Catálogo vazio.</p>';
+    }
+
+    // ==================== TECH LAB ====================
+    function switchTechSubTab(sub) {
+      ['unlocks', 'protectors', 'benchmark'].forEach(s => {
+        document.getElementById(`techlab-sub-${s}`)?.classList.toggle('hidden', s !== sub);
+        const btn = document.getElementById(`subtab-btn-${s}`);
+        if (btn) {
+          btn.className = s === sub
+            ? 'tech-sub-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition'
+            : 'tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition';
+        }
+      });
+    }
+
+    async function handleUnlockSubmit(e) {
+      e.preventDefault();
+      const toolVal = document.getElementById('ul-tool').value.trim();
+      const methodRaw = document.getElementById('ul-method').value.trim();
+      const { error } = await supabaseClient.from('unlock_guides').insert([{
+        brand: document.getElementById('ul-brand').value,
+        model: document.getElementById('ul-model').value.trim(),
+        lock_type: document.getElementById('ul-type').value,
+        method: toolVal ? `[${toolVal}] ${methodRaw}` : methodRaw
+      }]);
+      if (error) return alert('Erro ao salvar: ' + error.message);
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    function renderUnlockList() {
+      const container = document.getElementById('bench-unlocks-list');
+      if (!container) return;
+      const q = (document.getElementById('ul-search-input')?.value || '').toLowerCase().trim();
+      const list = cachedUnlocks.filter(u => !q || `${u.brand} ${u.model} ${u.lock_type} ${u.method}`.toLowerCase().includes(q));
+      container.innerHTML = list.map(u => `
+        <div class="glass-card rounded-2xl p-5 space-y-2 border border-amber-500/20">
+          <div class="flex justify-between items-start"><div><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[11px] font-bold">${escapeHTML(u.brand)} • ${escapeHTML(u.lock_type)}</span><h4 class="font-bold text-white text-base mt-1">${escapeHTML(u.model)}</h4></div><button type="button" onclick="deleteUnlockGuide(${u.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button></div>
+          <p class="text-xs text-slate-300 bg-slateDark-950/90 p-3 rounded-xl border border-slate-800 leading-relaxed">${escapeHTML(u.method)}</p>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum procedimento registado.</p>';
+    }
+
+    async function deleteUnlockGuide(id) {
+      if (!confirm('Excluir este procedimento?')) return;
+      await supabaseClient.from('unlock_guides').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    async function handleProtectorSubmit(e) {
+      e.preventDefault();
+      const { error } = await supabaseClient.from('screen_protectors').insert([{
+        primary_model: document.getElementById('sp-primary').value.trim(),
+        compatible_models: document.getElementById('sp-compat').value.trim(),
+        notes: document.getElementById('sp-notes').value.trim()
+      }]);
+      if (error) return alert('Erro ao salvar: ' + error.message);
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    function renderProtectorList() {
+      const container = document.getElementById('bench-protectors-list');
+      if (!container) return;
+      const q = (document.getElementById('sp-search-input')?.value || '').toLowerCase().trim();
+      const list = cachedProtectors.filter(p => !q || `${p.primary_model} ${p.compatible_models} ${p.notes || ''}`.toLowerCase().includes(q));
+      container.innerHTML = list.map(p => `
+        <div class="glass-card rounded-2xl p-4 space-y-2 border border-cyan-500/20">
+          <div class="flex justify-between items-start"><h4 class="font-bold text-cyan-300 text-sm">📱 ${escapeHTML(p.primary_model)}</h4>${typeof p.id === 'number' ? `<button type="button" onclick="deleteProtector(${p.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button>` : `<span class="text-[10px] text-slate-500">Padrão</span>`}</div>
+          <p class="text-xs text-white font-semibold">Compatível com: <span class="text-emerald-300">${escapeHTML(p.compatible_models)}</span></p>
+          ${p.notes ? `<p class="text-[11px] text-slate-400">Obs.: ${escapeHTML(p.notes)}</p>` : ''}
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhuma película encontrada.</p>';
+    }
+
+    async function deleteProtector(id) {
+      await supabaseClient.from('screen_protectors').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    function initBenchmarkSelectors() {
+      const selA = document.getElementById('bench-comp-a');
+      const selB = document.getElementById('bench-comp-b');
+      if (!selA || !selB) return;
+      const optionsHtml = PROCESSOR_BENCHMARKS.map(p => `<option value="${p.id}">[${p.type}] ${p.name}</option>`).join('');
+      selA.innerHTML = optionsHtml;
+      selB.innerHTML = optionsHtml;
+      selA.value = 'sd685';
+      selB.value = 'hg99';
+      renderProcessorComparison();
+    }
+
+    function renderProcessorComparison() {
+      const idA = document.getElementById('bench-comp-a')?.value;
+      const idB = document.getElementById('bench-comp-b')?.value;
+      const box = document.getElementById('processor-comparison-result');
+      if (!box) return;
+      const a = PROCESSOR_BENCHMARKS.find(p => p.id === idA) || PROCESSOR_BENCHMARKS[0];
+      const b = PROCESSOR_BENCHMARKS.find(p => p.id === idB) || PROCESSOR_BENCHMARKS[1];
+      const maxScore = Math.max(a.score, b.score, 1);
+      box.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-slateDark-950 border border-cyan-500/30 space-y-2.5 text-xs"><span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">${a.type}</span><h4 class="font-bold text-white text-base">${a.name}</h4><p class="text-slate-400"><strong>Núcleos:</strong> ${a.cores} • <strong>Litografia:</strong> ${a.litho}</p><p class="text-slate-400"><strong>GPU:</strong> ${a.gpu}</p><div><div class="flex justify-between mb-1"><span class="text-slate-300">Benchmark (${a.scale})</span><strong class="text-cyan-400">${a.score.toLocaleString('pt-BR')} pts</strong></div><div class="w-full h-3 bg-slateDark-800 rounded-full overflow-hidden"><div class="h-full bg-cyan-400" style="width:${Math.round((a.score / maxScore) * 100)}%"></div></div></div><p class="text-emerald-300 pt-1"><strong>Indicação:</strong> ${a.ideal}</p></div>
+          <div class="p-4 rounded-2xl bg-slateDark-950 border border-purple-500/30 space-y-2.5 text-xs"><span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">${b.type}</span><h4 class="font-bold text-white text-base">${b.name}</h4><p class="text-slate-400"><strong>Núcleos:</strong> ${b.cores} • <strong>Litografia:</strong> ${b.litho}</p><p class="text-slate-400"><strong>GPU:</strong> ${b.gpu}</p><div><div class="flex justify-between mb-1"><span class="text-slate-300">Benchmark (${b.scale})</span><strong class="text-purple-400">${b.score.toLocaleString('pt-BR')} pts</strong></div><div class="w-full h-3 bg-slateDark-800 rounded-full overflow-hidden"><div class="h-full bg-purple-400" style="width:${Math.round((b.score / maxScore) * 100)}%"></div></div></div><p class="text-emerald-300 pt-1"><strong>Indicação:</strong> ${b.ideal}</p></div>
+        </div>
+      `;
+    }
+
+    // ==================== ESTOQUE & STORE (IDs prod-*) ====================
+    function renderTradeModule() {
+      const totalSales = cachedTrades.filter(t => t.operation_type === 'venda').reduce((a, b) => a + Number(b.total_price || 0), 0);
+      const totalPurchases = cachedTrades.filter(t => t.operation_type === 'compra').reduce((a, b) => a + Number(b.total_price || 0), 0);
+      const stockValueCost = cachedInventory.reduce((a, b) => a + (Number(b.qty || 0) * Number(b.cost_price || 0)), 0);
+      const stockValueSell = cachedInventory.reduce((a, b) => a + (Number(b.qty || 0) * Number(b.sell_price || 0)), 0);
+
+      document.getElementById('trade-kpi-grid').innerHTML = `
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Total Vendas Diretas</p><p class="text-xl font-extrabold text-emerald-400 mt-1">${formatCurrency(totalSales)}</p></div>
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Total Compras Peças</p><p class="text-xl font-extrabold text-rose-400 mt-1">${formatCurrency(totalPurchases)}</p></div>
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Estoque (Custo)</p><p class="text-xl font-extrabold text-white mt-1">${formatCurrency(stockValueCost)}</p></div>
+        <div class="glass-card p-4 rounded-2xl"><p class="text-xs text-slate-400">Potencial de Venda</p><p class="text-xl font-extrabold text-cyan-400 mt-1">${formatCurrency(stockValueSell)}</p></div>
+      `;
+
+      const selectEl = document.getElementById('trade-item-select');
+      if (selectEl) {
+        selectEl.innerHTML = `<option value="">-- Item avulso / digitar nome --</option>` + cachedInventory.map(i => `<option value="${i.id}">${escapeHTML(i.name)} (Disp: ${i.qty})</option>`).join('');
+      }
+
+      document.getElementById('bench-inventory-list').innerHTML = cachedInventory.map(item => `
+        <div class="p-3.5 rounded-xl bg-slateDark-950/90 border ${item.qty <= 1 ? 'border-amber-500/40' : 'border-slate-800'} flex items-center justify-between gap-2 text-xs">
+          <div>
+            <div class="flex items-center gap-1.5"><span class="text-[10px] uppercase font-bold text-cyan-400">${escapeHTML(item.category)}</span><span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${item.show_in_store ? 'bg-purple-500/20 text-purple-300' : 'bg-slate-800 text-slate-400'}">${item.show_in_store ? '🛍️ Na Store' : '🔒 Interno'}</span></div>
+            <p class="font-bold text-white text-sm mt-0.5">${escapeHTML(item.name)}</p>
+            <p class="text-slate-400">Custo: ${formatCurrency(item.cost_price)} • Venda: <strong class="text-emerald-400">${formatCurrency(item.sell_price)}</strong></p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="toggleItemInStore(${item.id}, ${!item.show_in_store})" class="px-2 py-1 rounded-lg bg-slateDark-800 hover:bg-purple-500/20 text-purple-300 text-[11px] font-semibold">${item.show_in_store ? 'Ocultar' : 'Publicar'}</button>
+            <span class="px-2.5 py-1 rounded-lg font-bold ${item.qty <= 1 ? 'bg-amber-500/20 text-amber-300' : 'bg-slateDark-800 text-white'}">${item.qty} un.</span>
+            <button type="button" onclick="deleteInventoryItem(${item.id})" class="text-slate-500 hover:text-rose-400">✕</button>
+          </div>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum item cadastrado no estoque.</p>';
+
+      document.getElementById('bench-trade-history-list').innerHTML = cachedTrades.map(t => `
+        <div class="p-3.5 rounded-xl bg-slateDark-950/90 border border-slate-800 flex items-center justify-between gap-2 text-xs">
+          <div><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${t.operation_type === 'venda' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">${t.operation_type}</span><p class="font-bold text-white mt-1">${t.qty}x ${escapeHTML(t.item_name)}</p><p class="text-slate-400">${escapeHTML(t.notes || '')}</p></div>
+          <div class="text-right"><p class="font-extrabold ${t.operation_type === 'venda' ? 'text-emerald-400' : 'text-rose-400'}">${t.operation_type === 'venda' ? '+' : '-'} ${formatCurrency(t.total_price)}</p><p class="text-[11px] text-slate-500">${formatCurrency(t.unit_price)} / un.</p></div>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhuma operação registada.</p>';
+    }
+
+    function syncTradeDefaultPrice() {
+      const itemId = document.getElementById('trade-item-select').value;
+      const opType = document.getElementById('trade-type').value;
+      if (!itemId) return;
+      const item = cachedInventory.find(i => String(i.id) === String(itemId));
+      if (!item) return;
+      document.getElementById('trade-item-name').value = item.name;
+      document.getElementById('trade-unit-price').value = opType === 'venda' ? item.sell_price : item.cost_price;
+    }
+
+    async function handleInventoryCreate(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('prod-name').value.trim(),
+        category: document.getElementById('prod-category').value,
+        qty: parseInt(document.getElementById('prod-qty').value, 10) || 0,
+        cost_price: parseFloat(document.getElementById('prod-cost').value) || 0,
+        sell_price: parseFloat(document.getElementById('prod-sell').value) || 0,
+        show_in_store: document.getElementById('prod-show-store').value === 'true',
+        image_url: document.getElementById('prod-image').value.trim(),
+        description: document.getElementById('prod-desc').value.trim()
+      };
+      const { error } = await supabaseClient.from('inventory').insert([payload]);
+      if (error) return alert('Erro ao cadastrar item: ' + error.message);
+      e.target.reset();
+      clearProductImagePreview();
+      await refreshAllBenchData();
+    }
+
+    function processProductImageFile(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = new Image();
+        img.onload = function() {
+          const maxSide = 600;
+          let w = img.width, h = img.height;
+          if (w > maxSide || h > maxSide) {
+            if (w > h) { h = Math.round((h * maxSide) / w); w = maxSide; }
+            else { w = Math.round((w * maxSide) / h); h = maxSide; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', 0.78);
+          document.getElementById('prod-image').value = compressed;
+          document.getElementById('prod-image-url-helper').value = '';
+          document.getElementById('prod-image-preview').src = compressed;
+          document.getElementById('prod-image-status').textContent = `Foto otimizada (${w}x${h}px) pronta!`;
+          document.getElementById('prod-image-preview-box').classList.remove('hidden');
+          document.getElementById('prod-image-clear-btn').classList.remove('hidden');
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function syncProductImageUrl(val) {
+      const url = (val || '').trim();
+      document.getElementById('prod-image').value = url;
+      if (url) {
+        document.getElementById('prod-image-preview').src = url;
+        document.getElementById('prod-image-status').textContent = 'Link carregado.';
+        document.getElementById('prod-image-preview-box').classList.remove('hidden');
+        document.getElementById('prod-image-clear-btn').classList.remove('hidden');
+      } else clearProductImagePreview();
+    }
+
+    function clearProductImagePreview() {
+      if (document.getElementById('prod-image')) document.getElementById('prod-image').value = '';
+      if (document.getElementById('prod-image-file')) document.getElementById('prod-image-file').value = '';
+      if (document.getElementById('prod-image-url-helper')) document.getElementById('prod-image-url-helper').value = '';
+      document.getElementById('prod-image-preview-box')?.classList.add('hidden');
+      document.getElementById('prod-image-clear-btn')?.classList.add('hidden');
+    }
+
+    async function toggleItemInStore(id, nextState) {
+      await supabaseClient.from('inventory').update({ show_in_store: nextState }).eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    async function deleteInventoryItem(id) {
+      if (!confirm('Remover este item do estoque?')) return;
+      await supabaseClient.from('inventory').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    async function handleTradeOperation(e) {
+      e.preventDefault();
+      const operation_type = document.getElementById('trade-type').value;
+      const itemIdVal = document.getElementById('trade-item-select').value;
+      const item_name = document.getElementById('trade-item-name').value.trim();
+      const qty = parseInt(document.getElementById('trade-qty').value, 10) || 1;
+      const unit_price = parseFloat(document.getElementById('trade-unit-price').value) || 0;
+      const total_price = qty * unit_price;
+      const notes = document.getElementById('trade-notes').value.trim();
+
+      const { error } = await supabaseClient.from('trade_history').insert([{ operation_type, item_id: itemIdVal ? parseInt(itemIdVal, 10) : null, item_name, qty, unit_price, total_price, notes }]);
+      if (error) return alert('Erro ao registrar operação: ' + error.message);
+
+      if (itemIdVal) {
+        const invItem = cachedInventory.find(i => String(i.id) === String(itemIdVal));
+        if (invItem) {
+          const newQty = operation_type === 'compra' ? Number(invItem.qty) + qty : Math.max(0, Number(invItem.qty) - qty);
+          await supabaseClient.from('inventory').update({ qty: newQty }).eq('id', invItem.id);
+        }
+      }
+
+      await supabaseClient.from('finance').insert([{
+        type: operation_type === 'venda' ? 'entrada' : 'saida',
+        description: `${operation_type === 'venda' ? 'Venda' : 'Compra'}: ${qty}x ${item_name}${notes ? ' (' + notes + ')' : ''}`,
+        amount: total_price,
+        date: new Date().toLocaleDateString('pt-BR')
+      }]);
+
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    // ==================== BASE DE DEFEITOS & OS ====================
+    async function handleKnowledgeSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('save-kb-btn');
+      btn.disabled = true; btn.textContent = 'Salvando...';
+      const { error } = await supabaseClient.from('knowledge_base').insert([{
+        category: document.getElementById('kb-category').value,
+        model: document.getElementById('kb-model').value.trim(),
+        symptom: document.getElementById('kb-symptom').value.trim(),
+        component: document.getElementById('kb-component').value.trim(),
+        solution: document.getElementById('kb-solution').value.trim()
+      }]);
+      btn.disabled = false; btn.textContent = 'Salvar na Base de Conhecimento';
+      if (error) return alert('Erro: ' + error.message);
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    function renderKnowledgeList() {
+      const container = document.getElementById('bench-knowledge-list');
+      if (!container) return;
+      const query = (document.getElementById('kb-search-input')?.value || '').toLowerCase().trim();
+      const catFilter = document.getElementById('kb-filter-category')?.value || '';
+      const filtered = cachedKnowledge.filter(item => (!catFilter || item.category === catFilter) && (!query || `${item.model} ${item.symptom} ${item.component || ''} ${item.solution}`.toLowerCase().includes(query)));
+      container.innerHTML = filtered.map(item => `
+        <div class="glass-card rounded-2xl p-5 space-y-3 border border-cyan-500/20">
+          <div class="flex items-start justify-between gap-2"><div><span class="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 text-[11px] font-bold">${escapeHTML(item.category)}</span><h4 class="font-bold text-white text-base mt-1">${escapeHTML(item.model)}</h4></div><button type="button" onclick="deleteKnowledgeItem(${item.id})" class="text-slate-500 hover:text-rose-400 text-xs">✕</button></div>
+          <div class="space-y-1.5 text-xs"><p class="text-amber-300"><strong>Sintoma:</strong> ${escapeHTML(item.symptom)}</p>${item.component ? `<p class="text-purple-300"><strong>Componente:</strong> ${escapeHTML(item.component)}</p>` : ''}<div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 text-slate-200"><strong class="text-emerald-400 block mb-1">Solução Técnica:</strong>${escapeHTML(item.solution)}</div></div>
+          <div class="flex justify-end pt-1"><button type="button" onclick="applyKnowledgeToOs(${item.id})" class="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition">📋 Aplicar Laudo na OS</button></div>
+        </div>
+      `).join('') || '<p class="text-sm text-slate-400">Nenhum registro encontrado.</p>';
+    }
+
+    async function deleteKnowledgeItem(id) {
+      if (!confirm('Remover este registro?')) return;
+      await supabaseClient.from('knowledge_base').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    function applyKnowledgeToOs(id) {
+      const item = cachedKnowledge.find(k => k.id === id);
+      if (!item) return;
+      switchBenchTab('orders');
+      document.getElementById('os-diagnosis').value = item.component ? `${item.solution} (Ref: ${item.component})` : item.solution;
+      if (!document.getElementById('os-model').value) document.getElementById('os-model').value = item.model;
+      document.getElementById('bench-os-form')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function sendOsToKnowledge(osId) {
+      const order = cachedOrders.find(o => o.id === osId);
+      if (!order) return;
+      switchBenchTab('knowledge');
+      document.getElementById('kb-category').value = order.category;
+      document.getElementById('kb-model').value = order.model;
+      document.getElementById('kb-symptom').value = order.issue;
+      document.getElementById('kb-solution').value = order.diagnosis || '';
+    }
+
+    function resetBenchForm() {
+      document.getElementById('bench-os-form')?.reset();
+      document.getElementById('os-edit-id').value = '';
+      document.getElementById('os-number').value = getNextOsNumber();
+      document.getElementById('bench-form-title').textContent = 'Nova Ordem de Serviço (Check-in)';
+    }
+
+    async function handleBenchOsSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('save-os-btn');
+      btn.disabled = true; btn.textContent = 'Salvando...';
+      const editId = document.getElementById('os-edit-id').value;
+      const osId = document.getElementById('os-number').value;
+      const { partCost, transportCost, laborVal, netProfit } = recalcOsBudget();
+      const partId = document.getElementById('os-part-select')?.value || null;
+      const mediaUrl = document.getElementById('os-media-url')?.value?.trim() || null;
+
+      const payload = {
+        id: osId,
+        client: document.getElementById('os-client').value.trim(),
+        phone: document.getElementById('os-phone').value.replace(/\D/g, ''),
+        category: document.getElementById('os-category').value,
+        model: document.getElementById('os-model').value.trim(),
+        status: document.getElementById('os-status').value,
+        price: parseFloat(document.getElementById('os-price').value) || 0,
+        issue: document.getElementById('os-issue').value.trim(),
+        diagnosis: document.getElementById('os-diagnosis').value.trim(),
+        part_id: partId ? Number(partId) : null,
+        part_cost: partCost,
+        transport_cost: transportCost,
+        labor_value: laborVal,
+        net_profit: netProfit,
+        media_url: mediaUrl
+      };
+
+      const { error } = editId
+        ? await supabaseClient.from('orders').update(payload).eq('id', editId)
+        : await supabaseClient.from('orders').insert([payload]);
+
+      btn.disabled = false; btn.textContent = 'Salvar Ordem de Serviço na Nuvem';
+      if (error) return alert('Erro ao salvar OS: ' + error.message);
+      resetBenchForm();
+      await refreshAllBenchData();
+    }
+
+    function editBenchOrder(osId) {
+      const order = cachedOrders.find(o => o.id === osId);
+      if (!order) return;
+      document.getElementById('os-edit-id').value = order.id;
+      document.getElementById('os-number').value = order.id;
+      document.getElementById('os-client').value = order.client;
+      document.getElementById('os-phone').value = order.phone;
+      document.getElementById('os-category').value = order.category;
+      document.getElementById('os-model').value = order.model;
+      document.getElementById('os-status').value = order.status;
+      document.getElementById('os-price').value = order.price;
+      document.getElementById('os-issue').value = order.issue;
+      document.getElementById('os-diagnosis').value = order.diagnosis || '';
+      document.getElementById('bench-form-title').textContent = `Editando ${order.id}`;
+      document.getElementById('bench-os-form')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function markOrderReady(osId) {
+      const order = cachedOrders.find(o => o.id === osId);
+      if (!order) return;
+      await supabaseClient.from('orders').update({ status: 'Pronto', paid_in_finance: true }).eq('id', osId);
+      if (Number(order.price) > 0 && !order.paid_in_finance) {
+        await supabaseClient.from('finance').insert([{ type: 'entrada', description: `Serviço ${order.id} (${order.model})`, amount: Number(order.price), date: new Date().toLocaleDateString('pt-BR') }]);
+      }
+      await refreshAllBenchData();
+    }
+
+    async function deleteBenchOrder(osId) {
+      if (!confirm(`Excluir permanentemente a ordem ${osId}?`)) return;
+      await supabaseClient.from('orders').delete().eq('id', osId);
+      await refreshAllBenchData();
+    }
+
+    function sendOrderWhatsApp(osId) {
+      const o = cachedOrders.find(item => item.id === osId);
+      if (!o) return;
+      const targetPhone = o.phone.startsWith('55') ? o.phone : '55' + o.phone;
+      const portalLink = window.location.origin + window.location.pathname;
+      const msg = `*LABTECH_MSI — Atualização de Serviço*\n*OS:* ${o.id}\n*Cliente:* ${o.client}\n*Equipamento:* ${o.model}\n*Status:* ${o.status}\n*Laudo:* ${o.diagnosis || 'Em bancada'}\n*Valor:* ${formatCurrency(o.price)}\n*Chave PIX:* ${cachedPix.pix_key}\n\nAcompanhe em:\n${portalLink}`;
+      window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function populateOsPartsSelect() {
+      const sel = document.getElementById('os-part-select');
+      if (!sel) return;
+      const cur = sel.value;
+      sel.innerHTML = `<option value="">-- Sem peça / Avulso --</option>` + cachedInventory.map(i => `<option value="${i.id}" data-cost="${i.cost_price || 0}">${escapeHTML(i.name)} (Est: ${i.qty} | Custo: R$ ${Number(i.cost_price || 0).toFixed(2)})</option>`).join('');
+      if (cur) sel.value = cur;
+    }
+
+    function onOsPartChange() {
+      const sel = document.getElementById('os-part-select');
+      const opt = sel?.options[sel.selectedIndex];
+      document.getElementById('os-part-cost').value = opt && opt.value ? Number(opt.dataset.cost || 0).toFixed(2) : '0';
+      recalcOsBudget();
+    }
+
+    function recalcOsBudget() {
+      const partCost = parseFloat(document.getElementById('os-part-cost')?.value) || 0;
+      const transportCost = parseFloat(document.getElementById('os-transport-cost')?.value) || 0;
+      const laborVal = parseFloat(document.getElementById('os-labor-value')?.value) || 0;
+      const totalClient = partCost + transportCost + laborVal;
+      const priceInput = document.getElementById('os-price');
+      if (priceInput && totalClient > 0) priceInput.value = totalClient.toFixed(2);
+      const finalPrice = parseFloat(priceInput?.value) || 0;
+      const netProfit = finalPrice - partCost - transportCost;
+      const badge = document.getElementById('os-profit-badge');
+      if (badge) {
+        badge.textContent = `Lucro Líquido: ${formatCurrency(netProfit)}`;
+        badge.className = `px-2.5 py-1 rounded-lg text-xs font-extrabold ${netProfit >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
+      }
+      return { partCost, transportCost, laborVal, netProfit };
+    }
+
+    // ==================== FINANCEIRO & CATÁLOGO ====================
+    async function handleFinanceSubmit(e) {
+      e.preventDefault();
+      await supabaseClient.from('finance').insert([{ type: document.getElementById('fin-type').value, description: document.getElementById('fin-desc').value.trim(), amount: parseFloat(document.getElementById('fin-amount').value) || 0, date: new Date().toLocaleDateString('pt-BR') }]);
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    async function deleteFinanceItem(id) {
+      await supabaseClient.from('finance').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    async function handleCatalogSubmit(e) {
+      e.preventDefault();
+      await supabaseClient.from('catalog').insert([{ name: document.getElementById('cat-name').value.trim(), category: document.getElementById('cat-category').value, price: parseFloat(document.getElementById('cat-price').value) || 0 }]);
+      e.target.reset();
+      await refreshAllBenchData();
+    }
+
+    async function deleteCatalogItem(id) {
+      await supabaseClient.from('catalog').delete().eq('id', id);
+      await refreshAllBenchData();
+    }
+
+    function useCatalogInOs(id) {
+      const item = cachedCatalog.find(c => c.id === id);
+      if (!item) return;
+      switchBenchTab('orders');
+      resetBenchForm();
+      document.getElementById('os-category').value = item.category;
+      document.getElementById('os-diagnosis').value = item.name;
+      document.getElementById('os-price').value = item.price;
+    }
+
+    // ==================== RETORNOS, DRIVE & CURSOS ====================
+    async function loadReturnsAndDrive() {
+      const [retRes, drvRes] = await Promise.all([
+        supabaseClient.from('warranty_returns').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('drive_archive').select('*').order('created_at', { ascending: false })
+      ]);
+      cachedReturns = retRes.data || [];
+      cachedDriveArchive = drvRes.data || [];
+      renderReturnsList();
+      renderDriveArchive();
+    }
+
+    function autofillReturnFromOs() {
+      const osId = document.getElementById('ret-order-id')?.value?.trim();
+      if (!osId) return;
+      const found = cachedOrders.find(o => String(o.id).toLowerCase() === osId.toLowerCase());
+      if (found) {
+        document.getElementById('ret-client').value = found.client || '';
+        document.getElementById('ret-device').value = found.model || '';
+      }
+    }
+
+    async function handleReturnSubmit(e) {
+      e.preventDefault();
+      const { error } = await supabaseClient.from('warranty_returns').insert([{
+        original_order_id: document.getElementById('ret-order-id').value.trim(),
+        client_name: document.getElementById('ret-client').value.trim(),
+        device_model: document.getElementById('ret-device').value.trim(),
+        extra_cost: parseFloat(document.getElementById('ret-extra-cost').value) || 0,
+        return_reason: document.getElementById('ret-reason').value.trim(),
+        technical_findings: document.getElementById('ret-findings').value.trim(),
+        status: 'Em Análise'
+      }]);
+      if (error) return alert('Erro: ' + error.message);
+      e.target.reset();
+      await loadReturnsAndDrive();
+    }
+
+    async function updateReturnStatus(id, newStatus) {
+      await supabaseClient.from('warranty_returns').update({ status: newStatus, resolved_at: newStatus === 'Entregue' ? new Date().toISOString() : null }).eq('id', id);
+      await loadReturnsAndDrive();
+    }
+
+    function renderReturnsList() {
+      const el = document.getElementById('bench-returns-list');
+      if (!el) return;
+      el.innerHTML = cachedReturns.map(r => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-amber-500/30 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2"><span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono font-bold">OS: ${escapeHTML(r.original_order_id || '-')}</span><span class="font-bold text-white text-sm">${escapeHTML(r.client_name)} — ${escapeHTML(r.device_model)}</span></div>
+            <p class="text-amber-300"><strong>Motivo:</strong> ${escapeHTML(r.return_reason)}</p>
+            ${r.technical_findings ? `<p class="text-slate-400"><strong>Laudo:</strong> ${escapeHTML(r.technical_findings)}</p>` : ''}
+          </div>
+          <select onchange="updateReturnStatus(${r.id}, this.value)" class="px-3 py-1.5 rounded-lg bg-slateDark-900 border border-slate-700 text-white text-xs font-semibold">
+            <option value="Em Análise" ${r.status === 'Em Análise' ? 'selected' : ''}>🔍 Em Análise</option>
+            <option value="Reparado" ${r.status === 'Reparado' ? 'selected' : ''}>✅ Reparado</option>
+            <option value="Sem Defeito" ${r.status === 'Sem Defeito' ? 'selected' : ''}>ℹ️ Sem Defeito</option>
+            <option value="Entregue" ${r.status === 'Entregue' ? 'selected' : ''}>📦 Entregue</option>
+          </select>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum retorno registrado.</p>';
+    }
+
+    async function handleDriveSubmit(e) {
+      e.preventDefault();
+      const { error } = await supabaseClient.from('drive_archive').insert([{
+        category: document.getElementById('drv-category').value,
+        brand_model: document.getElementById('drv-model').value.trim(),
+        title: document.getElementById('drv-title').value.trim(),
+        drive_url: document.getElementById('drv-url').value.trim(),
+        notes: document.getElementById('drv-notes').value.trim()
+      }]);
+      if (error) return alert('Erro: ' + error.message);
+      e.target.reset();
+      await loadReturnsAndDrive();
+    }
+
+    async function deleteDriveItem(id) {
+      if (!confirm('Remover este item?')) return;
+      await supabaseClient.from('drive_archive').delete().eq('id', id);
+      await loadReturnsAndDrive();
+      renderCoursesList();
+      renderYouTubeLibrary();
+    }
+
+    function renderDriveArchive() {
+      const el = document.getElementById('bench-drive-list');
+      if (!el) return;
+      const q = (document.getElementById('drv-search')?.value || '').toLowerCase().trim();
+      const list = cachedDriveArchive.filter(d => d.category !== 'Curso Online' && d.category !== 'YouTube Defeito' && (!q || `${d.category} ${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase().includes(q)));
+      el.innerHTML = list.map(d => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 flex flex-col justify-between gap-3 text-xs">
+          <div class="space-y-1"><div class="flex items-center justify-between gap-2"><span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold text-[10px]">${escapeHTML(d.category)}</span><button type="button" onclick="deleteDriveItem(${d.id})" class="text-slate-500 hover:text-rose-400">✕</button></div><p class="text-emerald-400 font-bold">${escapeHTML(d.brand_model || '')}</p><h4 class="font-bold text-white text-sm">${escapeHTML(d.title)}</h4>${d.notes ? `<p class="text-slate-400">${escapeHTML(d.notes)}</p>` : ''}</div>
+          <a href="${escapeHTML(d.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold transition">☁️ Abrir no Google Drive ↗</a>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400">Nenhum arquivo indexado.</p>';
+    }
+
+    async function handleCourseSubmit(e) {
+      e.preventDefault();
+      const { error } = await supabaseClient.from('drive_archive').insert([{
+        category: 'Curso Online',
+        brand_model: document.getElementById('crs-platform').value,
+        title: document.getElementById('crs-title').value.trim(),
+        drive_url: document.getElementById('crs-url').value.trim(),
+        notes: document.getElementById('crs-notes').value.trim()
+      }]);
+      if (error) return alert('Erro: ' + error.message);
+      e.target.reset();
+      await loadReturnsAndDrive();
+      renderCoursesList();
+    }
+
+    async function updateCourseProgress(id, currentNotes) {
+      const updated = prompt('Atualize o módulo/aula onde parou:', currentNotes || '');
+      if (updated === null) return;
+      await supabaseClient.from('drive_archive').update({ notes: updated.trim() }).eq('id', id);
+      await loadReturnsAndDrive();
+      renderCoursesList();
+    }
+
+    function renderCoursesList() {
+      const el = document.getElementById('bench-courses-list');
+      if (!el) return;
+      const q = (document.getElementById('crs-search')?.value || '').toLowerCase().trim();
+      const courses = cachedDriveArchive.filter(d => d.category === 'Curso Online' && (!q || `${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase().includes(q)));
+      el.innerHTML = courses.map(c => `
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-purple-500/30 flex flex-col justify-between gap-3 text-xs">
+          <div class="space-y-1.5"><div class="flex items-center justify-between gap-2"><span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold text-[10px]">${escapeHTML(c.brand_model || 'Plataforma')}</span><div class="flex items-center gap-2"><button type="button" onclick="updateCourseProgress(${c.id}, '${escapeHTML(c.notes || '').replace(/'/g, "\\'")}')" class="text-cyan-400 hover:underline text-[11px]">✏️ Progresso</button><button type="button" onclick="deleteDriveItem(${c.id})" class="text-slate-500 hover:text-rose-400">✕</button></div></div><h4 class="font-bold text-white text-sm">${escapeHTML(c.title)}</h4><p class="text-slate-400">${c.notes ? `📌 ${escapeHTML(c.notes)}` : 'Sem anotação.'}</p></div>
+          <a href="${escapeHTML(c.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition">▶️ Assistir Aula ↗</a>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400 col-span-full">Nenhum curso cadastrado.</p>';
+    }
+
+    // ==================== BANCADA IA, YOUTUBE & RECIBOS ====================
+    function populateReceiptOSSelect() {
+      const sel = document.getElementById('receipt-os-select');
+      if (!sel) return;
+      if (!cachedOrders.length) { sel.innerHTML = '<option value="">Nenhuma OS encontrada</option>'; return; }
+      sel.innerHTML = cachedOrders.map(o => `<option value="${o.id}">${escapeHTML(o.id)} — ${escapeHTML(o.client)} (${escapeHTML(o.model)}) • R$ ${Number(o.price || 0).toFixed(2)}</option>`).join('');
+    }
+
+    function getSelectedReceiptOS() {
+      const id = document.getElementById('receipt-os-select')?.value;
+      return cachedOrders.find(o => String(o.id) === String(id));
+    }
+
+    function generateOSReceiptPDF() {
+      const os = getSelectedReceiptOS();
+      if (!os) return alert('Selecione uma Ordem de Serviço primeiro.');
+      const total = Number(os.price || 0).toFixed(2).replace('.', ',');
+      const win = window.open('', '_blank', 'width=800,height=900');
+      win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Recibo - ${os.id}</title><style>body{font-family:Arial,sans-serif;color:#111;padding:32px;max-width:720px;margin:auto}.header{border-bottom:2px solid #0891b2;padding-bottom:12px;margin-bottom:20px;display:flex;justify-content:space-between}.box{border:1px solid #cbd5e1;border-radius:8px;padding:14px;margin-bottom:16px}.total{font-size:18px;font-weight:bold;text-align:right;margin-top:12px;color:#065f46}.warranty{font-size:11px;background:#f8fafc;padding:12px;border-left:4px solid #0891b2}.sign{margin-top:48px;display:flex;justify-content:space-between;text-align:center;font-size:12px}.sign div{width:45%;border-top:1px solid #334155;padding-top:6px}</style></head><body><div class="header"><div><strong>LABTECH_MSI</strong><br><small>Rua 8 de Dezembro, Ceará-Mirim/RN • (84) 99121-6849</small></div><div style="text-align:right"><strong>RECIBO DE SERVIÇO</strong><br><small>Protocolo: ${os.id} • ${new Date().toLocaleDateString('pt-BR')}</small></div></div><div class="box"><p><strong>Cliente:</strong> ${os.client} • Tel: ${os.phone || '-'}</p><p><strong>Equipamento:</strong> ${os.model}</p><p><strong>Status:</strong> ${os.status}</p></div><div class="box"><p><strong>Defeito:</strong> ${os.issue}</p><p><strong>Laudo/Solução:</strong> ${os.diagnosis || 'Serviço técnico concluído.'}</p><div class="total">Valor Total: R$ ${total}</div></div><div class="warranty"><strong>GARANTIA DE 90 DIAS:</strong> Garantia legal sobre o serviço executado e peças substituídas. Não cobre mau uso, queda ou líquidos.</div><div class="sign"><div>LABTECH_MSI</div><div>Assinatura do Cliente</div></div><script>window.onload=()=>window.print()<\/script></body></html>`);
+      win.document.close();
+    }
+
+    function sendOSReceiptWhatsApp() {
+      const os = getSelectedReceiptOS();
+      if (!os) return alert('Selecione uma Ordem de Serviço.');
+      const total = Number(os.price || 0).toFixed(2).replace('.', ',');
+      const phone = (os.phone || '').replace(/\D/g, '');
+      const text = encodeURIComponent(`*LABTECH_MSI - Comprovante & Garantia*\n📋 *OS:* ${os.id}\n👤 *Cliente:* ${os.client}\n💻 *Equipamento:* ${os.model}\n🛠️ *Serviço:* ${os.diagnosis || os.issue}\n💰 *Valor:* R$ ${total}\n🛡️ *Garantia:* 90 dias.`);
+      window.open(phone ? `https://wa.me/55${phone}?text=${text}` : `https://wa.me/?text=${text}`, '_blank');
+    }
+
+    function copyYouTubeExtractionPrompt() {
+      const ytUrl = (document.getElementById('yt-source-url')?.value || '').trim();
+      if (!ytUrl) return alert('Cole primeiro o link da aula do YouTube.');
+      const promptText = `Atue como engenheiro especialista em reparo de placas. Analise este vídeo (${ytUrl}) e extraia TODOS os defeitos solucionados.\nResponda uma linha por defeito no formato:\nPLACA: [Modelo] | SINTOMA: [Sintoma] | MINUTO: [MM:SS] | PASSOS: [1. Medição -> 2. Teste -> 3. Solução] | SOLDA_TEMP: [Temp/ar ou N/A] | DICAS: [Dicas]`;
+      navigator.clipboard.writeText(promptText).then(() => document.getElementById('yt-copy-feedback')?.classList.remove('hidden'));
+    }
+
+    function parseTimestampToSeconds(ts) {
+      const parts = (ts || '0:00').trim().split(':').map(Number);
+      if (parts.length === 3) return (parts[0] * 3600) + (parts[1] * 60) + (parts[2] || 0);
+      if (parts.length === 2) return (parts[0] * 60) + (parts[1] || 0);
+      return 0;
+    }
+
+    async function saveParsedYouTubeDefects() {
+      const rawUrl = (document.getElementById('yt-source-url')?.value || '').trim();
+      const rawText = (document.getElementById('yt-ai-bulk-text')?.value || '').trim();
+      if (!rawUrl || !rawText) return alert('Preencha o link e o texto gerado pela IA.');
+      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('PLACA:'));
+      if (!lines.length) return alert('Nenhuma linha válida encontrada.');
+      const records = lines.map(line => {
+        const getF = (lbl) => (line.match(new RegExp(lbl + ':\\s*([^|]+)')) || [])[1]?.trim() || '';
+        const secs = parseTimestampToSeconds(getF('MINUTO') || '00:00');
+        return {
+          category: 'YouTube Defeito',
+          brand_model: getF('PLACA') || 'Placa',
+          title: `${getF('SINTOMA') || 'Defeito'} (⏱️ ${getF('MINUTO') || '00:00'})`,
+          drive_url: `${rawUrl}${rawUrl.includes('?') ? '&' : '?'}t=${secs}s`,
+          notes: `PASSOS: ${getF('PASSOS') || getF('SOLUCAO')} || SOLDA: ${getF('SOLDA_TEMP') || 'N/A'} || DICAS: ${getF('DICAS')}`
+        };
+      });
+      const { error } = await supabaseClient.from('drive_archive').insert(records);
+      if (error) return alert('Erro: ' + error.message);
+      document.getElementById('yt-ai-bulk-text').value = '';
+      await loadReturnsAndDrive();
+      renderYouTubeLibrary();
+    }
+
+    function renderYouTubeLibrary() {
+      const el = document.getElementById('yt-library-list');
+      if (!el) return;
+      const q = (document.getElementById('yt-library-search')?.value || '').toLowerCase().trim();
+      const items = cachedDriveArchive.filter(d => d.category === 'YouTube Defeito' && (!q || `${d.brand_model} ${d.title} ${d.notes || ''}`.toLowerCase().includes(q)));
+      el.innerHTML = items.map(item => `
+        <div class="p-4 rounded-xl bg-slateDark-950 border border-rose-500/30 flex flex-col justify-between gap-3 text-xs">
+          <div class="space-y-2"><div class="flex items-center justify-between"><span class="px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold text-[10px]">${escapeHTML(item.brand_model)}</span><button type="button" onclick="deleteDriveItem(${item.id})" class="text-slate-500 hover:text-rose-400">✕</button></div><h4 class="font-bold text-white text-sm">${escapeHTML(item.title)}</h4><p class="text-slate-300">${escapeHTML(item.notes || '')}</p></div>
+          <a href="${escapeHTML(item.drive_url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold transition">▶️ Abrir Vídeo ↗</a>
+        </div>
+      `).join('') || '<p class="text-xs text-slate-400 col-span-full">Nenhum protocolo salvo.</p>';
+    }
+
+    function runBenchDiagnosticSimulation() {
+      const model = (document.getElementById('diag-board-model')?.value || '').trim();
+      const scenario = document.getElementById('diag-scenario')?.value;
+      const notes = (document.getElementById('diag-notes')?.value || '').trim();
+      const guides = {
+        'no-power': `🔍 ROTEIRO — ${model || 'Placa'} (0.00A)\n1. Conferir jack DC / USB-C e mosfets de entrada.\n2. Testar curto na linha B+ antes de injetar tensão.\n3. Medir ACDRV / Gate (~24V) e CI Charger.\n4. Verificar +3V_ALW e +5V_ALW e botão Power.`,
+        'short-bplus': `⚡ ROTEIRO — ${model || 'Placa'} (Curto B+)\n1. Ajustar fonte assimétrica para 1.0V e 2.5A.\n2. Aplicar breu ou álcool isopropílico na linha B+.\n3. Injetar tensão após resistor shunt e observar aquecimento.`,
+        'low-current': `🔋 ROTEIRO — ${model || 'Placa'} (0.01A - 0.08A)\n1. Medir saídas LDO 3.3V e 5V.\n2. Conferir cristal RTC 32.768kHz.\n3. Checar pino 8 da BIOS e sinais RSMRST# / PWRBTN#.`,
+        'no-video': `🖥️ ROTEIRO — ${model || 'Placa'} (Sem Vídeo)\n1. Iluminar tela para checar backlight vs imagem.\n2. Conferir RAM, VCore e GFX Core.\n3. Medir conector LVDS/eDP (B+, VDD, BL_ON, PWM_DIM).`,
+        'no-charge': `⚡ ROTEIRO — ${model || 'Placa'} (Não Carrega)\n1. Medir condução reversa nos pinos CC1 e CC2.\n2. Checar entrada e saída do OVP.\n3. Verificar VBUS, PMID e linhas SDA/SCL da bateria.`
+      };
+      const out = document.getElementById('diag-simulation-output');
+      if (out) out.textContent = (guides[scenario] || '') + (notes ? `\n\n📌 Obs: ${notes}` : '');
+    }
+
+    function copyDeepAIPrompt() {
+      const model = document.getElementById('diag-board-model')?.value || 'Placa';
+      const scenarioText = document.getElementById('diag-scenario')?.selectedOptions[0]?.text || '';
+      const notes = document.getElementById('diag-notes')?.value || 'Nenhuma';
+      navigator.clipboard.writeText(`Analisando na bancada: ${model}. Sintoma: ${scenarioText}. Obs: ${notes}. Me dê a sequência exata de pinos, malhas e tensões para medir.`).then(() => alert('Prompt copiado!'));
+    }
+
+    function loadLocalPDFViewer(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const iframe = document.getElementById('bench-pdf-iframe');
+      if (iframe) { iframe.src = URL.createObjectURL(file); iframe.classList.remove('hidden'); }
+      document.getElementById('bench-pdf-placeholder')?.classList.add('hidden');
+    }
+
+    function copyManualExtractionPrompt() {
+      const manualName = (document.getElementById('manual-source-name')?.value || 'Apostila').trim();
+      navigator.clipboard.writeText(`Extraia protocolos da apostila "${manualName}" no formato:\nPLACA: [Setor] | SINTOMA: [Sintoma] | PASSOS: [1. -> 2.] | SOLDA_TEMP: [Temp] | DICAS: [Dicas]`).then(() => document.getElementById('manual-copy-feedback')?.classList.remove('hidden'));
+    }
+
+    async function saveParsedManualKnowledge() {
+      const manualName = (document.getElementById('manual-source-name')?.value || 'Apostila').trim();
+      const rawText = (document.getElementById('manual-ai-bulk-text')?.value || '').trim();
+      if (!rawText) return alert('Cole o conteúdo extraído.');
+      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.includes('PLACA:'));
+      if (!lines.length) return alert('Nenhuma linha válida.');
+      const records = lines.map(line => {
+        const getF = (lbl) => (line.match(new RegExp(lbl + ':\\s*([^|]+)')) || [])[1]?.trim() || '';
+        return { category: 'YouTube Defeito', brand_model: getF('PLACA') || manualName, title: `📚 [${manualName}] ${getF('SINTOMA')}`, drive_url: '#apostila', notes: `PASSOS: ${getF('PASSOS')} || SOLDA: ${getF('SOLDA_TEMP')} || DICAS: ${getF('DICAS')}` };
+      });
+      await supabaseClient.from('drive_archive').insert(records);
+      document.getElementById('manual-ai-bulk-text').value = '';
+      await loadReturnsAndDrive();
+      renderYouTubeLibrary();
+    }
+
+    function openHwLookup(site) {
+      const q = (document.getElementById('bench-hw-query')?.value || '').trim();
+      const enc = encodeURIComponent(q);
+      const urls = {
+        tudocelular: q ? 'https://www.tudocelular.com/?s=' + enc : 'https://www.tudocelular.com/',
+        antutu: q ? 'https://www.google.com/search?q=site:antutu.com+' + enc : 'https://www.antutu.com/web/ranking',
+        geekbench: q ? 'https://browser.geekbench.com/search?q=' + enc : 'https://browser.geekbench.com/',
+        cpubenchmark: q ? 'https://www.google.com/search?q=site:cpubenchmark.net+' + enc : 'https://www.cpubenchmark.net/',
+        '3dmark': q ? 'https://www.google.com/search?q=site:benchmarks.ul.com/pt-br/3dmark+' + enc : 'https://benchmarks.ul.com/pt-br/3dmark',
+        userbenchmark: q ? 'https://www.google.com/search?q=site:userbenchmark.com+' + enc : 'https://www.userbenchmark.com/',
+        corona: q ? 'https://www.google.com/search?q=site:chaos.com/pt/corona/benchmark+' + enc : 'https://www.chaos.com/pt/corona/benchmark'
+      };
+      window.open(urls[site], '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== GRÁFICO FINANCEIRO & SIMULADOR METAS ====================
+    async function loadFinancialRecordsForChart() {
+      const { data } = await supabaseClient.from('financial_records').select('*').order('due_date', { ascending: true });
+      allFinanceRecords = data || [];
+      renderFinancialChart(allFinanceRecords);
+    }
+
+    function renderFinancialChart(records) {
+      const container = document.getElementById('fin-visual-chart');
+      const badge = document.getElementById('fin-chart-balance-badge');
+      if (!container) return;
+      const list = records || [];
+      const recebido = list.filter(r => r.type === 'receber' && r.status === 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const aReceber = list.filter(r => r.type === 'receber' && r.status !== 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const pago = list.filter(r => r.type === 'pagar' && r.status === 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const aPagar = list.filter(r => r.type === 'pagar' && r.status !== 'pago').reduce((s, r) => s + Number(r.amount || 0), 0);
+      const saldo = (recebido + aReceber) - (pago + aPagar);
+      const maxVal = Math.max(recebido + aReceber, pago + aPagar, 1);
+
+      if (badge) {
+        badge.textContent = 'Saldo Projetado: ' + formatCurrency(saldo);
+        badge.className = saldo >= 0 ? 'px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs' : 'px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 font-bold text-xs';
+      }
+
+      const bars = [
+        { label: '✅ Já Recebido', value: recebido, color: 'bg-emerald-500', text: 'text-emerald-300' },
+        { label: '⏳ A Receber', value: aReceber, color: 'bg-cyan-500', text: 'text-cyan-300' },
+        { label: '💸 Já Pago', value: pago, color: 'bg-amber-500', text: 'text-amber-300' },
+        { label: '🚨 A Pagar', value: aPagar, color: 'bg-rose-500', text: 'text-rose-300' }
+      ];
+      container.innerHTML = bars.map(b => `<div class="space-y-1"><div class="flex justify-between text-xs"><span class="text-slate-300 font-semibold">${b.label}</span><span class="font-bold ${b.text}">${formatCurrency(b.value)}</span></div><div class="w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden"><div class="h-full ${b.color} rounded-full transition-all" style="width:${Math.min(100, Math.round((b.value / maxVal) * 100))}%"></div></div></div>`).join('');
+    }
+
+    let goalLevers = [
+      { id: 'micro', checked: true, name: '🔬 Micro-soldagem / Reparo de Placas', action: 'Divulgar casos resolvidos e captar placas de lojistas', qty: 4, ticket: 380 },
+      { id: 'tela_bat', checked: true, name: '📱 Troca de Telas, Baterias & Conectores', action: 'Oferecer película 3D + revisão de carga', qty: 8, ticket: 180 },
+      { id: 'info', checked: true, name: '💻 Informática (Formatação, SSD & Limpeza)', action: 'Combo manutenção preventiva + upgrade SSD', qty: 6, ticket: 160 },
+      { id: 'diversos', checked: true, name: '🔊 Caixas de Som & Smartwatches', action: 'Troca de bateria/conector JBL e relógios', qty: 4, ticket: 140 },
+      { id: 'store', checked: true, name: '🛍️ Venda de Aparelhos Loja & Acessórios', action: 'Revisar aparelhos de vitrine + kits carregador', qty: 2, ticket: 350 },
+      { id: 'parceria', checked: false, name: '🤝 Pacote B2B / Lojistas Parceiros', action: 'Tabela semanal de micro-soldagem', qty: 3, ticket: 220 }
+    ];
+
+    function renderGoalChecklist() {
+      const tbody = document.getElementById('goal-checklist-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = goalLevers.map((item, idx) => `
+        <tr class="${item.checked ? 'bg-slateDark-950/60' : 'opacity-50'}">
+          <td class="py-2.5 px-2"><input type="checkbox" ${item.checked ? 'checked' : ''} onchange="goalLevers[${idx}].checked=this.checked;renderGoalChecklist();" class="w-4 h-4 accent-emerald-500 cursor-pointer" /></td>
+          <td class="py-2.5 px-2 font-bold text-white">${item.name}</td>
+          <td class="py-2.5 px-2 text-slate-400">${item.action}</td>
+          <td class="py-2.5 px-2 text-center"><input type="number" min="0" value="${item.qty}" oninput="goalLevers[${idx}].qty=Math.max(0,Number(this.value||0));renderGoalChecklist();" class="w-16 px-2 py-1 rounded bg-slateDark-900 border border-slate-700 text-white text-center font-bold" /></td>
+          <td class="py-2.5 px-2 text-right"><input type="number" min="0" step="10" value="${item.ticket}" oninput="goalLevers[${idx}].ticket=Math.max(0,Number(this.value||0));renderGoalChecklist();" class="w-24 px-2 py-1 rounded bg-slateDark-900 border border-slate-700 text-cyan-300 text-right font-bold" /></td>
+          <td class="py-2.5 px-2 text-right font-extrabold ${item.checked ? 'text-emerald-400' : 'text-slate-500'}">${formatCurrency(item.checked ? item.qty * item.ticket : 0)}</td>
+        </tr>
+      `).join('');
+      recalcGoalSimulator();
+    }
+
+    function recalcGoalSimulator() {
+      const target = Math.max(1, Number(document.getElementById('goal-target-input')?.value || 5000));
+      const total = goalLevers.reduce((acc, item) => acc + (item.checked ? item.qty * item.ticket : 0), 0);
+      const pct = Math.min(100, Math.round((total / target) * 100));
+      const diff = target - total;
+      if (document.getElementById('goal-simulated-total')) document.getElementById('goal-simulated-total').textContent = formatCurrency(total);
+      if (document.getElementById('goal-progress-bar')) document.getElementById('goal-progress-bar').style.width = pct + '%';
+      const statusEl = document.getElementById('goal-status-text');
+      if (statusEl) {
+        statusEl.textContent = diff <= 0 ? `🚀 Meta batida! Superávit de ${formatCurrency(Math.abs(diff))}` : `Faltam ${formatCurrency(diff)} para a meta (${pct}%)`;
+        statusEl.className = diff <= 0 ? 'font-bold text-emerald-400' : 'font-bold text-amber-300';
+      }
+    }
+
+    async function saveGoalSimulation() {
+      const target = Number(document.getElementById('goal-target-input')?.value || 5000);
+      const monthLabel = new Date().toLocaleDateString('pt-BR', { month: '2-digit', year: 'numeric' });
+      const { error } = await supabaseClient.from('revenue_goals').insert([{ month_label: monthLabel, target_amount: target, plan_json: goalLevers }]);
+      alert(error ? 'Plano salvo localmente!' : 'Plano de meta salvo na nuvem!');
+    }
+
+    // ==================== CHECKLISTS, ETAPA 2 UX & LEVANTAMENTO (IDs lev-*) ====================
+    const CHECKLIST_TEMPLATES = {
+      'Celular': ['Liga / Pulso na Fonte', 'Display / Imagem', 'Touch Screen', 'Carga / Conector USB', 'Câmera Traseira / Frontal', 'Áudio Auricular / Campainha', 'Microfones', 'Wi-Fi / Bluetooth / Sinal Chip', 'Biometria / FaceID', 'Sensores / Botões'],
+      'Informática': ['Liga / POST Vídeo', 'Carregador / Circuito Charger', 'Teclado / Touchpad', 'Tela / Dobradiças', 'Portas USB / HDMI / Rede', 'Wi-Fi / Bluetooth', 'Áudio / Webcam / Mic', 'Temperatura / Cooler / Pasta Térmica', 'Saúde SSD / HD', 'Bateria Segura Carga'],
+      'Caixa de Som': ['Liga / Botão Power', 'Conector Carga (Tipo-C / V8)', 'Bateria Segura Carga', 'Pareamento Bluetooth', 'Entrada Auxiliar P2 / USB', 'Alto-falante Grave (Woofer)', 'Tweeter / Agudos', 'Botões Volume / Play', 'Vedação / Borrachas', 'Sem Distorção no Volume Máx'],
+      'Smartwatch': ['Liga / Carregamento Magnético', 'Tela / Brilho / Touch', 'Botão Coroa / Lateral', 'Sensor Batimentos / Oxímetro', 'Pareamento App Bluetooth', 'Vibração / Alto-falante', 'Pulseira / Travas', 'Bateria Autonomia'],
+      'Console': ['Liga / Luz Indicadora', 'Saída Vídeo HDMI', 'Leitor de Disco / Slot', 'Wi-Fi / Rede Cabo', 'Cooler / Temperatura', 'Porta USB / Sincronia Controle', 'Analógicos / Botões Controle', 'Armazenamento Interno']
+    };
+
+    function applyChecklistItemStyle(sel) {
+      const row = sel.parentElement;
+      if (!row) return;
+      row.style.borderColor = '';
+      row.style.backgroundColor = '';
+      if (sel.value === 'Defeito') {
+        row.style.borderColor = 'rgba(244, 63, 94, 0.7)';
+        row.style.backgroundColor = 'rgba(244, 63, 94, 0.12)';
+        sel.className = 'chk-item-status px-2 py-1 rounded bg-slateDark-950 border border-rose-500/50 text-[11px] font-bold text-rose-300';
+      } else if (sel.value === 'OK') {
+        row.style.borderColor = 'rgba(16, 185, 129, 0.45)';
+        row.style.backgroundColor = 'rgba(16, 185, 129, 0.08)';
+        sel.className = 'chk-item-status px-2 py-1 rounded bg-slateDark-950 border border-slate-700 text-[11px] font-bold text-emerald-300';
+      } else {
+        sel.className = 'chk-item-status px-2 py-1 rounded bg-slateDark-950 border border-slate-700 text-[11px] font-bold text-slate-300';
+      }
+    }
+
+    function renderDynamicChecklistItems() {
+      const cat = document.getElementById('chk-category')?.value || 'Celular';
+      const grid = document.getElementById('chk-items-grid');
+      if (!grid) return;
+      const items = CHECKLIST_TEMPLATES[cat] || CHECKLIST_TEMPLATES['Celular'];
+      grid.innerHTML = items.map(label => `
+        <div class="flex items-center justify-between gap-2 p-2 rounded-lg bg-slateDark-900 border border-slate-800 transition">
+          <span class="text-xs text-slate-200 font-medium">${label}</span>
+          <select data-chk-label="${label}" onchange="applyChecklistItemStyle(this)" class="chk-item-status px-2 py-1 rounded bg-slateDark-950 border border-slate-700 text-[11px] font-bold text-emerald-300">
+            <option value="OK">✅ OK</option>
+            <option value="Defeito">❌ Defeito</option>
+            <option value="N/A">➖ N/A</option>
+          </select>
+        </div>
+      `).join('');
+    }
+
+    async function populateChecklistOSDropdown() {
+      const sel = document.getElementById('chk-os-select');
+      if (!sel) return;
+      const { data, error } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false }).limit(60);
+      if (error || !data) return;
+      cachedBenchOrders = data;
+      sel.innerHTML = `<option value="">-- Selecione uma OS ativa --</option>` + data.map(os => `<option value="${os.id}">OS #${os.id} • ${os.client || 'Cliente'} — ${os.model || 'Aparelho'} [${os.status || 'Pendente'}]</option>`).join('');
+    }
+
+    function onSelectOSForChecklist() {
+      const osId = document.getElementById('chk-os-select')?.value;
+      const badge = document.getElementById('chk-linked-badge');
+      const os = cachedBenchOrders.find(o => String(o.id) === String(osId));
+      if (!os) { if (badge) badge.textContent = 'Nenhuma OS vinculada'; return; }
+      if (badge) { badge.textContent = `Vinculada: OS #${os.id}`; badge.className = 'px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold'; }
+      document.getElementById('chk-client').value = os.client || '';
+      document.getElementById('chk-model').value = os.model || '';
+      document.getElementById('chk-client-phone').value = os.phone || os.client_phone || '';
+      document.getElementById('chk-obs').value = os.observations || os.diagnosis || os.issue || '';
+      if (os.checklist_entry && typeof os.checklist_entry === 'object') {
+        document.querySelectorAll('.chk-item-status').forEach(sel => {
+          const savedVal = os.checklist_entry[sel.dataset.chkLabel];
+          if (savedVal) { sel.value = savedVal; applyChecklistItemStyle(sel); }
+        });
+      }
+      currentBenchPhotos.entry = os.photo_entry_url || '';
+      currentBenchPhotos.exit = os.photo_exit_url || '';
+      renderBenchPhotoPreview('entry', currentBenchPhotos.entry);
+      renderBenchPhotoPreview('exit', currentBenchPhotos.exit);
+    }
+
+    function handleBenchPhotoUpload(event, type) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const scale = Math.min(1, 900 / img.width);
+          canvas.width = img.width * scale; canvas.height = img.height * scale;
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressed = canvas.toDataURL('image/jpeg', 0.72);
+          currentBenchPhotos[type] = compressed;
+          renderBenchPhotoPreview(type, compressed);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderBenchPhotoPreview(type, dataUrl) {
+      const box = document.getElementById(`preview-photo-${type}`);
+      if (!box) return;
+      box.innerHTML = dataUrl
+        ? `<img src="${dataUrl}" alt="Foto ${type}" class="w-full h-full object-cover cursor-zoom-in" title="Clique para ampliar" />`
+        : (type === 'entry' ? 'Sem foto de entrada anexada' : 'Sem foto de saída anexada');
+    }
+
+    async function saveIntegratedBenchChecklist(notifyWhatsApp) {
+      const osId = document.getElementById('chk-os-select')?.value;
+      const category = document.getElementById('chk-category')?.value || 'Celular';
+      const client_name = (document.getElementById('chk-client')?.value || '').trim();
+      const device_model = (document.getElementById('chk-model')?.value || '').trim();
+      const status = document.getElementById('chk-os-status')?.value || 'Em Bancada / Reparo';
+      const phoneRaw = (document.getElementById('chk-client-phone')?.value || '').replace(/\D/g, '');
+      const observations = (document.getElementById('chk-obs')?.value || '').trim();
+
+      if (!device_model) return alert('Informe o modelo do equipamento ou selecione uma OS.');
+      const checklist_json = {};
+      document.querySelectorAll('.chk-item-status').forEach(sel => { checklist_json[sel.dataset.chkLabel] = sel.value; });
+
+      const osObj = cachedBenchOrders.find(o => String(o.id) === String(osId));
+      const osCode = osObj?.id || 'Avulsa';
+
+      await supabaseClient.from('service_checklists').insert([{ os_ref: String(osCode), category, client_name, device_model, checklist_json, observations }]);
+
+      if (osId) {
+        const { error } = await supabaseClient.from('orders').update({
+          status,
+          phone: phoneRaw || osObj?.phone || null,
+          photo_entry_url: currentBenchPhotos.entry || null,
+          photo_exit_url: currentBenchPhotos.exit || null,
+          checklist_entry: checklist_json,
+          diagnosis: observations || osObj?.diagnosis || null
+        }).eq('id', osId);
+        if (error) return alert('Erro ao atualizar OS: ' + error.message);
+      }
+
+      await populateChecklistOSDropdown();
+      loadServiceChecklists();
+      await refreshAllBenchData();
+
+      if (notifyWhatsApp) {
+        const siteLink = window.location.origin + window.location.pathname;
+        const okItems = Object.entries(checklist_json).filter(([, v]) => v === 'OK').map(([k]) => k);
+        const defectItems = Object.entries(checklist_json).filter(([, v]) => v === 'Defeito').map(([k]) => k);
+        const priceInfo = osObj?.price ? `\n💰 *Valor:* R$ ${Number(osObj.price).toFixed(2)}` : '';
+        let msg = `*ATUALIZAÇÃO DE SERVIÇO - LABTECH_MSI* 🔧\n👤 *Cliente:* ${client_name || 'Cliente'}\n📱 *Equipamento:* ${device_model} (OS #${osCode})\n📌 *Status:* *${status}*${priceInfo}\n\n`;
+        if (observations) msg += `📝 *Parecer:* ${observations}\n\n`;
+        if (defectItems.length) msg += `⚠️ *Pendências:* ${defectItems.join(', ')}\n`;
+        if (okItems.length) msg += `✅ *Testados OK:* ${okItems.join(', ')}\n\n`;
+        msg += `🔎 *Acompanhe online:* ${siteLink}`;
+        const waNumber = phoneRaw.length >= 10 && !phoneRaw.startsWith('55') ? '55' + phoneRaw : phoneRaw;
+        window.open(waNumber ? `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+      } else {
+        alert('Checklist, fotos e status salvos com sucesso!');
+      }
+    }
+
+    async function loadServiceChecklists() {
+      const listEl = document.getElementById('chk-history-list');
+      if (!listEl) return;
+      const { data } = await supabaseClient.from('service_checklists').select('*').order('created_at', { ascending: false }).limit(15);
+      if (!data) return;
+      listEl.innerHTML = data.map(row => {
+        const defects = Object.entries(row.checklist_json || {}).filter(([, v]) => v === 'Defeito').map(([k]) => k);
+        return `<div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"><div><span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold mr-1">${row.category}</span><strong class="text-white">${row.device_model}</strong>${row.client_name ? `<span class="text-slate-400"> • ${row.client_name}</span>` : ''}<p class="text-[11px] mt-1 ${defects.length ? 'text-rose-300' : 'text-emerald-400'}">${defects.length ? '❌ Defeitos: ' + defects.join(', ') : '✅ Todos os itens OK'}</p></div><span class="text-[10px] text-slate-500">${new Date(row.created_at).toLocaleDateString('pt-BR')}</span></div>`;
+      }).join('') || '<p class="text-xs text-slate-500">Nenhum checklist registrado.</p>';
+    }
+
+    // Levantamento físico (IDs lev-*)
+    async function saveBenchInventoryItem(e) {
+      e.preventDefault();
+      const { error } = await supabaseClient.from('bench_inventory').insert([{
+        ownership: document.getElementById('lev-ownership').value,
+        device_type: document.getElementById('lev-type').value,
+        brand_model: document.getElementById('lev-model').value.trim(),
+        location_box: document.getElementById('lev-box').value.trim(),
+        condition_notes: document.getElementById('lev-notes').value.trim(),
+        estimated_value: Number(document.getElementById('lev-value').value || 0)
+      }]);
+      if (error) return alert('Erro ao registrar item: ' + error.message);
+      e.target.reset();
+      loadBenchInventory();
+    }
+
+    async function loadBenchInventory() {
+      const { data } = await supabaseClient.from('bench_inventory').select('*').order('created_at', { ascending: false });
+      allBenchInventory = data || [];
+      renderBenchInventory();
+    }
+
+    function filterBenchInventory(group) { currentInvFilter = group; renderBenchInventory(); }
+
+    async function deleteBenchInventoryItem(id) {
+      if (!confirm('Remover este equipamento?')) return;
+      await supabaseClient.from('bench_inventory').delete().eq('id', id);
+      loadBenchInventory();
+    }
+
+    function renderBenchInventory() {
+      const tbody = document.getElementById('bench-inv-tbody');
+      const summary = document.getElementById('bench-inv-summary');
+      if (!tbody) return;
+      const countCli = allBenchInventory.filter(i => i.ownership === 'cliente').length;
+      const countLoja = allBenchInventory.filter(i => i.ownership === 'loja').length;
+      const countSuc = allBenchInventory.filter(i => i.ownership === 'sucata').length;
+      const valLoja = allBenchInventory.filter(i => i.ownership === 'loja').reduce((s, i) => s + Number(i.estimated_value || 0), 0);
+      if (summary) {
+        summary.innerHTML = `<span class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300">👤 Clientes: ${countCli}</span><span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300">🏪 Loja: ${countLoja} (${formatCurrency(valLoja)})</span><span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300">♻️ Sucatas: ${countSuc}</span>`;
+      }
+      const filtered = currentInvFilter === 'todos' ? allBenchInventory : allBenchInventory.filter(i => i.ownership === currentInvFilter);
+      const badges = {
+        cliente: '<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">👤 Cliente</span>',
+        loja: '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">🏪 Loja</span>',
+        sucata: '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">♻️ Sucata</span>'
+      };
+      tbody.innerHTML = filtered.map(item => `
+        <tr class="hover:bg-slate-900/50">
+          <td class="py-2 px-2">${badges[item.ownership] || item.ownership}</td>
+          <td class="py-2 px-2 text-slate-300">${item.device_type}</td>
+          <td class="py-2 px-2 font-bold text-white">${item.brand_model}</td>
+          <td class="py-2 px-2 text-slate-400">${item.location_box || '-'}</td>
+          <td class="py-2 px-2 text-slate-300">${item.condition_notes || '-'}</td>
+          <td class="py-2 px-2 text-right font-bold text-emerald-400">R$ ${Number(item.estimated_value || 0).toFixed(2)}</td>
+          <td class="py-2 px-2 text-right"><button type="button" onclick="deleteBenchInventoryItem(${item.id})" class="text-rose-400 hover:text-rose-300 font-bold">Excluir</button></td>
+        </tr>
+      `).join('') || '<tr><td colspan="7" class="py-4 text-center text-slate-500">Nenhum item registrado.</td></tr>';
+    }
+
+    // ==================== INVESTIMENTOS & METAS (IDs meta-*) ====================
+    const DEFAULT_FAVORITE_STORES = [
+      { name: 'TechFelipe', url: 'https://www.techfelipe.com.br/' },
+      { name: '99Fix', url: 'https://www.99fix.com.br/' },
+      { name: 'HCell Equipamentos', url: 'https://www.hcell.com.br/equipamentos/' },
+      { name: 'Lojas Griffin', url: 'https://lojasgriffin.com/' },
+      { name: 'Mirão Ferramentas', url: 'https://www.mirao.com.br/smartphones/ferramentas.html' },
+      { name: 'AliExpress', url: 'https://pt.aliexpress.com/' },
+      { name: 'Shopee', url: 'https://shopee.com.br/' }
+    ];
+
+    function getFavoriteStores() {
+      try { const saved = JSON.parse(localStorage.getItem('labtech_fav_stores') || 'null'); return Array.isArray(saved) && saved.length ? saved : DEFAULT_FAVORITE_STORES; }
+      catch { return DEFAULT_FAVORITE_STORES; }
+    }
+
+    function renderFavoriteStores() {
+      const bar = document.getElementById('favorite-stores-bar');
+      if (!bar) return;
+      bar.innerHTML = getFavoriteStores().map((s, idx) => `<div class="inline-flex items-center bg-slate-800/90 border border-slate-700 rounded-xl overflow-hidden text-xs"><a href="${s.url}" target="_blank" class="px-3 py-2 text-cyan-300 hover:bg-slate-700/80 font-semibold">🔗 ${s.name}</a><button type="button" onclick="removeFavoriteStore(${idx})" class="px-2 py-2 text-slate-500 hover:text-rose-400">×</button></div>`).join('');
+    }
+
+    function addFavoriteStore() {
+      const name = document.getElementById('fav-store-name').value.trim();
+      const url = document.getElementById('fav-store-url').value.trim();
+      if (!name || !url) return alert('Preencha o nome da loja e o link.');
+      const stores = getFavoriteStores(); stores.push({ name, url });
+      localStorage.setItem('labtech_fav_stores', JSON.stringify(stores));
+      document.getElementById('fav-store-name').value = ''; document.getElementById('fav-store-url').value = '';
+      renderFavoriteStores();
+    }
+
+    function removeFavoriteStore(index) {
+      const stores = getFavoriteStores(); stores.splice(index, 1);
+      localStorage.setItem('labtech_fav_stores', JSON.stringify(stores));
+      renderFavoriteStores();
+    }
+
+    async function loadInvestmentPlans() {
+      renderFavoriteStores();
+      const { data } = await supabaseClient.from('investment_plans').select('*').order('created_at', { ascending: false });
+      const items = (data || []).filter(i => i.category !== 'Fornecedor / Loja');
+      let totalTarget = 0, totalSaved = 0;
+      items.forEach(i => { if (i.status !== 'Comprado') { totalTarget += Number(i.target_price || 0); totalSaved += Number(i.saved_amount || 0); } });
+      document.getElementById('inv-total-target').textContent = formatCurrency(totalTarget);
+      document.getElementById('inv-total-saved').textContent = formatCurrency(totalSaved);
+      document.getElementById('inv-total-remaining').textContent = formatCurrency(Math.max(0, totalTarget - totalSaved));
+
+      const container = document.getElementById('investment-plans-list');
+      if (!container) return;
+      container.innerHTML = items.map(item => {
+        const target = Number(item.target_price || 0);
+        const saved = Number(item.saved_amount || 0);
+        const pct = target > 0 ? Math.min(100, Math.round((saved / target) * 100)) : 0;
+        const q = encodeURIComponent(item.item_name);
+        return `
+          <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between gap-3">
+            <div><div class="flex items-start justify-between gap-2"><h4 class="font-bold text-white text-sm">${item.item_name}</h4><span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300 border border-slate-700">${item.priority}</span></div><p class="text-xs text-slate-400 mt-1">${item.notes || 'Sem observações'}</p><div class="mt-3"><div class="flex justify-between text-xs mb-1"><span class="text-emerald-400">Guardado: R$ ${saved.toFixed(2)}</span><span class="text-amber-400 font-semibold">Meta: R$ ${target.toFixed(2)} (${pct}%)</span></div><div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden"><div class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-full" style="width:${pct}%"></div></div></div></div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px]"><div class="flex flex-wrap gap-1.5">${item.store_url ? `<a href="${item.store_url}" target="_blank" class="px-2.5 py-1 rounded-lg bg-cyan-600/20 text-cyan-300 border border-cyan-500/30">🔗 Ver Anúncio</a>` : ''}<a href="https://pt.aliexpress.com/wholesale?SearchText=${q}" target="_blank" class="px-2 py-1 rounded-lg bg-orange-600/20 text-orange-300">🔎 AliExpress</a><a href="https://lista.mercadolivre.com.br/${q}" target="_blank" class="px-2 py-1 rounded-lg bg-yellow-600/20 text-yellow-300">🔎 ML</a></div><button type="button" onclick="deleteInvestmentPlan('${item.id}')" class="text-rose-400 hover:text-rose-300 px-2 py-1">Excluir</button></div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function addInvestmentPlan() {
+      const item_name = document.getElementById('meta-name').value.trim();
+      if (!item_name) return alert('Informe o nome do equipamento.');
+      const { error } = await supabaseClient.from('investment_plans').insert([{
+        item_name,
+        category: 'Equipamento / Bancada',
+        target_price: parseFloat(document.getElementById('meta-price').value) || 0,
+        saved_amount: parseFloat(document.getElementById('meta-saved').value) || 0,
+        priority: document.getElementById('meta-priority').value,
+        store_url: document.getElementById('meta-url').value.trim(),
+        notes: document.getElementById('meta-notes').value.trim()
+      }]);
+      if (error) return alert('Erro ao salvar: ' + error.message);
+      ['meta-name', 'meta-price', 'meta-saved', 'meta-url', 'meta-notes'].forEach(id => { document.getElementById(id).value = ''; });
+      loadInvestmentPlans();
+    }
+
+    async function deleteInvestmentPlan(id) {
+      if (!confirm('Remover esta meta?')) return;
+      await supabaseClient.from('investment_plans').delete().eq('id', id);
+      loadInvestmentPlans();
+    }
+
+    // ==================== FORNECEDORES & COTAÇÃO ====================
+    async function loadSupplierQuotes() {
+      const { data } = await supabaseClient.from('supplier_quotes').select('*').order('updated_at', { ascending: false });
+      allSupplierQuotes = data || [];
+      filterSupplierQuotes();
+    }
+
+    function filterSupplierQuotes() {
+      const term = (document.getElementById('sup-search-input')?.value || '').trim().toLowerCase();
+      const labor = parseFloat(document.getElementById('sup-labor-fee')?.value) || 0;
+      const filtered = term ? allSupplierQuotes.filter(q => `${q.part_name} ${q.supplier_name} ${q.notes || ''}`.toLowerCase().includes(term)) : allSupplierQuotes;
+      const budgetItems = filtered.filter(q => q.quality_tier === 'Mais em Conta').sort((a, b) => Number(a.price) - Number(b.price));
+      const qualityItems = filtered.filter(q => q.quality_tier === 'Melhor Qualidade').sort((a, b) => Number(a.price) - Number(b.price));
+
+      lastQuoteSummary = { part: budgetItems[0]?.part_name || qualityItems[0]?.part_name || term || 'Serviço', budgetFinal: 0, qualityFinal: 0, budgetNotes: '', qualityNotes: '' };
+
+      const budgetBox = document.getElementById('sup-best-budget');
+      if (budgetBox) {
+        if (budgetItems.length) {
+          const best = budgetItems[0];
+          lastQuoteSummary.budgetFinal = Number(best.price) + labor;
+          lastQuoteSummary.budgetNotes = best.notes || '';
+          budgetBox.innerHTML = `<div class="flex items-baseline justify-between"><strong class="text-white text-sm">${best.part_name} (${best.supplier_name})</strong><span class="text-emerald-400 font-extrabold text-base">Cliente: R$ ${lastQuoteSummary.budgetFinal.toFixed(2)}</span></div><p class="text-slate-300 mt-1">Peça: <strong>R$ ${Number(best.price).toFixed(2)}</strong> + Mão de obra: <strong>R$ ${labor.toFixed(2)}</strong></p>`;
+        } else budgetBox.innerHTML = `<span class="text-slate-400">Nenhuma cotação econômica encontrada.</span>`;
+      }
+
+      const qualityBox = document.getElementById('sup-best-quality');
+      if (qualityBox) {
+        if (qualityItems.length) {
+          const best = qualityItems[0];
+          lastQuoteSummary.qualityFinal = Number(best.price) + labor;
+          lastQuoteSummary.qualityNotes = best.notes || '';
+          qualityBox.innerHTML = `<div class="flex items-baseline justify-between"><strong class="text-white text-sm">${best.part_name} (${best.supplier_name})</strong><span class="text-cyan-400 font-extrabold text-base">Cliente: R$ ${lastQuoteSummary.qualityFinal.toFixed(2)}</span></div><p class="text-slate-300 mt-1">Peça: <strong>R$ ${Number(best.price).toFixed(2)}</strong> + Mão de obra: <strong>R$ ${labor.toFixed(2)}</strong></p>`;
+        } else qualityBox.innerHTML = `<span class="text-slate-400">Nenhuma cotação premium encontrada.</span>`;
+      }
+
+      const tbody = document.getElementById('supplier-quotes-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = filtered.map(q => {
+        const isPremium = q.quality_tier === 'Melhor Qualidade';
+        const badge = isPremium ? `<span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">⭐ Melhor Qualidade</span>` : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">💲 Mais em Conta</span>`;
+        return `<tr class="hover:bg-slate-800/40"><td class="py-2.5 px-3 font-semibold text-white cursor-pointer hover:text-cyan-300" onclick="document.getElementById('sup-search-input').value='${q.part_name.replace(/'/g, "\\'")}';filterSupplierQuotes();">${q.part_name}</td><td class="py-2.5 px-3 text-slate-200">${q.supplier_name}</td><td class="py-2.5 px-3">${badge}</td><td class="py-2.5 px-3 font-bold text-amber-400">R$ ${Number(q.price).toFixed(2)} <span class="text-[11px] text-slate-400 font-normal">(Final: R$ ${(Number(q.price) + labor).toFixed(2)})</span></td><td class="py-2.5 px-3 text-slate-400">${q.notes || '-'}</td><td class="py-2.5 px-3 text-right space-x-2"><button type="button" onclick="quickUpdateSupplierPrice('${q.id}', ${Number(q.price)})" class="text-cyan-400">Atualizar R$</button><button type="button" onclick="deleteSupplierQuote('${q.id}')" class="text-rose-400">Excluir</button></td></tr>`;
+      }).join('');
+    }
+
+    function sendQuoteToWhatsApp(openWhatsApp) {
+      const { part, budgetFinal, qualityFinal, budgetNotes, qualityNotes } = lastQuoteSummary;
+      if (!budgetFinal && !qualityFinal) return alert('Pesquise uma peça primeiro.');
+      let msg = `*ORÇAMENTO - LABTECH_MSI* 🔧\n*Serviço/Peça:* ${part}\n\n`;
+      if (budgetFinal > 0) msg += `💲 *Opção 1 (Econômica):* R$ ${budgetFinal.toFixed(2)}\n${budgetNotes ? `_${budgetNotes}_\n` : ''}\n`;
+      if (qualityFinal > 0) msg += `⭐ *Opção 2 (Melhor Qualidade):* R$ ${qualityFinal.toFixed(2)}\n${qualityNotes ? `_${qualityNotes}_\n` : ''}\n`;
+      msg += `✅ *Serviço completo incluso (peça + instalação).*`;
+      navigator.clipboard?.writeText(msg).catch(() => {});
+      if (openWhatsApp) window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+      else alert('Orçamento copiado!');
+    }
+
+    async function addSupplierQuote() {
+      const part_name = document.getElementById('sup-part-name').value.trim();
+      const supplier_name = document.getElementById('sup-name').value.trim();
+      const price = parseFloat(document.getElementById('sup-price').value) || 0;
+      if (!part_name || !supplier_name || price <= 0) return alert('Preencha peça, fornecedor e valor.');
+      const { error } = await supabaseClient.from('supplier_quotes').insert([{ part_name, supplier_name, quality_tier: document.getElementById('sup-quality').value, price, notes: document.getElementById('sup-notes').value.trim() }]);
+      if (error) return alert('Erro: ' + error.message);
+      document.getElementById('sup-price').value = ''; document.getElementById('sup-notes').value = '';
+      document.getElementById('sup-search-input').value = part_name;
+      loadSupplierQuotes();
+    }
+
+    async function quickUpdateSupplierPrice(id, currentPrice) {
+      const novo = prompt('Novo valor (R$):', currentPrice);
+      if (novo === null) return;
+      const val = parseFloat(novo.replace(',', '.'));
+      if (isNaN(val) || val <= 0) return alert('Valor inválido.');
+      await supabaseClient.from('supplier_quotes').update({ price: val, updated_at: new Date().toISOString() }).eq('id', id);
+      loadSupplierQuotes();
+    }
+
+    async function deleteSupplierQuote(id) {
+      if (!confirm('Excluir este preço?')) return;
+      await supabaseClient.from('supplier_quotes').delete().eq('id', id);
+      loadSupplierQuotes();
+    }
+
+    // ==================== CHATBOT DE TRIAGEM ====================
+    let chatState = { step: 0, device: '', symptom: '', model: '', name: '' };
+
+    function toggleChatbot() {
+      const win = document.getElementById('chatbot-window');
+      win.classList.toggle('hidden');
+      if (!win.classList.contains('hidden') && !document.getElementById('chat-messages').children.length) resetChatbot();
+    }
+
+    function resetChatbot() {
+      chatState = { step: 1, device: '', symptom: '', model: '', name: '' };
+      document.getElementById('chat-messages').innerHTML = '';
+      appendBotMessage('Olá! Bem-vindo à <strong>LABTECH_MSI</strong> 👋<br>Qual equipamento precisa de atendimento hoje?');
+      setQuickReplies(['Notebook / PC', 'Smartphone', 'Placa de Vídeo', 'Console', 'Endereço & Horário']);
+    }
+
+    function appendBotMessage(html) {
+      const box = document.getElementById('chat-messages');
+      box.innerHTML += `<div class="p-3 rounded-2xl rounded-tl-none bg-slateDark-800 text-slate-200 border border-slate-700/80 max-w-[88%]">${html}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function appendUserMessage(text) {
+      const box = document.getElementById('chat-messages');
+      box.innerHTML += `<div class="ml-auto p-3 rounded-2xl rounded-tr-none bg-cyan-500 text-slate-950 font-semibold max-w-[85%]">${escapeHTML(text)}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setQuickReplies(options) {
+      document.getElementById('chat-quick-replies').innerHTML = options.map(opt => `<button type="button" onclick="processChatInput('${escapeHTML(opt)}')" class="px-2.5 py-1 rounded-lg bg-slateDark-800 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-semibold transition">${escapeHTML(opt)}</button>`).join('');
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      processChatInput(val);
+    }
+
+    function processChatInput(text) {
+      if (text === 'Nova Triagem') { resetChatbot(); return; }
+      appendUserMessage(text);
+      if (chatState.step === 1 && text === 'Endereço & Horário') {
+        appendBotMessage('📍 <strong>Rua 8 de Dezembro, Ceará-Mirim/RN</strong><br>🕒 Seg a Sex: 08h às 18h | Sáb: 08h às 12h<br>🛡️ <strong>Garantia:</strong> 90 dias.');
+        setQuickReplies(['Notebook / PC', 'Smartphone', 'Placa de Vídeo', 'Console']);
+        return;
+      }
+      if (chatState.step === 1) { chatState.device = text; chatState.step = 2; appendBotMessage(`Qual o <strong>sintoma principal</strong> do seu ${escapeHTML(text)}?`); setQuickReplies(['Não liga / Sem vídeo', 'Superaquecimento', 'Tela / Conector quebrado', 'Lentidão / Sistema']); }
+      else if (chatState.step === 2) { chatState.symptom = text; chatState.step = 3; appendBotMessage('Qual é a <strong>marca e o modelo</strong> exato?'); setQuickReplies([]); }
+      else if (chatState.step === 3) { chatState.model = text; chatState.step = 4; appendBotMessage('Por último, qual é o <strong>seu nome</strong>?'); setQuickReplies([]); }
+      else if (chatState.step === 4) {
+        chatState.name = text; chatState.step = 5;
+        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`*TRIAGEM BOT LABTECH_MSI*\n*Cliente:* ${chatState.name}\n*Equipamento:* ${chatState.device}\n*Modelo:* ${chatState.model}\n*Sintoma:* ${chatState.symptom}`)}`;
+        appendBotMessage(`Perfeito, <strong>${escapeHTML(chatState.name)}</strong>!<br><br><a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="block text-center py-2 px-3 rounded-xl bg-emerald-500 text-slate-950 font-extrabold">📲 Enviar Triagem no WhatsApp</a>`);
+        setQuickReplies(['Nova Triagem']);
+      }
+    }
+
+    // ==================== INICIALIZAÇÃO & ETAPA 2 (DRAG-AND-DROP + LIGHTBOX) ====================
+    document.addEventListener('DOMContentLoaded', async () => {
+      const { data } = await supabaseClient.auth.getSession();
+      if (data?.session?.user) currentUser = data.session.user;
+      await loadPixSettings();
+      await loadPublicStore();
+      renderDynamicChecklistItems();
+      renderGoalChecklist();
+
+      // Drag-and-Drop e Lightbox nas fotos de entrada/saída
+      const checkTab = document.getElementById('bench-tab-checklists');
+      if (checkTab) {
+        checkTab.querySelectorAll('input[type="file"]').forEach(input => {
+          const card = input.closest('div[class*="rounded-xl"]');
+          if (!card) return;
+          ['dragenter', 'dragover'].forEach(evt => card.addEventListener(evt, ev => { ev.preventDefault(); card.style.borderColor = '#22d3ee'; }));
+          ['dragleave', 'drop'].forEach(evt => card.addEventListener(evt, ev => { ev.preventDefault(); card.style.borderColor = ''; }));
+          card.addEventListener('drop', ev => {
+            if (ev.dataTransfer?.files?.length) { input.files = ev.dataTransfer.files; input.dispatchEvent(new Event('change', { bubbles: true })); }
+          });
+        });
+
+        checkTab.addEventListener('click', ev => {
+          const img = ev.target.closest('img');
+          if (!img || !img.src || img.src.endsWith('#')) return;
+          const overlay = document.createElement('div');
+          overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,0.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;cursor:zoom-out;';
+          overlay.innerHTML = `<img src="${img.src}" style="max-width:95vw;max-height:90vh;border-radius:1rem;border:1px solid rgba(34,211,238,0.4);" />`;
+          overlay.onclick = () => overlay.remove();
+          document.body.appendChild(overlay);
+        });
+      }
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
+  
