@@ -22,20 +22,20 @@
       theme: {
         extend: {
           colors: {
-            slateDark: { 950: '#060911', 900: '#0b101d', 800: '#121a2e', 700: '#1c2742' },
-            cyanTech:  { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2' }
+            slateDark: { 950:'#060911', 900:'#0b101d', 800:'#121a2e', 700:'#1c2742' },
+            cyanTech:  { 400:'#22d3ee', 500:'#06b6d4', 600:'#0891b2' }
           }
         }
       }
     };
   </script>
   <style>
-    body { background-color: #060911; color: #f1f5f9; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    .glass-card { background: rgba(18, 26, 46, 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.14); }
-    .tech-grid { background-image: radial-gradient(rgba(34, 211, 238, 0.12) 1px, transparent 1px); background-size: 24px 24px; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #060911; }
-    ::-webkit-scrollbar-thumb { background: #1c2742; border-radius: 9999px; }
+    body { background-color:#060911; color:#f1f5f9; font-family:'Inter', system-ui, -apple-system, sans-serif; }
+    .glass-card { background:rgba(18,26,46,.72); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(56,189,248,.14); }
+    .tech-grid { background-image:radial-gradient(rgba(34,211,238,.12) 1px, transparent 1px); background-size:24px 24px; }
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background:#060911; }
+    ::-webkit-scrollbar-thumb { background:#1c2742; border-radius:9999px; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col tech-grid pb-20 md:pb-0">
@@ -45,7 +45,7 @@
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
       <a href="#inicio" onclick="switchAppMode('client')" class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 overflow-hidden">
-          <img src="logo.png.jpg" onerror="this.src='logo.png'" alt="Logo LABTECH_MSI" class="w-full h-full object-cover" />
+          <img src="logo.png.jpg" alt="Logo LABTECH_MSI" class="w-full h-full object-cover" />
         </div>
         <div>
           <span class="font-extrabold tracking-wider text-white text-lg block leading-none">LABTECH<span class="text-cyan-400">_MSI</span></span>
@@ -54,10 +54,10 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-5 text-sm font-medium text-slate-300">
-        <a href="#servicos"    onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Serviços</a>
-        <a href="#loja"        onclick="switchAppMode('client')" class="hover:text-cyan-400 transition font-semibold text-cyan-300">🛍️ Store</a>
-        <a href="#rastrear-os" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Acompanhar OS & PIX</a>
-        <a href="#orcamento"   onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Orçamento</a>
+        <a href="#servicos"     onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Serviços</a>
+        <a href="#loja"         onclick="switchAppMode('client')" class="hover:text-cyan-400 transition font-semibold text-cyan-300">🛍️ Store</a>
+        <a href="#rastrear-os"  onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Acompanhar OS & PIX</a>
+        <a href="#orcamento"    onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Orçamento</a>
         <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition">@labtechmsicm</a>
       </nav>
 
@@ -238,7 +238,6 @@
 
   <!-- ==================== MODO BANCADA ==================== -->
   <section id="bench-app-view" class="hidden flex-1 max-w-7xl mx-auto w-full px-4 py-8">
-    <!-- Cabeçalho da bancada -->
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
       <div>
         <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • ERP, BI & Tech Lab na Nuvem</span>
@@ -252,7 +251,7 @@
       </div>
     </div>
 
-    <!-- ==================== ABAS (TODAS IRMÃS, SEM ANINHAMENTO) ==================== -->
+    <!-- ABAS DO DASHBOARD -->
     <div class="flex flex-wrap gap-2 mb-6">
       <button type="button" id="tab-btn-overview"    onclick="switchBenchTab('overview')"    class="bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition">📊 Visão Geral & BI</button>
       <button type="button" id="tab-btn-orders"      onclick="switchBenchTab('orders')"      class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🛠️ Ordens de Serviço (OS)</button>
@@ -266,11 +265,11 @@
       <button type="button" id="tab-btn-courses"     onclick="switchBenchTab('courses')"     class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🎓 Meus Cursos</button>
       <button type="button" id="tab-btn-ailab"       onclick="switchBenchTab('ailab')"       class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">🧠 Bancada IA, YouTube & Recibos</button>
       <button type="button" id="tab-btn-checklists"  onclick="switchBenchTab('checklists')"  class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">✅ Checklists & Bancada</button>
-      <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🚀 Investimentos & Metas</button>
-      <button type="button" id="tab-btn-suppliers"   onclick="switchBenchTab('suppliers')"   class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🏪 Fornecedores & Cotação</button>
+      <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🚀 Investimentos & Metas</button>
+      <button type="button" id="tab-btn-suppliers"   onclick="switchBenchTab('suppliers')"   class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🏪 Fornecedores & Cotação</button>
     </div>
 
-    <!-- Barra de setores -->
+    <!-- BARRA DE SETORES -->
     <div class="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-slateDark-950/90 border border-slate-800 mb-6">
       <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mr-1">Setores:</span>
       <button type="button" onclick="selectSector('all')"         class="sector-pill px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-bold text-xs">🌐 Todos</button>
@@ -281,12 +280,9 @@
       <button type="button" onclick="selectSector('gestao')"      class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💼 Gestão & Financeiro</button>
     </div>
 
-    <!-- ============================================================
-         ABA: VISÃO GERAL & BI
-         ============================================================ -->
+    <!-- ABA: VISÃO GERAL & BI -->
     <div id="bench-tab-overview" class="bench-tab-content space-y-6">
       <div id="bench-kpi-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-4"></div>
-
       <div class="grid lg:grid-cols-12 gap-6">
         <div class="lg:col-span-8 glass-card rounded-2xl p-6 flex flex-col justify-between">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -302,7 +298,6 @@
           <div id="bench-monthly-chart" class="grid grid-cols-12 gap-1.5 items-end h-48 pt-4 border-b border-slate-800 pb-2"></div>
           <div id="bench-monthly-summary" class="mt-3 flex flex-wrap justify-between text-xs text-slate-400"></div>
         </div>
-
         <div class="lg:col-span-4 glass-card rounded-2xl p-6 flex flex-col items-center justify-between text-center">
           <div class="w-full text-left">
             <h3 class="font-bold text-white">Serviços Solucionados</h3>
@@ -312,7 +307,6 @@
           <div id="bench-solved-legend" class="w-full space-y-2 text-xs"></div>
         </div>
       </div>
-
       <div class="glass-card rounded-2xl p-6">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div>
@@ -323,7 +317,6 @@
         </div>
         <div id="bench-pipeline-columns" class="grid md:grid-cols-3 gap-4"></div>
       </div>
-
       <div class="grid lg:grid-cols-2 gap-6">
         <div class="glass-card rounded-2xl p-6">
           <h3 class="font-bold text-white mb-4">Distribuição por Equipamento</h3>
@@ -336,9 +329,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: ORDENS DE SERVIÇO
-         ============================================================ -->
+    <!-- ABA: ORDENS DE SERVIÇO -->
     <div id="bench-tab-orders" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <div class="flex items-center justify-between mb-4">
@@ -396,8 +387,6 @@
             <label class="block text-xs text-slate-400 mb-1">Laudo Técnico / Serviço Executado</label>
             <input id="os-diagnosis" type="text" placeholder="Ex: Troca de CI PWM e limpeza ultrassônica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
           </div>
-
-          <!-- Calculadora de orçamento -->
           <div class="sm:col-span-2 lg:col-span-4 p-4 rounded-2xl bg-slateDark-950/90 border border-cyan-500/30 space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-400">🧮 Calculadora de Orçamento & Lucro Líquido (Pós-Diagnóstico)</h4>
@@ -428,24 +417,18 @@
               </div>
             </div>
           </div>
-
           <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-2 pt-2">
             <button id="save-os-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar Ordem de Serviço na Nuvem</button>
           </div>
         </form>
       </div>
-
       <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ============================================================
-         ABA: COMPRAS, VENDAS & STORE
-         ============================================================ -->
+    <!-- ABA: COMPRAS, VENDAS & STORE (IDs com prefixo prod-) -->
     <div id="bench-tab-trade" class="bench-tab-content hidden space-y-6">
       <div id="trade-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
-
       <div class="grid lg:grid-cols-2 gap-6">
-        <!-- Cadastro de produto (IDs com prefixo PROD-) -->
         <div class="glass-card rounded-2xl p-6">
           <h3 class="font-bold text-white text-lg mb-4">📦 Cadastrar Produto / Peça (Estoque & Store)</h3>
           <form onsubmit="handleInventoryCreate(event)" class="grid sm:grid-cols-2 gap-3">
@@ -507,7 +490,6 @@
           </form>
         </div>
 
-        <!-- Registrar compra/venda -->
         <div class="glass-card rounded-2xl p-6">
           <h3 class="font-bold text-white text-lg mb-4">💳 Registrar Compra ou Venda</h3>
           <form onsubmit="handleTradeOperation(event)" class="grid sm:grid-cols-2 gap-3">
@@ -559,9 +541,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: BASE DE DEFEITOS
-         ============================================================ -->
+    <!-- ABA: BASE DE DEFEITOS -->
     <div id="bench-tab-knowledge" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6 border border-cyan-500/20">
         <div class="mb-4">
@@ -600,7 +580,6 @@
           </div>
         </form>
       </div>
-
       <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row gap-3 items-center justify-between">
         <input id="kb-search-input" oninput="renderKnowledgeList()" type="text" placeholder="🔍 Pesquisar por placa, modelo, sintoma, CI ou linha..." class="w-full sm:flex-1 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400" />
         <select id="kb-filter-category" onchange="renderKnowledgeList()" class="w-full sm:w-48 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
@@ -612,13 +591,10 @@
           <option value="Desktop / PC">Desktop / PC</option>
         </select>
       </div>
-
       <div id="bench-knowledge-list" class="grid md:grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- ============================================================
-         ABA: TECH LAB (Desbloqueios / Películas / Benchmark)
-         ============================================================ -->
+    <!-- ABA: TECH LAB -->
     <div id="bench-tab-techlab" class="bench-tab-content hidden space-y-6">
       <div class="flex flex-wrap gap-2">
         <button type="button" id="subtab-btn-unlocks"    onclick="switchTechSubTab('unlocks')"    class="tech-sub-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition">🔓 Central de Desbloqueios (FRP / Mi / BIOS)</button>
@@ -626,19 +602,16 @@
         <button type="button" id="subtab-btn-benchmark"  onclick="switchTechSubTab('benchmark')"  class="tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">⚡ Comparador de Processadores</button>
       </div>
 
-      <!-- Sub: Desbloqueios -->
       <div id="techlab-sub-unlocks" class="space-y-6">
         <div class="glass-card rounded-2xl p-6 border border-amber-500/25">
           <h3 class="font-bold text-white text-base mb-1">🔗 Atalhos Rápidos de Bancada & FRP</h3>
-          <p class="text-xs text-slate-400 mb-4">Ferramentas e portais de apoio.</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-bold">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-bold mt-3">
             <a href="https://vnrom.net/bypass/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-amber-400/50 border border-slate-800 text-amber-300 text-center transition">🌐 vnROM Bypass APK</a>
             <a href="https://samfw.com/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-cyan-400/50 border border-slate-800 text-cyan-300 text-center transition">📱 SamFW / Firmwares</a>
             <a href="https://www.imei.info/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-emerald-400/50 border border-slate-800 text-emerald-300 text-center transition">🔍 Consulta IMEI</a>
             <a href="https://www.hardreset.info/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-purple-400/50 border border-slate-800 text-purple-300 text-center transition">🔄 HardReset & Modo EDL</a>
           </div>
         </div>
-
         <div class="glass-card rounded-2xl p-6">
           <h3 class="font-bold text-white text-lg mb-4">📝 Salvar Método de Desbloqueio Resolvido</h3>
           <form onsubmit="handleUnlockSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -654,8 +627,8 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs text-slate-400 mb-1">Modelo & Patch / Android *</label>
-              <input id="ul-model" type="text" required placeholder="Ex: Galaxy A14 (SM-A145M) Android 14" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+              <label class="block text-xs text-slate-400 mb-1">Modelo & Patch *</label>
+              <input id="ul-model" type="text" required placeholder="Ex: Galaxy A14 Android 14" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
             </div>
             <div>
               <label class="block text-xs text-slate-400 mb-1">Tipo de Bloqueio *</label>
@@ -680,21 +653,17 @@
             </div>
           </form>
         </div>
-
         <div class="glass-card rounded-2xl p-4">
           <input id="ul-search-input" oninput="renderUnlockList()" type="text" placeholder="🔍 Filtrar desbloqueios..." class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400" />
         </div>
         <div id="bench-unlocks-list" class="grid md:grid-cols-2 gap-4"></div>
       </div>
 
-      <!-- Sub: Películas -->
       <div id="techlab-sub-protectors" class="hidden space-y-6">
         <div class="glass-card rounded-2xl p-6 border border-cyan-500/25">
           <h3 class="font-bold text-white text-lg mb-1">🛡️ Compatibilidade de Películas 3D / Cerâmica</h3>
-          <p class="text-xs text-slate-400 mb-4">Pesquise o modelo do cliente para encontrar películas equivalentes.</p>
-          <input id="sp-search-input" oninput="renderProtectorList()" type="text" placeholder="🔍 Digite qualquer modelo (Ex: Moto G22, Redmi Note 12...)" class="w-full px-4 py-3 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white text-sm focus:outline-none" />
+          <input id="sp-search-input" oninput="renderProtectorList()" type="text" placeholder="🔍 Digite qualquer modelo (Ex: Moto G22, Redmi Note 12...)" class="w-full mt-3 px-4 py-3 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white text-sm focus:outline-none" />
         </div>
-
         <div class="glass-card rounded-2xl p-6">
           <h3 class="font-bold text-white text-base mb-4">+ Adicionar Nova Equivalência</h3>
           <form onsubmit="handleProtectorSubmit(event)" class="grid sm:grid-cols-3 gap-4">
@@ -715,11 +684,9 @@
             </div>
           </form>
         </div>
-
         <div id="bench-protectors-list" class="grid md:grid-cols-2 gap-4"></div>
       </div>
 
-      <!-- Sub: Benchmark (SELETORES A/B AQUI, no lugar certo) -->
       <div id="techlab-sub-benchmark" class="hidden space-y-6">
         <div class="glass-card rounded-2xl p-6 border border-purple-500/25 space-y-5">
           <div>
@@ -741,9 +708,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: FINANCEIRO
-         ============================================================ -->
+    <!-- ABA: FINANCEIRO -->
     <div id="bench-tab-finance" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6 border border-emerald-500/30 space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -817,13 +782,10 @@
           </div>
         </form>
       </div>
-
       <div id="bench-finance-list" class="glass-card rounded-2xl p-6 space-y-3"></div>
     </div>
 
-    <!-- ============================================================
-         ABA: CATÁLOGO DE SERVIÇOS
-         ============================================================ -->
+    <!-- ABA: CATÁLOGO -->
     <div id="bench-tab-catalog" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">Adicionar Serviço Padrão</h3>
@@ -853,9 +815,7 @@
       <div id="bench-catalog-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
-    <!-- ============================================================
-         ABA: RETORNOS & GARANTIA
-         ============================================================ -->
+    <!-- ABA: RETORNOS & GARANTIA -->
     <div id="bench-tab-returns" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">🔄 Registrar Retorno / Garantia (90 Dias)</h3>
@@ -895,9 +855,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: ACERVO GOOGLE DRIVE
-         ============================================================ -->
+    <!-- ABA: ACERVO GOOGLE DRIVE -->
     <div id="bench-tab-drive" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
         <h3 class="font-bold text-white text-lg mb-4">☁️ Indexar Arquivo / Pasta do Google Drive (5TB)</h3>
@@ -942,16 +900,12 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: MEUS CURSOS
-         ============================================================ -->
+    <!-- ABA: MEUS CURSOS -->
     <div id="bench-tab-courses" class="bench-tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-6">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div>
-            <h3 class="font-bold text-white text-lg">🎓 Central de Cursos & Aulas Online</h3>
-            <p class="text-xs text-slate-400">Salve links diretos das suas aulas (Hotmart, Kiwify, CTCASB).</p>
-          </div>
+        <div class="mb-4">
+          <h3 class="font-bold text-white text-lg">🎓 Central de Cursos & Aulas Online</h3>
+          <p class="text-xs text-slate-400">Salve links diretos das suas aulas (Hotmart, Kiwify, CTCASB).</p>
         </div>
         <form onsubmit="handleCourseSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
@@ -974,7 +928,7 @@
           </div>
           <div class="sm:col-span-3">
             <label class="block text-xs text-slate-400 mb-1">Módulo Atual / Anotações</label>
-            <input id="crs-notes" type="text" placeholder="Ex: Parei na Aula 12 / Login: email" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            <input id="crs-notes" type="text" placeholder="Ex: Parei na Aula 12" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
           </div>
           <div class="flex items-end">
             <button type="submit" class="w-full px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition">+ Adicionar Curso</button>
@@ -990,18 +944,12 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: BANCADA IA, YOUTUBE & RECIBOS
-         ============================================================ -->
+    <!-- ABA: BANCADA IA, YOUTUBE & RECIBOS -->
     <div id="bench-tab-ailab" class="bench-tab-content hidden space-y-6">
-
-      <!-- Bloco A: Recibo -->
       <div class="glass-card rounded-2xl p-6 border border-emerald-500/30 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <h3 class="font-bold text-white text-lg">🧾 Emitir Recibo & Termo de Garantia (90 Dias)</h3>
-            <p class="text-xs text-slate-400">Selecione uma OS cadastrada para gerar o comprovante em PDF.</p>
-          </div>
+        <div>
+          <h3 class="font-bold text-white text-lg">🧾 Emitir Recibo & Termo de Garantia (90 Dias)</h3>
+          <p class="text-xs text-slate-400">Selecione uma OS cadastrada para gerar o comprovante em PDF.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-3 items-end">
           <div class="md:col-span-2">
@@ -1017,7 +965,6 @@
         </div>
       </div>
 
-      <!-- Bloco B: YouTube Library -->
       <div class="glass-card rounded-2xl p-6 border border-rose-500/30 space-y-5">
         <div>
           <h3 class="font-bold text-white text-lg">📺 Biblioteca de Defeitos Solucionados (YouTube → Bancada)</h3>
@@ -1039,7 +986,7 @@
             <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs">PASSO 2</span>
             <span class="text-sm font-bold text-white">Cole o resumo gerado pela IA</span>
           </div>
-          <textarea id="yt-ai-bulk-text" rows="4" placeholder="PLACA: ... | SINTOMA: ... | MINUTO: 14:25 | PASSOS: ... | SOLDA_TEMP: ... | DICAS: ..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs font-mono"></textarea>
+          <textarea id="yt-ai-bulk-text" rows="4" placeholder="PLACA: ... | SINTOMA: ... | MINUTO: 14:25 | PASSOS: ..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs font-mono"></textarea>
           <div class="flex justify-end">
             <button type="button" onclick="saveParsedYouTubeDefects()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">⚡ Extrair & Salvar Todos</button>
           </div>
@@ -1056,11 +1003,9 @@
         </div>
       </div>
 
-      <!-- Bloco C: IA + PDF -->
       <div class="grid lg:grid-cols-2 gap-6">
         <div class="glass-card rounded-2xl p-6 border border-cyan-500/30 space-y-4">
           <h3 class="font-bold text-white text-lg">🤖 Copiloto & Simulador de Bancada IA</h3>
-          <p class="text-xs text-slate-400">Descreva o aparelho e consumo para gerar a árvore de medições.</p>
           <div class="space-y-3">
             <input id="diag-board-model" type="text" placeholder="Ex: Notebook Acer Nitro 5 / Samsung A54" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
             <select id="diag-scenario" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
@@ -1097,44 +1042,32 @@
         </div>
       </div>
 
-      <!-- Bloco D: Manual IA -->
       <div class="glass-card rounded-2xl p-6 border border-indigo-500/30 space-y-4">
         <div>
           <h3 class="font-bold text-white text-lg">📚 Absorver Apostila / Manual Técnico (Base IA)</h3>
-          <p class="text-xs text-slate-400">Transforme apostilas em regras consultáveis pelo Copiloto IA.</p>
         </div>
         <div class="grid md:grid-cols-2 gap-4">
           <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-2.5">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-indigo-500 text-white font-extrabold text-xs">1º PASSO</span>
-              <span class="text-xs font-bold text-white">Copie o comando e envie junto com o PDF</span>
-            </div>
             <input id="manual-source-name" type="text" placeholder="Nome da Apostila" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs" />
-            <button type="button" onclick="copyManualExtractionPrompt()" class="w-full px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">📋 Copiar Comando</button>
+            <button type="button" onclick="copyManualExtractionPrompt()" class="w-full px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">📋 Copiar Comando para Apostila PDF</button>
             <p id="manual-copy-feedback" class="hidden text-[11px] text-emerald-400 font-semibold">✅ Comando copiado!</p>
           </div>
           <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-2.5">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-xs">2º PASSO</span>
-              <span class="text-xs font-bold text-white">Cole o conhecimento extraído</span>
-            </div>
             <textarea id="manual-ai-bulk-text" rows="3" placeholder="PLACA: ... | SINTOMA: ... | PASSOS: ..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs font-mono"></textarea>
             <button type="button" onclick="saveParsedManualKnowledge()" class="w-full px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">🧠 Absorver & Salvar</button>
           </div>
         </div>
       </div>
 
-      <!-- Bloco E: Benchmark externo -->
       <div class="glass-card rounded-2xl p-6 border border-sky-500/30 space-y-4">
         <div>
           <h3 class="font-bold text-white text-lg">📊 Fichas Técnicas & Benchmarks</h3>
-          <p class="text-xs text-slate-400">Digite o modelo e abra diretamente a ficha técnica ou benchmark.</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-2">
           <input id="bench-hw-query" type="text" placeholder="Ex: Poco X3 Pro, Ryzen 7 5700X, RTX 4060..." class="flex-1 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-xs font-bold">
-          <button type="button" onclick="openHwLookup('tudocelular')"  class="px-3 py-2.5 rounded-xl bg-sky-600/20 hover:bg-sky-600/40 border border-sky-500/40 text-sky-300 transition">📱 TudoCelular</button>
+          <button type="button" onclick="openHwLookup('tudocelular')"   class="px-3 py-2.5 rounded-xl bg-sky-600/20 hover:bg-sky-600/40 border border-sky-500/40 text-sky-300 transition">📱 TudoCelular</button>
           <button type="button" onclick="openHwLookup('antutu')"       class="px-3 py-2.5 rounded-xl bg-orange-600/20 hover:bg-orange-600/40 border border-orange-500/40 text-orange-300 transition">🔥 AnTuTu</button>
           <button type="button" onclick="openHwLookup('geekbench')"    class="px-3 py-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/40 text-purple-300 transition">⚡ Geekbench</button>
           <button type="button" onclick="openHwLookup('cpubenchmark')" class="px-3 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-300 transition">🧠 PassMark CPU</button>
@@ -1145,11 +1078,8 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: CHECKLISTS & BANCADA
-         ============================================================ -->
+    <!-- ABA: CHECKLISTS & BANCADA (IDs do levantamento com prefixo lev-) -->
     <div id="bench-tab-checklists" class="bench-tab-content hidden space-y-6">
-      <!-- Bloco 1: Bancada integrada -->
       <div class="bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-5 mb-6 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
           <div>
@@ -1185,7 +1115,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 transition">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-cyan-300">📸 Foto de Entrada (Arraste ou Anexe)</span>
+              <span class="text-xs font-bold text-cyan-300">📸 Foto de Entrada (Arraste ou Clique)</span>
               <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">
                 Capturar / Anexar
                 <input type="file" accept="image/*" capture="environment" onchange="handleBenchPhotoUpload(event, 'entry')" class="hidden" />
@@ -1195,7 +1125,7 @@
           </div>
           <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 transition">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-emerald-300">📸 Foto de Saída (Arraste ou Anexe)</span>
+              <span class="text-xs font-bold text-emerald-300">📸 Foto de Saída (Arraste ou Clique)</span>
               <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold">
                 Capturar / Anexar
                 <input type="file" accept="image/*" capture="environment" onchange="handleBenchPhotoUpload(event, 'exit')" class="hidden" />
@@ -1244,7 +1174,6 @@
         </div>
       </div>
 
-      <!-- Bloco 2: Levantamento físico (IDs com prefixo LEV-) -->
       <div class="glass-card rounded-2xl p-6 border border-purple-500/30 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
@@ -1291,7 +1220,7 @@
           </div>
           <div class="sm:col-span-2 lg:col-span-6 flex justify-between items-center pt-1">
             <div class="flex gap-1.5 text-xs">
-              <button type="button" onclick="filterBenchInventory('todos')"   class="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-bold">Todos</button>
+              <button type="button" onclick="filterBenchInventory('todos')"  class="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-bold">Todos</button>
               <button type="button" onclick="filterBenchInventory('cliente')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 font-bold">👤 Clientes</button>
               <button type="button" onclick="filterBenchInventory('loja')"    class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold">🏪 Loja</button>
               <button type="button" onclick="filterBenchInventory('sucata')"  class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold">♻️ Sucatas</button>
@@ -1319,9 +1248,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: INVESTIMENTOS & METAS (IDs com prefixo META-)
-         ============================================================ -->
+    <!-- ABA: INVESTIMENTOS & METAS (IDs com prefixo meta-) -->
     <div id="bench-tab-investments" class="bench-tab-content hidden space-y-6">
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
         <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -1378,9 +1305,7 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         ABA: FORNECEDORES & COTAÇÃO
-         ============================================================ -->
+    <!-- ABA: FORNECEDORES & COTAÇÃO -->
     <div id="bench-tab-suppliers" class="bench-tab-content hidden space-y-6">
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -1474,7 +1399,7 @@
     </p>
   </footer>
 
-  <!-- ==================== BARRA INFERIOR MOBILE ==================== -->
+  <!-- BARRA INFERIOR MOBILE -->
   <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 glass-card border-t border-cyan-500/20 flex justify-around py-2 text-[11px] font-semibold">
     <a href="#inicio" onclick="switchAppMode('client')" class="flex flex-col items-center text-slate-300 hover:text-cyan-400"><span class="text-base">🏠</span><span>Início</span></a>
     <a href="#loja" onclick="switchAppMode('client')" class="flex flex-col items-center text-purple-300 hover:text-purple-200"><span class="text-base">🛍️</span><span>Store</span></a>
@@ -1483,8 +1408,7 @@
     <button type="button" onclick="toggleChatbot()" class="flex flex-col items-center text-emerald-400"><span class="text-base">🤖</span><span>Bot IA</span></button>
   </nav>
 
-  <!-- ==================== MODAIS & CHATBOT ==================== -->
-  <!-- MODAL CARRINHO LABTECH STORE -->
+  <!-- MODAIS -->
   <div id="cart-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-card rounded-2xl p-6 w-full max-w-lg border border-purple-500/30 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -1517,7 +1441,6 @@
     </div>
   </div>
 
-  <!-- WIDGET CHATBOT FLUTUANTE -->
   <div class="fixed bottom-16 md:bottom-6 right-4 z-50">
     <div id="chatbot-window" class="hidden mb-3 w-80 sm:w-96 glass-card rounded-2xl border border-cyan-500/30 shadow-2xl overflow-hidden flex flex-col">
       <div class="bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 flex items-center justify-between">
@@ -1542,14 +1465,13 @@
     </button>
   </div>
 
-  <!-- MODAL LOGIN BANCADA -->
   <div id="login-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-card rounded-2xl p-6 w-full max-w-sm border border-amber-500/30 space-y-4">
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-white text-lg">🔒 Login Bancada OS</h3>
         <button type="button" onclick="closeModal('login-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
-      <p class="text-xs text-slate-400">Entre com seu e-mail e senha cadastrados no Supabase para gerenciar a bancada e a loja.</p>
+      <p class="text-xs text-slate-400">Entre com seu e-mail e senha cadastrados no Supabase.</p>
       <form onsubmit="handleBenchLogin(event)" class="space-y-3">
         <div>
           <label class="block text-xs text-slate-400 mb-1">E-mail do Técnico</label>
@@ -1565,7 +1487,6 @@
     </div>
   </div>
 
-  <!-- MODAL CONFIGURAR PIX -->
   <div id="pix-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-cyan-500/30 space-y-4">
       <div class="flex justify-between items-center">
@@ -1574,11 +1495,11 @@
       </div>
       <form onsubmit="savePixConfig(event)" class="space-y-3">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Chave PIX Oficial (CPF sem pontos, Telefone +55..., E-mail ou Aleatória)</label>
+          <label class="block text-xs text-slate-400 mb-1">Chave PIX Oficial</label>
           <input id="pix-key-input" type="text" required placeholder="Ex: 12345678900" class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
         </div>
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Nome do Recebedor (sem acentos, máx. 25 caracteres)</label>
+          <label class="block text-xs text-slate-400 mb-1">Nome do Recebedor (máx. 25 caracteres)</label>
           <input id="pix-receiver-input" type="text" required maxlength="25" placeholder="MACIEL LEMOS DA CAMARA" class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
         </div>
         <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">Salvar Configuração PIX</button>
@@ -1586,420 +1507,18 @@
     </div>
   </div>
 
-  <!-- MODAL INSTALAR APP PWA -->
   <div id="install-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="glass-card rounded-2xl p-6 w-full max-w-md border border-cyan-500/30 space-y-4">
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-white text-lg">📲 Instalar App LABTECH_MSI</h3>
         <button type="button" onclick="closeModal('install-modal')" class="text-slate-400 hover:text-white">✕</button>
       </div>
-      <p class="text-xs text-slate-300 leading-relaxed">Adicione este sistema à tela inicial do seu celular para acompanhar OS, comprar na Store ou gerenciar a bancada como um aplicativo:</p>
       <div class="space-y-2.5 text-xs text-slate-300 bg-slateDark-950/80 p-4 rounded-xl border border-slate-800">
-        <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito e selecione <strong>"Adicionar à tela inicial"</strong>.</p>
-        <p><strong class="text-cyan-400">iPhone (Safari):</strong> Toque no ícone de <strong>Compartilhar (□↑)</strong> na barra inferior e escolha <strong>"Adicionar à Tela de Início"</strong>.</p>
+        <p><strong class="text-cyan-400">Android (Chrome):</strong> Toque nos <strong>3 pontinhos (⋮)</strong> e escolha <strong>"Instalar aplicativo"</strong>.</p>
+        <p><strong class="text-cyan-400">iPhone (Safari):</strong> Toque em <strong>Compartilhar (□↑)</strong> e escolha <strong>"Adicionar à Tela de Início"</strong>.</p>
       </div>
       <div class="flex justify-end">
         <button type="button" onclick="closeModal('install-modal')" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold">Entendi</button>
       </div>
     </div>
   </div>
-
-  <!-- ==================== JAVASCRIPT UNIFICADO ==================== -->
-  <script>
-    const SUPABASE_URL = 'https://shhqlfxptomageoxlxbu.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_JumNMKTABz50bB040Gm_iQ_eWvvjTxB';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const WHATSAPP_NUMBER = '5584991216849';
-    let currentUser = null;
-    let cachedOrders = [];
-    let cachedFinance = [];
-    let cachedCatalog = [];
-    let cachedKnowledge = [];
-    let cachedInventory = [];
-    let cachedUnlocks = [];
-    let cachedProtectors = [];
-    let publicStoreItems = [];
-    let shoppingCart = [];
-    let cachedTrades = [];
-    let cachedReturns = [];
-    let cachedDriveArchive = [];
-    let allFinanceRecords = [];
-    let allBenchInventory = [];
-    let currentInvFilter = 'todos';
-    let allSupplierQuotes = [];
-    let currentBenchPhotos = { entry: '', exit: '' };
-    let cachedBenchOrders = [];
-    let cachedPix = { pix_key: '84991216849', pix_receiver: 'MACIEL LEMOS DA CAMARA' };
-
-    const DEFAULT_PROTECTORS = [
-      { id: 'def1', primary_model: 'Moto G22 / Moto E22', compatible_models: 'Moto E32 • Moto E32s • Realme C35 • Realme C31', notes: 'Tela 6.5" furo centralizado' },
-      { id: 'def2', primary_model: 'Redmi Note 12 4G / 5G', compatible_models: 'Poco X5 5G • Redmi Note 11 Pro • Poco X4 Pro', notes: 'Tela 6.67" borda preta fina' },
-      { id: 'def3', primary_model: 'Samsung Galaxy A03 / A03s / A03 Core', compatible_models: 'Galaxy A02s • Galaxy A04 • Galaxy A04e • Moto G10 / G20 / G30', notes: 'Entalhe em gota (V-notch)' },
-      { id: 'def4', primary_model: 'Samsung Galaxy A14 / A24 / A34', compatible_models: 'Galaxy A13 4G • Galaxy A23 • Galaxy M13 • Galaxy M23', notes: 'Entalhe gota 6.6"' },
-      { id: 'def5', primary_model: 'iPhone 13 / iPhone 13 Pro / iPhone 14', compatible_models: 'iPhone 13 • iPhone 13 Pro • iPhone 14 (6.1")', notes: 'Mesma dimensão frontal 6.1"' },
-      { id: 'def6', primary_model: 'iPhone 11 / iPhone XR', compatible_models: 'iPhone 11 • iPhone XR (6.1")', notes: 'Compatibilidade 100% idêntica' }
-    ];
-
-    const PROCESSOR_BENCHMARKS = [
-      { id: 'sd685', name: 'Snapdragon 685 (Redmi Note 12 / Note 13)', type: 'Smartphone', cores: '8 Núcleos (2.8 GHz)', litho: '6 nm', gpu: 'Adreno 610', score: 345000, scale: 'AnTuTu v10', ideal: 'Uso diário fluido, redes sociais e jogos leves' },
-      { id: 'hg85', name: 'MediaTek Helio G85 (Moto G23 / Redmi 12C / A05)', type: 'Smartphone', cores: '8 Núcleos (2.0 GHz)', litho: '12 nm', gpu: 'Mali-G52 MC2', score: 265000, scale: 'AnTuTu v10', ideal: 'Tarefas básicas, WhatsApp e aplicativos bancários' },
-      { id: 'hg99', name: 'MediaTek Helio G99 (Poco M5 / Galaxy A15 / A24)', type: 'Smartphone', cores: '8 Núcleos (2.2 GHz)', litho: '6 nm', gpu: 'Mali-G57 MC2', score: 420000, scale: 'AnTuTu v10', ideal: 'Multitarefa rápida, Free Fire / COD no médio-alto' },
-      { id: 'ex1380', name: 'Samsung Exynos 1380 (Galaxy A54 / A35)', type: 'Smartphone', cores: '8 Núcleos (2.4 GHz)', litho: '5 nm', gpu: 'Mali-G68 MP5', score: 595000, scale: 'AnTuTu v10', ideal: 'Alto desempenho, câmeras 4K e jogos pesados' },
-      { id: 'a15', name: 'Apple A15 Bionic (iPhone 13 / iPhone 14)', type: 'Smartphone', cores: '6 Núcleos (3.23 GHz)', litho: '5 nm', gpu: 'Apple GPU 4/5-core', score: 1280000, scale: 'AnTuTu v10', ideal: 'Edição de vídeo, jogos no máximo e longevidade' },
-      { id: 'r5_5500u', name: 'AMD Ryzen 5 5500U (Notebooks Lenovo / Acer)', type: 'Notebook', cores: '6 Núcleos / 12 Threads', litho: '7 nm', gpu: 'Radeon Vega 7', score: 13100, scale: 'PassMark CPU', ideal: 'Trabalho pesado, programação, AutoCAD 2D e jogos leves' },
-      { id: 'i5_12450h', name: 'Intel Core i5-12450H (Notebooks Gamer / Nitro)', type: 'Notebook', cores: '8 Núcleos / 12 Threads', litho: '10 nm (Intel 7)', gpu: 'Intel UHD + Dedicada', score: 17400, scale: 'PassMark CPU', ideal: 'Renderização, edição, jogos modernos e engenharia' },
-      { id: 'i3_1115g4', name: 'Intel Core i3-1115G4 (Notebooks Escritório)', type: 'Notebook', cores: '2 Núcleos / 4 Threads', litho: '10 nm SuperFin', gpu: 'Intel UHD Xe G4', score: 6150, scale: 'PassMark CPU', ideal: 'Pacote Office, navegação, estudos e sistemas PDV' },
-      { id: 'rtx3060', name: 'NVIDIA GeForce RTX 3060 12GB (Desktop GPU)', type: 'Placa de Vídeo', cores: '3584 CUDA Cores', litho: '8 nm Samsung', gpu: '12GB GDDR6 192-bit', score: 17150, scale: 'PassMark G3D', ideal: 'Jogos Full HD / Quad HD Ultra, Blender e IA local' },
-      { id: 'rx6600', name: 'AMD Radeon RX 6600 8GB (Desktop GPU)', type: 'Placa de Vídeo', cores: '1792 Stream Proc.', litho: '7 nm TSMC', gpu: '8GB GDDR6 128-bit', score: 15100, scale: 'PassMark G3D', ideal: 'Excelente custo-benefício em Full HD Alto/Ultra' }
-    ];
-
-    function escapeHTML(str) {
-      if (str === null || str === undefined) return '';
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-
-    function formatCurrency(val) {
-      return Number(val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function openModal(id) { document.getElementById(id)?.classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
-    function openInstallModal() { openModal('install-modal'); }
-
-    // ==================== PIX EMV / QR CODE ====================
-    function formatEMVField(id, value) {
-      return `${id}${String(value.length).padStart(2, '0')}${value}`;
-    }
-
-    function computeCRC16(payload) {
-      let crc = 0xFFFF;
-      for (let i = 0; i < payload.length; i++) {
-        crc ^= payload.charCodeAt(i) << 8;
-        for (let j = 0; j < 8; j++) {
-          crc = ((crc & 0x8000) !== 0) ? (((crc << 1) ^ 0x1021) & 0xFFFF) : ((crc << 1) & 0xFFFF);
-        }
-      }
-      return crc.toString(16).toUpperCase().padStart(4, '0');
-    }
-
-    function normalizeAscii(str, maxLen) {
-      return String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 ]/g, '').trim().substring(0, maxLen).toUpperCase();
-    }
-
-    function generatePixBrCode(pixKey, receiverName, amount, txid) {
-      const cleanKey = String(pixKey || '').trim();
-      const merchantAccount = formatEMVField('26', formatEMVField('00', 'br.gov.bcb.pix') + formatEMVField('01', cleanKey));
-      const amountField = Number(amount) > 0 ? formatEMVField('54', Number(amount).toFixed(2)) : '';
-      const cleanTx = String(txid || 'LABTECH').replace(/[^A-Za-z0-9]/g, '').substring(0, 25) || '***';
-      const rawPayload =
-        formatEMVField('00', '01') +
-        merchantAccount +
-        formatEMVField('52', '0000') +
-        formatEMVField('53', '986') +
-        amountField +
-        formatEMVField('58', 'BR') +
-        formatEMVField('59', normalizeAscii(receiverName || 'LABTECH MSI', 25) || 'LABTECH MSI') +
-        formatEMVField('60', 'CEARA MIRIM') +
-        formatEMVField('62', formatEMVField('05', cleanTx)) +
-        '6304';
-      return rawPayload + computeCRC16(rawPayload);
-    }
-
-    // ==================== LABTECH STORE ====================
-    async function loadPublicStore() {
-      const { data } = await supabaseClient.from('inventory').select('*').eq('show_in_store', true).gt('qty', 0).order('name', { ascending: true });
-      publicStoreItems = data || [];
-      renderPublicStore();
-    }
-
-    function getCategoryIcon(cat) {
-      if (cat === 'Hardware / Upgrade') return '💾';
-      if (cat === 'Peça Reparo') return '🔌';
-      if (cat === 'Insumo Bancada') return '🧪';
-      return '🎧';
-    }
-
-    function renderPublicStore() {
-      const grid = document.getElementById('public-store-grid');
-      if (!grid) return;
-      const query = (document.getElementById('store-search-input')?.value || '').toLowerCase().trim();
-      const catFilter = document.getElementById('store-category-filter')?.value || '';
-
-      const items = publicStoreItems.filter(p => {
-        const matchesCat = !catFilter || p.category === catFilter;
-        const text = `${p.name} ${p.description || ''} ${p.category}`.toLowerCase();
-        return matchesCat && (!query || text.includes(query));
-      });
-
-      if (!items.length) {
-        grid.innerHTML = `<div class="sm:col-span-2 lg:col-span-4 glass-card rounded-2xl p-8 text-center space-y-2"><p class="text-slate-300 font-semibold">Nenhum produto disponível nesta busca no momento.</p><p class="text-xs text-slate-400">Consulte disponibilidade de peças ou encomendas diretamente no WhatsApp (84) 99121-6849.</p></div>`;
-        return;
-      }
-
-      grid.innerHTML = items.map(item => `
-        <div class="glass-card hover:border-purple-400/50 rounded-2xl p-4 flex flex-col justify-between gap-3 transition">
-          <div class="space-y-3">
-            <div class="h-36 rounded-xl bg-slateDark-950 border border-slate-800 flex items-center justify-center overflow-hidden">
-              ${item.image_url ? `<img src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.name)}" class="w-full h-full object-cover" onerror="this.style.display='none'" />` : `<span class="text-4xl">${getCategoryIcon(item.category)}</span>`}
-            </div>
-            <div>
-              <div class="flex items-center justify-between gap-1">
-                <span class="text-[10px] uppercase font-bold text-purple-300">${escapeHTML(item.category)}</span>
-                <span class="text-[10px] text-emerald-400 font-semibold">${item.qty} em estoque</span>
-              </div>
-              <h3 class="font-bold text-white text-base mt-1 leading-snug">${escapeHTML(item.name)}</h3>
-              ${item.description ? `<p class="text-xs text-slate-400 mt-1 line-clamp-2">${escapeHTML(item.description)}</p>` : ''}
-            </div>
-          </div>
-          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
-            <span class="text-lg font-extrabold text-emerald-400">${formatCurrency(item.sell_price)}</span>
-            <button type="button" onclick="addToCart(${item.id})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90 text-slate-950 font-extrabold text-xs transition">+ Adicionar</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function updateCartBadges() {
-      const totalItems = shoppingCart.reduce((acc, item) => acc + item.qty, 0);
-      if (document.getElementById('header-cart-count')) document.getElementById('header-cart-count').textContent = totalItems;
-      if (document.getElementById('store-btn-cart-count')) document.getElementById('store-btn-cart-count').textContent = totalItems;
-    }
-
-    function addToCart(productId) {
-      const product = publicStoreItems.find(p => p.id === productId);
-      if (!product) return;
-      const existing = shoppingCart.find(c => c.id === productId);
-      if (existing) {
-        if (existing.qty < product.qty) existing.qty += 1;
-        else { alert('Quantidade máxima disponível em estoque atingida.'); return; }
-      } else {
-        shoppingCart.push({ id: product.id, name: product.name, price: Number(product.sell_price), maxQty: Number(product.qty), qty: 1 });
-      }
-      updateCartBadges();
-      openCartModal();
-    }
-
-    function changeCartQty(productId, delta) {
-      const idx = shoppingCart.findIndex(c => c.id === productId);
-      if (idx === -1) return;
-      const next = shoppingCart[idx].qty + delta;
-      if (next <= 0) shoppingCart.splice(idx, 1);
-      else if (next <= shoppingCart[idx].maxQty) shoppingCart[idx].qty = next;
-      updateCartBadges();
-      renderCartModal();
-    }
-
-    function openCartModal() {
-      document.getElementById('cart-pix-box')?.classList.add('hidden');
-      renderCartModal();
-      openModal('cart-modal');
-    }
-
-    function renderCartModal() {
-      const container = document.getElementById('cart-items-container');
-      const checkoutSec = document.getElementById('cart-checkout-section');
-      if (!shoppingCart.length) {
-        container.innerHTML = `<p class="text-center text-slate-400 py-6">Seu carrinho da LABTECH Store está vazio.</p>`;
-        checkoutSec.classList.add('hidden');
-        return;
-      }
-      checkoutSec.classList.remove('hidden');
-      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      document.getElementById('cart-total-display').textContent = formatCurrency(total);
-      container.innerHTML = shoppingCart.map(item => `
-        <div class="p-3 rounded-xl bg-slateDark-950 border border-slate-800 flex items-center justify-between gap-2">
-          <div><p class="font-bold text-white text-sm">${escapeHTML(item.name)}</p><p class="text-slate-400">${formatCurrency(item.price)} cada</p></div>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="changeCartQty(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-slateDark-800 text-white font-bold">-</button>
-            <span class="font-bold text-white px-1">${item.qty}</span>
-            <button type="button" onclick="changeCartQty(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-slateDark-800 text-white font-bold">+</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function showCartPix() {
-      await loadPixSettings();
-      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      const txid = 'STORE' + Math.floor(1000 + Math.random() * 9000);
-      const pixCode = generatePixBrCode(cachedPix.pix_key, cachedPix.pix_receiver, total, txid);
-      document.getElementById('cart-pix-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}`;
-      document.getElementById('cart-pix-key').textContent = cachedPix.pix_key;
-      document.getElementById('cart-copy-pix-btn').onclick = () => copyPixCode(pixCode);
-      document.getElementById('cart-pix-box').classList.remove('hidden');
-    }
-
-    function checkoutCartWhatsApp() {
-      const custName = document.getElementById('cart-customer-name').value.trim() || 'Cliente Store';
-      const total = shoppingCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      const lines = shoppingCart.map(i => `• ${i.qty}x ${i.name} (${formatCurrency(i.price * i.qty)})`).join('\n');
-      const msg = `*PEDIDO LABTECH STORE*\n*Cliente:* ${custName}\n\n*Itens:*\n${lines}\n\n*Total:* ${formatCurrency(total)}\n*Chave PIX:* ${cachedPix.pix_key}`;
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
-    }
-
-    // ==================== CONSULTA DE OS & PIX ====================
-    function selectServiceAndScroll(category) {
-      const select = document.getElementById('quote-device');
-      if (select) select.value = category;
-      document.getElementById('orcamento')?.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function handleCustomerTrackSubmit(e) { e.preventDefault(); searchCustomerOS(); }
-
-    async function loadPixSettings() {
-      const { data } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
-      if (data) cachedPix = data;
-    }
-
-    async function searchCustomerOS() {
-      const inputEl = document.getElementById('customer-os-search');
-      const container = document.getElementById('customer-os-result');
-      if (!inputEl || !container) return;
-      const query = inputEl.value.trim().toUpperCase();
-      if (!query) { container.innerHTML = `<p class="text-sm text-slate-400">Informe o código da Ordem de Serviço acima para consultar em tempo real.</p>`; return; }
-
-      container.innerHTML = `<p class="text-sm text-cyan-300 animate-pulse">Consultando Ordem de Serviço na nuvem...</p>`;
-      await loadPixSettings();
-      const { data: order, error } = await supabaseClient.from('orders').select('*').ilike('id', query).maybeSingle();
-
-      if (error) { container.innerHTML = `<div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm">Erro ao consultar banco de dados: ${escapeHTML(error.message)}</div>`; return; }
-      if (!order) { container.innerHTML = `<div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-sm">Ordem de Serviço <strong>${escapeHTML(query)}</strong> não encontrada.</div>`; return; }
-
-      const steps = ['Entrada', 'Em Análise', 'Orçamento Enviado', 'Em Reparo', 'Pronto'];
-      const currentIdx = order.status === 'Entregue' ? 4 : Math.max(0, steps.indexOf(order.status));
-      const pixPayload = generatePixBrCode(cachedPix.pix_key, cachedPix.pix_receiver, order.price, order.id);
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixPayload)}`;
-
-      const timelineHtml = steps.map((step, idx) => {
-        const active = idx <= currentIdx;
-        return `<div class="flex-1 flex flex-col items-center text-center"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${active ? 'bg-cyan-500 text-slate-950' : 'bg-slateDark-800 text-slate-500 border border-slate-700'}">${active ? '✓' : idx + 1}</div><span class="text-[11px] mt-1.5 ${active ? 'text-cyan-300 font-semibold' : 'text-slate-500'}">${step}</span></div>`;
-      }).join('');
-
-      container.innerHTML = `
-        <div class="p-5 rounded-2xl bg-slateDark-950/90 border border-slate-800 space-y-6">
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
-            <div><span class="text-xs font-mono text-cyan-400 font-bold">${escapeHTML(order.id)}</span><h3 class="text-lg font-bold text-white">${escapeHTML(order.category)} • ${escapeHTML(order.model)}</h3><p class="text-xs text-slate-400">Cliente: ${escapeHTML(order.client)}</p></div>
-            <div class="text-right"><span class="inline-block px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-bold">${escapeHTML(order.status)}</span><p class="text-lg font-extrabold text-emerald-400 mt-1">${formatCurrency(order.price)}</p></div>
-          </div>
-          <div class="flex items-start justify-between gap-1 pt-1">${timelineHtml}</div>
-          <div class="grid md:grid-cols-2 gap-4 text-sm">
-            <div class="p-4 rounded-xl bg-slateDark-900 border border-slate-800 space-y-2">
-              <p class="text-xs font-bold uppercase text-slate-400">Relato & Laudo Técnico</p>
-              <p class="text-slate-300"><strong>Defeito:</strong> ${escapeHTML(order.issue)}</p>
-              <p class="text-slate-300"><strong>Diagnóstico:</strong> ${escapeHTML(order.diagnosis || 'Em avaliação na bancada.')}</p>
-              ${order.status === 'Orçamento Enviado' ? `<button type="button" onclick="approveCustomerQuote('${escapeHTML(order.id)}', '${escapeHTML(order.model)}', ${Number(order.price)})" class="mt-2 w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">✅ Aprovar Orçamento Agora</button>` : ''}
-            </div>
-            <div class="p-4 rounded-xl bg-slateDark-900 border border-cyan-500/25 flex flex-col sm:flex-row items-center gap-4">
-              <img src="${qrUrl}" alt="QR Code PIX" class="w-32 h-32 rounded-lg bg-white p-1.5 shrink-0" />
-              <div class="space-y-2 text-xs w-full">
-                <p class="font-bold text-cyan-300 uppercase">Pagamento PIX (Valor Automático)</p>
-                <p class="text-slate-300">Chave: <strong class="text-white select-all">${escapeHTML(cachedPix.pix_key)}</strong></p>
-                <p class="text-slate-400">Favorecido: ${escapeHTML(cachedPix.pix_receiver)}</p>
-                <button type="button" onclick="copyPixCode('${escapeHTML(pixPayload)}')" class="w-full py-2 px-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 font-bold transition">📋 Copiar PIX Copia e Cola</button>
-                <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá LABTECH_MSI! Segue o comprovante PIX referente à ${order.id} (${order.model}) no valor de ${formatCurrency(order.price)}.`)}" target="_blank" rel="noopener noreferrer" class="block text-center w-full py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition">Enviar Comprovante</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    async function approveCustomerQuote(osId, model, price) {
-      const { error } = await supabaseClient.from('orders').update({ status: 'Em Reparo' }).eq('id', osId);
-      if (error) { alert('Não foi possível aprovar online: ' + error.message); return; }
-      await searchCustomerOS();
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Olá LABTECH_MSI! Aprovo o orçamento da ${osId} (${model}) no valor de ${formatCurrency(price)}.`)}`, '_blank', 'noopener,noreferrer');
-    }
-
-    function copyPixCode(text) {
-      navigator.clipboard.writeText(text).then(() => alert('Código PIX Copia e Cola copiado!')).catch(() => alert('Código PIX: ' + text));
-    }
-
-    function handleQuoteSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('quote-name').value.trim();
-      const device = document.getElementById('quote-device').value;
-      const model = document.getElementById('quote-model').value.trim();
-      const issue = document.getElementById('quote-issue').value.trim();
-      const protocol = 'ORC-' + Math.floor(1000 + Math.random() * 9000);
-      document.getElementById('quote-protocol-preview').textContent = `Protocolo gerado: ${protocol}`;
-      const text = `*SOLICITAÇÃO DE ORÇAMENTO - LABTECH_MSI*\n*Protocolo:* ${protocol}\n*Cliente:* ${name}\n*Equipamento:* ${device}\n*Modelo:* ${model}\n*Problema:* ${issue}`;
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
-    }
-
-    // ==================== AUTENTICAÇÃO & BANCADA OS ====================
-    function switchAppMode(mode) {
-      const clientView = document.getElementById('client-app-view');
-      const benchView = document.getElementById('bench-app-view');
-      if (mode === 'bench' && currentUser) {
-        clientView.classList.add('hidden');
-        benchView.classList.remove('hidden');
-        document.getElementById('bench-user-email').textContent = `Conectado como: ${currentUser.email}`;
-        refreshAllBenchData();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        benchView.classList.add('hidden');
-        clientView.classList.remove('hidden');
-        loadPublicStore();
-      }
-    }
-
-    function requestBenchAccess() {
-      if (currentUser) { switchAppMode('bench'); return; }
-      document.getElementById('login-error-msg').classList.add('hidden');
-      openModal('login-modal');
-    }
-
-    async function handleBenchLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('bench-email-input').value.trim();
-      const password = document.getElementById('bench-password-input').value;
-      const btn = document.getElementById('login-submit-btn');
-      const errEl = document.getElementById('login-error-msg');
-      btn.disabled = true; btn.textContent = 'Autenticando...'; errEl.classList.add('hidden');
-
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      btn.disabled = false; btn.textContent = 'Entrar na Bancada';
-
-      if (error) { errEl.textContent = 'E-mail ou senha inválidos.'; errEl.classList.remove('hidden'); return; }
-      currentUser = data.user;
-      closeModal('login-modal');
-      switchAppMode('bench');
-    }
-
-    async function logoutBench() {
-      await supabaseClient.auth.signOut();
-      currentUser = null;
-      switchAppMode('client');
-    }
-
-    async function openPixConfigModal() {
-      await loadPixSettings();
-      document.getElementById('pix-key-input').value = cachedPix.pix_key || '';
-      document.getElementById('pix-receiver-input').value = cachedPix.pix_receiver || '';
-      openModal('pix-modal');
-    }
-
-    async function savePixConfig(e) {
-      e.preventDefault();
-      const pix_key = document.getElementById('pix-key-input').value.trim();
-      const pix_receiver = document.getElementById('pix-receiver-input').value.trim().toUpperCase();
-      const { error } = await supabaseClient.from('settings').upsert({ id: 1, pix_key, pix_receiver });
-      if (error) { alert('Erro ao salvar PIX: ' + error.message); return; }
-      cachedPix = { id: 1, pix_key, pix_receiver };
-      closeModal('pix-modal');
-      alert('Chave PIX atualizada na nuvem com sucesso!');
-    }
-
-    // ==================== NAVEGAÇÃO UNIFICADA DE ABAS & SETORES ====================
-    const ALL_BENCH_TABS = ['overview', 'orders', 'trade', 'knowledge', 'techlab', 'finance', 'catalog', 'returns', 'drive', 'courses', 'ailab', 'checklists', 'investments', 'suppliers'];
-
-    function switchBenchTab(tab) {
-      ALL_BENCH_TABS.forEach(t => {
-        const panel = document.getElementById(`bench-tab-${t}`);
-        if (panel) panel.classList.toggle('hidden', t !== tab);
-        const btn = document.getElementById(`tab-btn-${t}`);
-        if (btn) {
-          btn.className = t === tab
-            ? 'bench-tab-btn px-4 py-
