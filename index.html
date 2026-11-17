@@ -4927,29 +4927,56 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
 
     // Carrega automaticamente a lista de OS ao abrir a página e ao clicar na aba
     setTimeout(populateChecklistOSDropdown, 1500);
-              function forceOpenChecklistsTab() {
-      document.querySelectorAll('[id^="bench-tab-"]').forEach(el => {
-        el.classList.add('hidden');
-        el.style.display = 'none';
-      });
+     function forceOpenChecklistsTab() {
       const target = document.getElementById('bench-tab-checklists');
-      if (target) {
-        target.classList.remove('hidden');
-        target.style.display = 'block';
+      if (!target) return;
+
+      // 1. Esconde apenas as abas irmãs dentro do mesmo contêiner pai
+      const parent = target.parentElement;
+      if (parent) {
+        Array.from(parent.children).forEach(child => {
+          if (child.id && child.id.startsWith('bench-tab-')) {
+            child.classList.add('hidden');
+            child.style.display = 'none';
+          }
+        });
       }
+
+      // 2. Garante que toda a cadeia de pais até o body esteja visível
+      let curr = target;
+      while (curr && curr !== document.body) {
+        curr.classList.remove('hidden');
+        if (curr.style.display === 'none') curr.style.display = 'block';
+        curr = curr.parentElement;
+      }
+      target.style.display = 'block';
+
+      // 3. Atualiza visual dos botões da barra
       document.querySelectorAll('.bench-tab-btn').forEach(btn => {
         btn.classList.remove('bg-cyan-500', 'text-slate-950');
         btn.style.backgroundColor = '#1e293b';
         btn.style.color = '#cbd5e1';
       });
+
       const activeBtn = document.getElementById('tab-btn-checklists');
       if (activeBtn) {
         activeBtn.style.backgroundColor = '#06b6d4';
         activeBtn.style.color = '#020617';
       }
+
+      // 4. Carrega as OS e os itens do checklist
       if (typeof populateChecklistOSDropdown === 'function') populateChecklistOSDropdown();
       if (typeof renderDynamicChecklistItems === 'function') renderDynamicChecklistItems();
-    }
+    } 
+    // Garante que o botão '🔒 Bancada OS' do topo nunca dê erro no console
+    window.requestBenchAccess = window.requestBenchAccess || function() {
+      const dash = document.getElementById('bench-dashboard') || document.querySelector('[id*="bench-area"], [id*="admin-panel"]');
+      if (dash) {
+        dash.classList.remove('hidden');
+        dash.style.display = 'block';
+        dash.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
   </script>
   
   
