@@ -247,6 +247,10 @@
       <div class="flex flex-wrap items-center gap-2">
         <button type="button" onclick="openPixConfigModal()" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition">💠 Configurar PIX (CPF / Chave)</button>
         <button type="button" onclick="refreshAllBenchData()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition">🔄 Atualizar</button>
+<label class="cursor-pointer px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition">
+          📥 Importar CSV
+          <input type="file" accept=".csv" onchange="importUnifiedLabtechCSV(event)" class="hidden" />
+        </label>
         <button type="button" onclick="logoutBench()" class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold transition">Sair</button>
       </div>
     </div>
@@ -3474,6 +3478,169 @@
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+    // ==================== IMPORTADOR AUTOMÁTICO DE CSV UNIFICADO ====================
+    function parseCSVLineSemicolon(line) {
+      const result = [];
+      let cur = '', inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQuotes = !inQuotes; }
+        else if (ch === ';' && !inQuotes) { result.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      result.push(cur.trim());
+      return result;
+    }
+
+    async function importUnifiedLabtechCSV(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const text = await file.text();
+      const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim().length > 0);
+      if (lines.length < 2) return alert('O ficheiro CSV está vazio.');
+
+      const headers = parseCSVLineSemicolon(lines[0]);
+      const rows = lines.slice(1).map(line => {
+        const vals = parseCSVLineSemicolon(line);
+        const obj = {};
+        headers.forEach((h, idx) => { obj[h] = vals[idx] ?? ''; });
+        return obj;
+      });
+
+      if (!confirm(`Foram encontrados ${rows.length} registos no CSV. Deseja importar tudo para o banco de dados na nuvem agora?`)) {
+        event.target.value = '';
+        return;
+      }
+
+      const todayStr = new Date().toLocaleDateString('pt-BR');
+      const ordersToUpsert = [];
+      const financeToInsert = [];
+      const finRecordsToInsert = [];
+      const benchInvToInsert = [];
+
+      rows.forEach(r => {
+        const id = r.ID || '';
+        const cat = r.Categoria || '';
+        const sub = r.Subcategoria || '';
+        const cliente = r.Cliente_Origem || 'Cliente';
+        const equip = r.Equipamento_Referencia || 'Equipamento';
+        const desc = r.Descricao_Servico_Conta || '';
+        const total = parseFloat(String(r.Valor_Total || '0').replace(',', '.')) || 0;
+        const custo = parseFloat(String(r.Custo_Peca || '0').replace(',', '.')) || 0;
+        const pago = parseFloat(String(r.Valor_Pago_Recebido || '0').replace(',', '.')) || 0;
+        const pendente = parseFloat(String(r.Saldo_Pendente || '0').replace(',', '.')) || 0;
+        const obs = r.Observacoes || '';
+
+        if (cat === 'Historico_Entradas') {
+          if (id === 'HIST-05') return;
+          if (pago > 0) {
+            financeToInsert.push({
+              type: 'entrada',
+              description: `[${id}] ${cliente} - ${equip}: ${desc}`,
+              amount: pago,
+              date: todayStr
+            });
+          }
+          if (custo > 0) {
+            financeToInsert.push({
+              type: 'saida',
+              description: `[${id}] Custo Peça (${equip} - ${cliente})`,
+              amount: custo,
+              date: todayStr
+            });
+          }
+        } else if (cat === 'Servicos_Feitos') {
+          const isQuitado = pendente <= 0;
+          ordersToUpsert.push({
+            id: id,
+            client: cliente,
+            phone: '84999990000',
+            category: equip.toLowerCase().includes('pc') || equip.toLowerCase().includes('notebook') ? 'Notebook' : 'Smartphone',
+            model: equip,
+            status: isQuitado ? 'Entregue' : 'Pronto',
+            price: total,
+            part_cost: custo,
+            net_profit: total - custo,
+            issue: desc,
+            diagnosis: `${r.Status} • ${obs}`,
+            paid_in_finance: isQuitado
+          });
+          if (pago > 0) {
+            financeToInsert.push({
+              type: 'entrada',
+              description: `[${id}] Recebido ${cliente} (${equip})`,
+              amount: pago,
+              date: todayStr
+            });
+          }
+          if (pendente > 0) {
+            finRecordsToInsert.push({
+              type: 'receber',
+              description: `[${id}] Saldo Pendente: ${cliente} (${equip}) - ${r.Prioridade_Prazo}`,
+              amount: pendente,
+              status: 'pendente',
+              due_date: new Date().toISOString().slice(0, 10)
+            });
+          }
+        } else if (cat === 'Servicos_Pendentes_Bancada') {
+          let devCat = 'Smartphone';
+          if (equip.toLowerCase().includes('notebook')) devCat = 'Notebook';
+          else if (equip.toLowerCase().includes('jbl') || equip.toLowerCase().includes('caixa')) devCat = 'Desktop / PC';
+          ordersToUpsert.push({
+            id: id,
+            client: cliente,
+            phone: '84999990000',
+            category: devCat,
+            model: equip,
+            status: r.Status === 'Em_Teste' ? 'Em Reparo' : 'Em Análise',
+            price: total,
+            issue: desc,
+            diagnosis: `${r.Prioridade_Prazo} • ${obs}`
+          });
+        } else if (cat === 'Aparelhos_Loja_Venda') {
+          benchInvToInsert.push({
+            ownership: 'loja',
+            device_type: 'Smartphone',
+            brand_model: equip,
+            location_box: id,
+            condition_notes: `${r.Prioridade_Prazo} • ${obs}`,
+            estimated_value: total
+          });
+        } else if (cat === 'Contas_Pagas') {
+          financeToInsert.push({
+            type: 'saida',
+            description: `[${id}] ${cliente}: ${desc}`,
+            amount: pago || total,
+            date: todayStr
+          });
+        } else if (cat === 'Contas_A_Pagar') {
+          finRecordsToInsert.push({
+            type: 'pagar',
+            description: `[${id}] ${cliente}: ${desc} (${r.Prioridade_Prazo})`,
+            amount: pendente || total,
+            status: 'pendente',
+            due_date: sub === 'Futuro_Dezembro' ? '2026-12-14' : '2026-11-17'
+          });
+        }
+      });
+
+      try {
+        if (ordersToUpsert.length) await supabaseClient.from('orders').upsert(ordersToUpsert);
+        if (financeToInsert.length) await supabaseClient.from('finance').insert(financeToInsert);
+        if (finRecordsToInsert.length) await supabaseClient.from('financial_records').insert(finRecordsToInsert);
+        if (benchInvToInsert.length) await supabaseClient.from('bench_inventory').insert(benchInvToInsert);
+
+        alert(`Importação concluída!\n• ${ordersToUpsert.length} Ordens de Serviço\n• ${financeToInsert.length} Movimentos de Caixa\n• ${finRecordsToInsert.length} Contas a Pagar/Receber\n• ${benchInvToInsert.length} Aparelhos da Loja`);
+        await refreshAllBenchData();
+        loadFinancialRecordsForChart();
+        loadBenchInventory();
+      } catch (err) {
+        alert('Erro durante a importação: ' + err.message);
+      } finally {
+        event.target.value = '';
+      }
     }
   </script>
 </body>
