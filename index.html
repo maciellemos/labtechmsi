@@ -339,10 +339,12 @@
 </button>
 <button type="button" id="tab-btn-ailab" onclick="switchBenchTab('ailab')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 text-slate-300 font-semibold text-xs transition">
                     🧠 Bancada IA, YouTube & Recibos
-                  </button
-          <button type="button" id="tab-btn-checklists" onclick="switchBenchTab('checklists')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-900/90 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs transition" style="background-color: #111827 !important; border: 1px solid #1e293b !important; border-radius: 0.75rem !important;">
+          <button type="button" id="tab-btn-ailab" onclick="switchBenchTab('ailab')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
+                    🧠 Bancada IA, YouTube & Recibos
+                  </button>
+                  <button type="button" id="tab-btn-checklists" onclick="forceOpenChecklistsTab()" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition" style="background-color: #1e293b !important; border-radius: 0.75rem !important;">
                     ✅ Checklists & Bancada
-                  </button>     
+                  </button>
       <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
               🚀 Investimentos & Metas
             </button>
@@ -4925,6 +4927,29 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
 
     // Carrega automaticamente a lista de OS ao abrir a página e ao clicar na aba
     setTimeout(populateChecklistOSDropdown, 1500);
+              function forceOpenChecklistsTab() {
+      document.querySelectorAll('[id^="bench-tab-"]').forEach(el => {
+        el.classList.add('hidden');
+        el.style.display = 'none';
+      });
+      const target = document.getElementById('bench-tab-checklists');
+      if (target) {
+        target.classList.remove('hidden');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.bench-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-cyan-500', 'text-slate-950');
+        btn.style.backgroundColor = '#1e293b';
+        btn.style.color = '#cbd5e1';
+      });
+      const activeBtn = document.getElementById('tab-btn-checklists');
+      if (activeBtn) {
+        activeBtn.style.backgroundColor = '#06b6d4';
+        activeBtn.style.color = '#020617';
+      }
+      if (typeof populateChecklistOSDropdown === 'function') populateChecklistOSDropdown();
+      if (typeof renderDynamicChecklistItems === 'function') renderDynamicChecklistItems();
+    }
   </script>
   
   
