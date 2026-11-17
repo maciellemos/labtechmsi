@@ -57,69 +57,6 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #060911; }
     ::-webkit-scrollbar-thumb { background: #1c2742; border-radius: 9999px; }
-    /* Estilo SaaS Moderno para Barra de Navegação e Cards LABTECH_MSI */
-    .bench-nav-scroll {
-      display: flex !important;
-      flex-wrap: nowrap !important;
-      overflow-x: auto !important;
-      gap: 0.35rem !important;
-      padding-bottom: 0.5rem !important;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.7) !important;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(6, 182, 212, 0.4) transparent;
-    }
-    .bench-nav-scroll::-webkit-scrollbar {
-      height: 4px;
-    }
-    .bench-nav-scroll::-webkit-scrollbar-thumb {
-      background: rgba(6, 182, 212, 0.4);
-      border-radius: 999px;
-    }
-    .bench-tab-btn {
-      white-space: nowrap !important;
-      border-radius: 0.65rem !important;
-      padding: 0.55rem 0.9rem !important;
-      font-size: 0.78rem !important;
-      font-weight: 600 !important;
-      letter-spacing: 0.01em !important;
-      border: 1px solid rgba(51, 65, 85, 0.6) !important;
-      background: rgba(15, 23, 42, 0.75) !important;
-      color: #94a3b8 !important;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      backdrop-filter: blur(8px);
-    }
-    .bench-tab-btn:hover {
-      color: #f8fafc !important;
-      border-color: rgba(6, 182, 212, 0.5) !important;
-      background: rgba(30, 41, 59, 0.9) !important;
-      transform: translateY(-1px);
-    }
-    .bench-tab-btn.bg-cyan-500,
-    .bench-tab-btn[style*="rgb(6, 182, 212)"],
-    .bench-tab-btn[style*="#06b6d4"] {
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(14, 165, 233, 0.12)) !important;
-      border-color: #06b6d4 !important;
-      color: #22d3ee !important;
-      box-shadow: 0 0 16px rgba(6, 182, 212, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-    }
-    /* Etapa 2: Drag-and-Drop nas Fotos e Destaque Inteligente no Checklist */
-    .photo-drop-active {
-      border-color: #22d3ee !important;
-      background-color: rgba(6, 182, 212, 0.12) !important;
-      box-shadow: 0 0 20px rgba(6, 182, 212, 0.25) !important;
-    }
-    .checklist-row-ok {
-      border-color: rgba(16, 185, 129, 0.35) !important;
-      background: rgba(16, 185, 129, 0.04) !important;
-    }
-    .checklist-row-warn {
-      border-color: rgba(245, 158, 11, 0.6) !important;
-      background: rgba(245, 158, 11, 0.08) !important;
-    }
-    .checklist-row-fail {
-      border-color: rgba(244, 63, 94, 0.65) !important;
-      background: rgba(244, 63, 94, 0.1) !important;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col tech-grid pb-20 md:pb-0">
@@ -353,13 +290,7 @@
       <div>
         <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • ERP, BI & Tech Lab na Nuvem</span>
         <h1 class="text-2xl font-extrabold text-white">Dashboard & Bancada LABTECH_MSI</h1>
-        <div class="flex flex-wrap items-center gap-3 mt-1">
-          <p id="bench-user-email" class="text-xs text-slate-400"></p>
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            Sistema Online • Cloud Sync
-          </span>
-        </div>
+        <p id="bench-user-email" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
       <div class="flex flex-wrap items-center gap-2">
         <button type="button" onclick="openPixConfigModal()" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition">
@@ -375,7 +306,7 @@
     </div>
 
     <!-- ABAS DO DASHBOARD -->
-   <div class="bench-nav-scroll mb-6">
+    <div class="flex flex-wrap gap-2 mb-6">
       <button type="button" id="tab-btn-overview" onclick="switchBenchTab('overview')" class="bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition">
         📊 Visão Geral & BI
       </button>
@@ -1377,7 +1308,42 @@ PLACA: ... | SINTOMA: ... | PASSOS: ... | SOLDA_TEMP: ... | DICAS: ..." class="w
          <!-- BLOCO 1: BANCADA INTEGRADA (CHECKLIST + FOTOS ENTRADA/SAÍDA + OS + WHATSAPP) -->
             <div class="bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-5 mb-6 space-y-4">
               <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
-                
+                <div>
+                  <h3 class="text-base font-bold text-white">📋 Bancada Integrada: Inspeção, Fotos (Entrada/Saída) & Status</h3>
+                  <p class="text-xs text-slate-400">Vincule uma OS para puxar o cliente, salvar fotos de vistoria e notificar no WhatsApp e Portal do Cliente.</p>
+                </div>
+                <span id="chk-linked-badge" class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-bold">
+                  Nenhuma OS vinculada
+                </span>
+              </div>
+
+              <!-- 1. Vínculo com OS & Status -->
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div class="md:col-span-2">
+                  <label class="block text-xs font-bold text-cyan-300 mb-1">🔗 Selecionar OS / Cliente Cadastrado:</label>
+                  <select id="chk-os-select" onchange="onSelectOSForChecklist()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-semibold">
+                    <option value="">-- Selecione uma Ordem de Serviço ativa --</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-amber-300 mb-1">📌 Status Atual da OS:</label>
+                  <select id="chk-os-status" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg px-3 py-2 text-xs text-amber-300 font-bold">
+                    <option value="Orçamento Pendente">⏳ Orçamento Pendente</option>
+                    <option value="Orçamento Aprovado">✅ Orçamento Aprovado</option>
+                    <option value="Aguardando Peça">📦 Aguardando Peça</option>
+                    <option value="Em Bancada / Reparo">🔧 Em Bancada / Reparo</option>
+                    <option value="Pronto para Retirada">🎉 Pronto para Retirada</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-emerald-300 mb-1">📱 WhatsApp do Cliente:</label>
+                  <input id="chk-client-phone" type="text" placeholder="Ex: 84999999999" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+                </div>
+              </div>
+
+              <!-- 2. Fotos de Entrada e Saída -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-bold text-cyan-300">📸 Foto de Entrada (Estado Recebido)</span>
                     <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">
@@ -5012,86 +4978,11 @@ PLACA: [Aparelho, Placa ou Setor] | SINTOMA: [Sintoma, consumo ou malha analisad
         dash.style.display = 'block';
         dash.scrollIntoView({ behavior: 'smooth' });
       }
-   // Etapa 2: Inicializa Drag-and-Drop, Lightbox e Destaque Inteligente no Checklist
-    (function initBenchStage2UX() {
-      // 1. Destaque visual automático nos itens do checklist ao mudar o select
-      document.addEventListener('change', function(e) {
-        const sel = e.target;
-        if (!sel || sel.tagName !== 'SELECT') return;
-        const container = sel.closest('#bench-tab-checklists');
-        if (!container) return;
-
-        const row = sel.parentElement;
-        if (!row) return;
-        const val = (sel.value || '').toLowerCase();
-
-        row.classList.remove('checklist-row-ok', 'checklist-row-warn', 'checklist-row-fail');
-        if (val.includes('defeito') || val.includes('falha') || val.includes('não') || val.includes('nao') || val.includes('quebrado')) {
-          row.classList.add('checklist-row-fail');
-        } else if (val.includes('aten') || val.includes('alerta') || val.includes('obs') || val.includes('risco')) {
-          row.classList.add('checklist-row-warn');
-        } else if (val.includes('ok') || val.includes('funciona')) {
-          row.classList.add('checklist-row-ok');
-        }
-      });
-
-      // 2. Suporte a Drag-and-Drop nas zonas de Foto de Entrada e Saída
-      setTimeout(() => {
-        const checkTab = document.getElementById('bench-tab-checklists');
-        if (!checkTab) return;
-
-        checkTab.querySelectorAll('input[type="file"]').forEach(input => {
-          const card = input.closest('div[class*="border"]');
-          if (!card || card.dataset.dndReady) return;
-          card.dataset.dndReady = '1';
-
-          ['dragenter', 'dragover'].forEach(evt => {
-            card.addEventListener(evt, ev => {
-              ev.preventDefault();
-              card.classList.add('photo-drop-active');
-            });
-          });
-          ['dragleave', 'drop'].forEach(evt => {
-            card.addEventListener(evt, ev => {
-              ev.preventDefault();
-              card.classList.remove('photo-drop-active');
-            });
-          });
-          card.addEventListener('drop', ev => {
-            if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files.length > 0) {
-              input.files = ev.dataTransfer.files;
-              input.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-          });
-        });
-
-        // 3. Clique em qualquer imagem anexada abre visualização ampliada (Lightbox)
-        checkTab.addEventListener('click', ev => {
-          const img = ev.target.closest('img');
-          if (!img || !img.src || img.src.endsWith('#')) return;
-
-          const overlay = document.createElement('div');
-          overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,0.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;cursor:zoom-out;';
-          overlay.innerHTML = `<img src="${img.src}" style="max-width:95vw;max-height:90vh;border-radius:1rem;border:1px solid rgba(34,211,238,0.4);box-shadow:0 25px 50px -12px rgba(0,0,0,0.8);" />`;
-          overlay.onclick = () => overlay.remove();
-          document.body.appendChild(overlay);
-        });
-      }, 1200);
-    })(); 
-  // Garante que o botão '🔒 Bancada OS' sempre funcione, mesmo se houver algum bloqueio
-    window.requestBenchAccess = function() {
-      if (typeof switchAppMode === 'function') {
-        try { switchAppMode('bench'); } catch (e) { console.error(e); }
-      }
-      const benchView = document.getElementById('bench-app-view');
-      const clientView = document.getElementById('client-app-view') || document.querySelector('main');
-      if (benchView) {
-        if (clientView && clientView !== benchView) clientView.classList.add('hidden');
-        benchView.classList.remove('hidden');
-        benchView.style.display = 'block';
-        benchView.scrollIntoView({ behavior: 'smooth' });
-      }
     };
   </script>
+  
+  
+
+  
 </body>
 </html>
