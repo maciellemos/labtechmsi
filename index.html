@@ -420,6 +420,15 @@
                 <input id="os-media-url" type="url" placeholder="https://drive.google.com/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs" />
               </div>
             </div>
+            <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80">
+           <select id="os-cat-service-select" class="flex-1 min-w-[180px] px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs">
+             <option value="">-- Adicionar Serviço do Catálogo --</option>
+           </select>
+           <button type="button" onclick="addSelectedPartToOsBundle()" class="px-3 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 font-bold text-xs transition">+ Somar Peça Selecionada</button>
+           <button type="button" onclick="addSelectedServiceToOsBundle()" class="px-3 py-2 rounded-xl bg-cyan-600/30 hover:bg-cyan-600/50 border border-cyan-500/40 text-cyan-200 font-bold text-xs transition">+ Somar Serviço</button>
+           <button type="button" onclick="clearOsBundle()" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">Limpar Lista</button>
+         </div>
+         <div id="os-bundle-list" class="space-y-1.5 text-xs"></div>
           </div>
           <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-2 pt-2">
             <button id="save-os-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar Ordem de Serviço na Nuvem</button>
@@ -3642,6 +3651,87 @@
         event.target.value = '';
       }
     }
+    // ==================== COMPOSITOR MULTI-PEÇAS E SERVIÇOS NA OS ====================
+    let currentOsBundle = [];
+
+    function populateOsCatalogSelect() {
+      const sel = document.getElementById('os-cat-service-select');
+      if (!sel || typeof cachedCatalog === 'undefined') return;
+      sel.innerHTML = `<option value="">-- Adicionar Serviço do Catálogo --</option>` +
+        cachedCatalog.map(c => `<option value="${c.id}" data-price="${c.price || 0}">${escapeHTML(c.name)} (${formatCurrency(c.price)})</option>`).join('');
+    }
+
+    function addSelectedPartToOsBundle() {
+      const sel = document.getElementById('os-part-select');
+      const item = cachedInventory.find(i => String(i.id) === String(sel?.value));
+      if (!item) return alert('Selecione primeiro uma peça no campo "Peça do Estoque".');
+      currentOsBundle.push({
+        kind: 'Peça',
+        name: item.name,
+        cost: Number(item.cost_price || 0),
+        sell: Number(item.sell_price || item.cost_price || 0)
+      });
+      syncOsBundleTotals();
+    }
+
+    function addSelectedServiceToOsBundle() {
+      const sel = document.getElementById('os-cat-service-select');
+      const srv = cachedCatalog.find(c => String(c.id) === String(sel?.value));
+      if (!srv) return alert('Selecione um serviço do catálogo.');
+      currentOsBundle.push({
+        kind: 'Serviço',
+        name: srv.name,
+        cost: 0,
+        sell: Number(srv.price || 0)
+      });
+      syncOsBundleTotals();
+    }
+
+    function removeOsBundleItem(idx) {
+      currentOsBundle.splice(idx, 1);
+      syncOsBundleTotals();
+    }
+
+    function clearOsBundle() {
+      currentOsBundle = [];
+      renderOsBundleList();
+    }
+
+    function renderOsBundleList() {
+      const box = document.getElementById('os-bundle-list');
+      if (!box) return;
+      if (!currentOsBundle.length) { box.innerHTML = ''; return; }
+      box.innerHTML = currentOsBundle.map((it, idx) => `
+        <div class="flex items-center justify-between px-3 py-1.5 rounded-lg bg-slateDark-900 border border-slate-800">
+          <span><strong class="${it.kind === 'Peça' ? 'text-purple-300' : 'text-cyan-300'}">[${it.kind}]</strong> ${escapeHTML(it.name)}</span>
+          <div class="flex items-center gap-3">
+            <span class="text-slate-400">Custo: ${formatCurrency(it.cost)}</span>
+            <span class="text-emerald-400 font-bold">Cliente: ${formatCurrency(it.sell)}</span>
+            <button type="button" onclick="removeOsBundleItem(${idx})" class="text-rose-400 hover:text-rose-300 font-bold">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function syncOsBundleTotals() {
+      renderOsBundleList();
+      const totalCost = currentOsBundle.reduce((s, i) => s + i.cost, 0);
+      const totalClient = currentOsBundle.reduce((s, i) => s + i.sell, 0);
+      const transport = parseFloat(document.getElementById('os-transport-cost')?.value) || 0;
+      const labor = Math.max(0, totalClient - totalCost);
+
+      document.getElementById('os-part-cost').value = totalCost.toFixed(2);
+      document.getElementById('os-labor-value').value = labor.toFixed(2);
+      document.getElementById('os-price').value = (totalClient + transport).toFixed(2);
+      document.getElementById('os-diagnosis').value = currentOsBundle.map(i => i.name).join(' + ');
+      recalcOsBudget();
+    }
+
+    const _origPopulateOsParts = populateOsPartsSelect;
+    populateOsPartsSelect = function() {
+      _origPopulateOsParts();
+      populateOsCatalogSelect();
+    };
   </script>
 </body>
 </html>
