@@ -11,10 +11,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LABTECH_MSI" />
   <link rel="manifest" href="manifest.json" />
-  <!-- Corrigido: logo.png.jpg para logo.png (renomeie o arquivo no GitHub) -->
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
 
+  <!-- ⚠️ Em produção: troque o CDN do Tailwind por CSS compilado -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -23,25 +23,25 @@
       theme: {
         extend: {
           colors: {
-            slateDark: { 950: '#060911', 900: '#0b101d', 800: '#121a2e', 700: '#1c2742' },
-            cyanTech: { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2' }
+            slateDark: { 950:'#060911', 900:'#0b101d', 800:'#121a2e', 700:'#1c2742' },
+            cyanTech:  { 400:'#22d3ee', 500:'#06b6d4', 600:'#0891b2' }
           }
         }
       }
     };
   </script>
   <style>
-    body { background-color: #060911; color: #f1f5f9; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    .glass-card { background: rgba(18, 26, 46, 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.14); }
-    .tech-grid { background-image: radial-gradient(rgba(34, 211, 238, 0.12) 1px, transparent 1px); background-size: 24px 24px; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #060911; }
-    ::-webkit-scrollbar-thumb { background: #1c2742; border-radius: 9999px; }
+    body { background-color:#060911; color:#f1f5f9; font-family:'Inter', system-ui, -apple-system, sans-serif; }
+    .glass-card { background:rgba(18,26,46,.72); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(56,189,248,.14); }
+    .tech-grid { background-image:radial-gradient(rgba(34,211,238,.12) 1px, transparent 1px); background-size:24px 24px; }
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background:#060911; }
+    ::-webkit-scrollbar-thumb { background:#1c2742; border-radius:9999px; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col tech-grid pb-20 md:pb-0">
 
-  <!-- CABEÇALHO PRINCIPAL -->
+  <!-- ==================== CABEÇALHO ==================== -->
   <header class="sticky top-0 z-40 glass-card border-b border-cyan-500/20">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
       <a href="#inicio" onclick="switchAppMode('client')" class="flex items-center gap-3">
@@ -55,17 +55,16 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-5 text-sm font-medium text-slate-300">
-        <a href="#servicos" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Serviços</a>
-        <a href="#loja" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition font-semibold text-cyan-300">🛍️ Store</a>
-        <a href="#rastrear-os" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Acompanhar OS & PIX</a>
-        <a href="#orcamento" onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Orçamento</a>
+        <a href="#servicos"     onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Serviços</a>
+        <a href="#loja"         onclick="switchAppMode('client')" class="hover:text-cyan-400 transition font-semibold text-cyan-300">🛍️ Store</a>
+        <a href="#rastrear-os"  onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Acompanhar OS & PIX</a>
+        <a href="#orcamento"    onclick="switchAppMode('client')" class="hover:text-cyan-400 transition">Orçamento</a>
         <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition">@labtechmsicm</a>
       </nav>
 
       <div class="flex items-center gap-2">
         <button type="button" onclick="openCartModal()" class="relative px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition flex items-center gap-1.5">
-          <span>🛒</span>
-          <span id="header-cart-count">0</span>
+          <span>🛒</span><span id="header-cart-count">0</span>
         </button>
         <button type="button" onclick="openInstallModal()" class="px-3 py-1.5 rounded-lg bg-slateDark-800 hover:bg-slateDark-700 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition flex items-center gap-1.5">
           <span>📲 App</span>
@@ -89,24 +88,17 @@
             +10 Anos de Experiência em Microeletrônica • Ceará-Mirim/RN
           </div>
           <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
-            Diagnóstico preciso e reparo avançado para <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">seus equipamentos</span>.
+            Diagnóstico preciso e reparo avançado para
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">seus equipamentos</span>.
           </h1>
           <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
             Manutenção de notebooks, smartphones, placas de vídeo, desktops e consoles com bancada equipada, loja de acessórios/upgrades e acompanhamento online da sua Ordem de Serviço.
           </p>
           <div class="flex flex-wrap gap-3 pt-2">
-            <a href="#rastrear-os" class="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">
-              🔍 Consultar Minha OS / PIX
-            </a>
-            <a href="#loja" class="px-5 py-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 font-bold text-sm transition">
-              🛍️ LABTECH Store
-            </a>
-            <a href="#orcamento" class="px-5 py-3 rounded-xl glass-card hover:border-cyan-400/50 text-white font-semibold text-sm transition">
-              Solicitar Orçamento
-            </a>
-            <a href="https://wa.me/5584991216849?text=Ol%C3%A1%20LABTECH_MSI!%20Gostaria%20de%20um%20atendimento%20t%C3%A9cnico." target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-semibold text-sm transition">
-              WhatsApp (84) 99121-6849
-            </a>
+            <a href="#rastrear-os" class="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 transition">🔍 Consultar Minha OS / PIX</a>
+            <a href="#loja"        class="px-5 py-3 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 font-bold text-sm transition">🛍️ LABTECH Store</a>
+            <a href="#orcamento"   class="px-5 py-3 rounded-xl glass-card hover:border-cyan-400/50 text-white font-semibold text-sm transition">Solicitar Orçamento</a>
+            <a href="https://wa.me/5584991216849?text=Ol%C3%A1%20LABTECH_MSI!%20Gostaria%20de%20um%20atendimento%20t%C3%A9cnico." target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-semibold text-sm transition">WhatsApp (84) 99121-6849</a>
           </div>
         </div>
 
@@ -141,7 +133,7 @@
         <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Serviços de Bancada</h2>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div onclick="selectServiceAndScroll('Notebook / PC')" class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
+        <div onclick="selectServiceAndScroll('Notebook / PC')"       class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
           <div class="w-11 h-11 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center mb-4 font-bold text-lg">💻</div>
           <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Notebooks & PCs</h3>
           <p class="text-sm text-slate-400 mt-2">Reparo de placa-mãe, troca de tela, teclado, dobradiças, upgrade SSD/RAM e formatação.</p>
@@ -156,7 +148,7 @@
           <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Placas de Vídeo</h3>
           <p class="text-sm text-slate-400 mt-2">Diagnóstico de VRM/memórias, troca de thermal pads, limpeza profunda e reparo eletrônico.</p>
         </div>
-        <div onclick="selectServiceAndScroll('Console / Videogame')" class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
+        <div onclick="selectServiceAndScroll('Console / Videogame')"   class="cursor-pointer glass-card hover:border-cyan-400/50 rounded-2xl p-5 transition group">
           <div class="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 font-bold text-lg">🎮</div>
           <h3 class="font-bold text-white text-lg group-hover:text-cyan-300 transition">Consoles</h3>
           <p class="text-sm text-slate-400 mt-2">PS4, PS5, Xbox e Nintendo: troca de porta HDMI, limpeza, metal líquido e fonte.</p>
@@ -164,7 +156,7 @@
       </div>
     </section>
 
-    <!-- LABTECH STORE -->
+    <!-- LOJA -->
     <section id="loja" class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-800/80">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
@@ -182,15 +174,14 @@
             <option value="Insumo Bancada">Insumos / Pastas Térmicas</option>
           </select>
           <button type="button" onclick="openCartModal()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5">
-            <span>🛒 Ver Carrinho (<span id="store-btn-cart-count">0</span>)</span>
+            🛒 Ver Carrinho (<span id="store-btn-cart-count">0</span>)
           </button>
         </div>
       </div>
-
       <div id="public-store-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
     </section>
 
-    <!-- ACOMPANHAMENTO DE OS + PAGAMENTO PIX -->
+    <!-- RASTREAR OS -->
     <section id="rastrear-os" class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-800/80">
       <div class="glass-card rounded-2xl p-6 sm:p-8 border border-cyan-500/25">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -201,22 +192,18 @@
           </div>
           <form onsubmit="handleCustomerTrackSubmit(event)" class="flex w-full md:w-auto gap-2">
             <input id="customer-os-search" type="text" placeholder="Ex: OS-2026-101" class="flex-1 md:w-56 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm uppercase focus:outline-none focus:border-cyan-400" />
-            <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
-              Consultar
-            </button>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Consultar</button>
           </form>
         </div>
-
         <div id="customer-os-result" class="mt-4"></div>
       </div>
     </section>
 
-    <!-- SOLICITAÇÃO DE ORÇAMENTO -->
+    <!-- ORÇAMENTO -->
     <section id="orcamento" class="max-w-4xl mx-auto px-4 py-12 border-t border-slate-800/80">
       <div class="glass-card rounded-2xl p-6 sm:p-8">
         <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Pré-Atendimento Rápido</span>
         <h2 class="text-2xl font-extrabold text-white mt-1 mb-6">Solicitar Orçamento via WhatsApp</h2>
-
         <form id="quote-form" onsubmit="handleQuoteSubmit(event)" class="grid sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">Seu Nome *</label>
@@ -242,9 +229,7 @@
           </div>
           <div class="sm:col-span-2 flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
             <span id="quote-protocol-preview" class="text-xs text-slate-400">Protocolo gerado automaticamente ao enviar.</span>
-            <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition shadow-lg shadow-emerald-500/20">
-              Enviar para WhatsApp LABTECH_MSI
-            </button>
+            <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition shadow-lg shadow-emerald-500/20">Enviar para WhatsApp LABTECH_MSI</button>
           </div>
         </form>
       </div>
@@ -252,8 +237,9 @@
 
   </main>
 
-  <!-- ==================== MODO BANCADA & DASHBOARD ==================== -->
+  <!-- ==================== MODO BANCADA ==================== -->
   <section id="bench-app-view" class="hidden flex-1 max-w-7xl mx-auto w-full px-4 py-8">
+    <!-- Cabeçalho da bancada -->
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
       <div>
         <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Área Restrita • ERP, BI & Tech Lab na Nuvem</span>
@@ -261,73 +247,39 @@
         <p id="bench-user-email" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
       <div class="flex flex-wrap items-center gap-2">
-        <button type="button" onclick="openPixConfigModal()" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition">
-          💠 Configurar PIX (CPF / Chave)
-        </button>
-        <button type="button" onclick="refreshAllBenchData()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition">
-          🔄 Atualizar
-        </button>
-        <button type="button" onclick="logoutBench()" class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold transition">
-          Sair
-        </button>
+        <button type="button" onclick="openPixConfigModal()" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition">💠 Configurar PIX (CPF / Chave)</button>
+        <button type="button" onclick="refreshAllBenchData()" class="px-3 py-2 rounded-xl bg-slateDark-800 hover:bg-slateDark-700 border border-slate-700 text-slate-300 text-xs font-semibold transition">🔄 Atualizar</button>
+        <button type="button" onclick="logoutBench()" class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-bold transition">Sair</button>
       </div>
     </div>
 
-    <!-- ABAS DO DASHBOARD -->
+    <!-- ==================== ABAS (cada uma IRMÃ, não aninhada) ==================== -->
     <div class="flex flex-wrap gap-2 mb-6">
-      <button type="button" id="tab-btn-overview" onclick="switchBenchTab('overview')" class="bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition">
-        📊 Visão Geral & BI
-      </button>
-      <button type="button" id="tab-btn-orders" onclick="switchBenchTab('orders')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🛠️ Ordens de Serviço (OS)
-      </button>
-      <button type="button" id="tab-btn-trade" onclick="switchBenchTab('trade')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🛒 Compras, Vendas & Store
-      </button>
-      <button type="button" id="tab-btn-knowledge" onclick="switchBenchTab('knowledge')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🧠 Base de Defeitos
-      </button>
-      <button type="button" id="tab-btn-techlab" onclick="switchBenchTab('techlab')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🔓 Desbloqueios, Películas & Benchmark
-      </button>
-      <button type="button" id="tab-btn-finance" onclick="switchBenchTab('finance')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        💰 Caixa & Peças
-      </button>
-      <button type="button" id="tab-btn-catalog" onclick="switchBenchTab('catalog')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        📋 Catálogo
-      </button>
-      <button type="button" id="tab-btn-returns" onclick="switchBenchTab('returns')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🔄 Retornos & Garantia
-      </button>
-      <button type="button" id="tab-btn-drive" onclick="switchBenchTab('drive')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        ☁️ Acervo Drive (5TB)
-      </button>
-      <button type="button" id="tab-btn-courses" onclick="switchBenchTab('courses')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">
-        🎓 Meus Cursos
-      </button>
-      <button type="button" id="tab-btn-ailab" onclick="switchBenchTab('ailab')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
-        🧠 Bancada IA, YouTube & Recibos
-      </button>
-      <button type="button" id="tab-btn-checklists" onclick="switchBenchTab('checklists')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">
-        ✅ Checklists & Bancada
-      </button>
-      <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
-        🚀 Investimentos & Metas
-      </button>
-      <button type="button" id="tab-btn-suppliers" onclick="switchBenchTab('suppliers')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
-        🏪 Fornecedores & Cotação
-      </button>
+      <button type="button" id="tab-btn-overview"    onclick="switchBenchTab('overview')"    class="bench-tab-btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition">📊 Visão Geral & BI</button>
+      <button type="button" id="tab-btn-orders"      onclick="switchBenchTab('orders')"      class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🛠️ Ordens de Serviço (OS)</button>
+      <button type="button" id="tab-btn-trade"       onclick="switchBenchTab('trade')"       class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🛒 Compras, Vendas & Store</button>
+      <button type="button" id="tab-btn-knowledge"   onclick="switchBenchTab('knowledge')"   class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🧠 Base de Defeitos</button>
+      <button type="button" id="tab-btn-techlab"     onclick="switchBenchTab('techlab')"     class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🔓 Desbloqueios, Películas & Benchmark</button>
+      <button type="button" id="tab-btn-finance"     onclick="switchBenchTab('finance')"     class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">💰 Caixa & Peças</button>
+      <button type="button" id="tab-btn-catalog"     onclick="switchBenchTab('catalog')"     class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">📋 Catálogo</button>
+      <button type="button" id="tab-btn-returns"     onclick="switchBenchTab('returns')"     class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🔄 Retornos & Garantia</button>
+      <button type="button" id="tab-btn-drive"       onclick="switchBenchTab('drive')"       class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">☁️ Acervo Drive (5TB)</button>
+      <button type="button" id="tab-btn-courses"     onclick="switchBenchTab('courses')"     class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🎓 Meus Cursos</button>
+      <button type="button" id="tab-btn-ailab"       onclick="switchBenchTab('ailab')"       class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">🧠 Bancada IA, YouTube & Recibos</button>
+      <button type="button" id="tab-btn-checklists"  onclick="switchBenchTab('checklists')"  class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">✅ Checklists & Bancada</button>
+      <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🚀 Investimentos & Metas</button>
+      <button type="button" id="tab-btn-suppliers"   onclick="switchBenchTab('suppliers')"   class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🏪 Fornecedores & Cotação</button>
     </div>
 
-    <!-- BARRA DE NAVEGAÇÃO POR 5 SETORES (Corrigido: fechamento de div) -->
+    <!-- Barra de setores -->
     <div class="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-slateDark-950/90 border border-slate-800 mb-6">
       <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mr-1">Setores:</span>
-      <button type="button" onclick="selectSector('all')" class="sector-pill px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-bold text-xs">🌐 Todos</button>
-      <button type="button" onclick="selectSector('celular')" class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">📱 Celular</button>
+      <button type="button" onclick="selectSector('all')"         class="sector-pill px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-bold text-xs">🌐 Todos</button>
+      <button type="button" onclick="selectSector('celular')"     class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">📱 Celular</button>
       <button type="button" onclick="selectSector('informatica')" class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💻 Informática</button>
-      <button type="button" onclick="selectSector('software')" class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💿 Software</button>
-      <button type="button" onclick="selectSector('reparos')" class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">🔧 Reparos & Checklists</button>
-      <button type="button" onclick="selectSector('gestao')" class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💼 Gestão & Financeiro</button>
+      <button type="button" onclick="selectSector('software')"    class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💿 Software</button>
+      <button type="button" onclick="selectSector('reparos')"     class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">🔧 Reparos & Checklists</button>
+      <button type="button" onclick="selectSector('gestao')"      class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💼 Gestão & Financeiro</button>
     </div>
 
     <!-- ============================================================
@@ -348,4 +300,1192 @@
               <span class="flex items-center gap-1 text-rose-300"><span class="w-2.5 h-2.5 rounded-sm bg-rose-400"></span> Saídas</span>
             </div>
           </div>
-          <div id="bench-monthly-chart" class="grid grid-cols-12 gap-1.5 items-end h-48 pt-4 border-b border
+          <div id="bench-monthly-chart" class="grid grid-cols-12 gap-1.5 items-end h-48 pt-4 border-b border-slate-800 pb-2"></div>
+          <div id="bench-monthly-summary" class="mt-3 flex flex-wrap justify-between text-xs text-slate-400"></div>
+        </div>
+
+        <div class="lg:col-span-4 glass-card rounded-2xl p-6 flex flex-col items-center justify-between text-center">
+          <div class="w-full text-left">
+            <h3 class="font-bold text-white">Serviços Solucionados</h3>
+            <p class="text-xs text-slate-400">Taxa de conclusão da bancada</p>
+          </div>
+          <div id="bench-solved-donut" class="my-4"></div>
+          <div id="bench-solved-legend" class="w-full space-y-2 text-xs"></div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="font-bold text-white text-lg">Fluxo da Bancada: Entrada • Diagnóstico • Orçamento</h3>
+            <p class="text-xs text-slate-400">Acompanhamento rápido dos aparelhos nas etapas iniciais de triagem e aprovação</p>
+          </div>
+          <button type="button" onclick="switchBenchTab('orders')" class="text-xs text-cyan-400 hover:underline font-semibold">Ver todas as OS →</button>
+        </div>
+        <div id="bench-pipeline-columns" class="grid md:grid-cols-3 gap-4"></div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white mb-4">Distribuição por Equipamento</h3>
+          <div id="bench-device-chart" class="space-y-3"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white mb-4">Indicadores Operacionais & Estoque</h3>
+          <div id="bench-operational-metrics" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: ORDENS DE SERVIÇO
+         ============================================================ -->
+    <div id="bench-tab-orders" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="bench-form-title" class="font-bold text-white text-lg">Nova Ordem de Serviço (Check-in)</h3>
+          <button type="button" onclick="resetBenchForm()" class="text-xs text-cyan-400 hover:underline">Limpar / Nova OS</button>
+        </div>
+        <form id="bench-os-form" onsubmit="handleBenchOsSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <input type="hidden" id="os-edit-id" />
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nº OS</label>
+            <input id="os-number" type="text" readonly class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 font-mono text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nome do Cliente *</label>
+            <input id="os-client" type="text" required placeholder="Nome completo" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">WhatsApp Cliente *</label>
+            <input id="os-phone" type="text" required placeholder="84999990000" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+            <select id="os-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Placa de Vídeo">Placa de Vídeo</option>
+              <option value="Console">Console</option>
+              <option value="Desktop / PC">Desktop / PC</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Equipamento / Modelo *</label>
+            <input id="os-model" type="text" required placeholder="Ex: Dell Inspiron 15 3520" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Status *</label>
+            <select id="os-status" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Entrada">Entrada</option>
+              <option value="Em Análise">Em Análise (Diagnóstico)</option>
+              <option value="Orçamento Enviado">Orçamento Enviado</option>
+              <option value="Em Reparo">Em Reparo</option>
+              <option value="Pronto">Pronto</option>
+              <option value="Entregue">Entregue</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor (R$)</label>
+            <input id="os-price" type="number" step="0.01" min="0" value="0" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Defeito Relatado *</label>
+            <input id="os-issue" type="text" required placeholder="Ex: Não liga, sem vídeo..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Laudo Técnico / Serviço Executado</label>
+            <input id="os-diagnosis" type="text" placeholder="Ex: Troca de CI PWM e limpeza ultrassônica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+
+          <!-- Calculadora de orçamento -->
+          <div class="sm:col-span-2 lg:col-span-4 p-4 rounded-2xl bg-slateDark-950/90 border border-cyan-500/30 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-400">🧮 Calculadora de Orçamento & Lucro Líquido (Pós-Diagnóstico)</h4>
+              <span id="os-profit-badge" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-extrabold">Lucro Líquido: R$ 0,00</span>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-1">Peça do Estoque (Opcional)</label>
+                <select id="os-part-select" onchange="onOsPartChange()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs">
+                  <option value="">-- Sem peça / Avulso --</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-1">Custo da Peça (R$)</label>
+                <input id="os-part-cost" type="number" step="0.01" min="0" value="0" oninput="recalcOsBudget()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-rose-300 text-xs" />
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-1">Transporte / Frete (R$)</label>
+                <input id="os-transport-cost" type="number" step="0.01" min="0" value="0" oninput="recalcOsBudget()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-amber-300 text-xs" />
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-1">Mão de Obra (R$)</label>
+                <input id="os-labor-value" type="number" step="0.01" min="0" value="0" oninput="recalcOsBudget()" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-cyan-300 text-xs" />
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-1">Link Fotos/Vídeo</label>
+                <input id="os-media-url" type="url" placeholder="https://drive.google.com/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs" />
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end gap-2 pt-2">
+            <button id="save-os-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar Ordem de Serviço na Nuvem</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="bench-orders-list" class="grid md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- ============================================================
+         ABA: COMPRAS, VENDAS & STORE
+         ============================================================ -->
+    <div id="bench-tab-trade" class="bench-tab-content hidden space-y-6">
+      <div id="trade-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <!-- Cadastro de produto (IDs com prefixo PROD-) -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-lg mb-4">📦 Cadastrar Produto / Peça (Estoque & Store)</h3>
+          <form onsubmit="handleInventoryCreate(event)" class="grid sm:grid-cols-2 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Nome da Peça / Produto *</label>
+              <input id="prod-name" type="text" required placeholder="Ex: SSD NVMe 256GB / Carregador Tipo-C 65W" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+              <select id="prod-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="Acessório">Acessório</option>
+                <option value="Hardware / Upgrade">Hardware / Upgrade</option>
+                <option value="Peça Reparo">Peça de Reparo</option>
+                <option value="Insumo Bancada">Insumo Bancada</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Qtd. em Estoque *</label>
+              <input id="prod-qty" type="number" min="0" value="1" required class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Preço de Custo (R$) *</label>
+              <input id="prod-cost" type="number" step="0.01" min="0" required placeholder="80.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Preço de Venda (R$) *</label>
+              <input id="prod-sell" type="number" step="0.01" min="0" required placeholder="150.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Exibir na LABTECH Store?</label>
+              <select id="prod-show-store" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="true">🛍️ Sim — Vitrine Pública</option>
+                <option value="false">🔒 Não — Uso Interno Bancada</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2 p-3 rounded-xl bg-slateDark-950/70 border border-slate-700/80 space-y-2">
+              <label class="block text-xs text-slate-300 font-semibold">📸 Foto do Produto (Galeria / Câmera / PC ou Link)</label>
+              <div class="flex flex-wrap items-center gap-3">
+                <label class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">
+                  📁 Escolher Foto
+                  <input id="prod-image-file" type="file" accept="image/*" onchange="processProductImageFile(event)" class="hidden" />
+                </label>
+                <input id="prod-image-url-helper" type="url" oninput="syncProductImageUrl(this.value)" placeholder="Ou cole um link https://..." class="flex-1 min-w-[180px] px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+                <button type="button" id="prod-image-clear-btn" onclick="clearProductImagePreview()" class="hidden px-2.5 py-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 text-xs font-bold">✕ Limpar</button>
+              </div>
+              <input id="prod-image" type="hidden" />
+              <div id="prod-image-preview-box" class="hidden pt-2 flex items-center gap-3">
+                <img id="prod-image-preview" src="" alt="Pré-visualização" class="w-16 h-16 object-cover rounded-lg border border-cyan-500/40 bg-slateDark-900" />
+                <span id="prod-image-status" class="text-[11px] text-emerald-400">Imagem pronta para salvar!</span>
+              </div>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Descrição Curta para o Cliente (Opcional)</label>
+              <input id="prod-desc" type="text" placeholder="Ex: Garantia de 90 dias, alta velocidade." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2 flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar Produto no Estoque</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Registrar compra/venda -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-lg mb-4">💳 Registrar Compra ou Venda</h3>
+          <form onsubmit="handleTradeOperation(event)" class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Tipo de Operação *</label>
+              <select id="trade-type" onchange="syncTradeDefaultPrice()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="venda">🟢 Venda (Saída Estoque + Entrada Caixa)</option>
+                <option value="compra">🔴 Compra (Entrada Estoque + Saída Caixa)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Item do Estoque (Opcional)</label>
+              <select id="trade-item-select" onchange="syncTradeDefaultPrice()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="">-- Item avulso / digitar nome --</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Descrição do Item *</label>
+              <input id="trade-item-name" type="text" required placeholder="Ex: Carregador Notebook Lenovo 65W" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Quantidade *</label>
+              <input id="trade-qty" type="number" min="1" value="1" required class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Valor Unitário (R$) *</label>
+              <input id="trade-unit-price" type="number" step="0.01" min="0.01" required placeholder="120.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-slate-400 mb-1">Observação / Cliente / Fornecedor</label>
+              <input id="trade-notes" type="text" placeholder="Ex: Venda balcão PIX / Compra fornecedor Natal" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2 flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">Confirmar Operação</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h3 class="font-bold text-white text-base">📦 Estoque & Controle da Vitrine Store</h3>
+          <div id="bench-inventory-list" class="space-y-2.5"></div>
+        </div>
+        <div class="glass-card rounded-2xl p-6 space-y-3">
+          <h3 class="font-bold text-white text-base">🧾 Histórico de Compras & Vendas</h3>
+          <div id="bench-trade-history-list" class="space-y-2.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: BASE DE DEFEITOS
+         ============================================================ -->
+    <div id="bench-tab-knowledge" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border border-cyan-500/20">
+        <div class="mb-4">
+          <h3 class="font-bold text-white text-lg">🧠 Registrar Defeito & Solução na Base Técnica</h3>
+          <p class="text-xs text-slate-400">Guarde medições, componentes em curto, reballing e soluções para consultas futuras.</p>
+        </div>
+        <form onsubmit="handleKnowledgeSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+            <select id="kb-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Placa de Vídeo">Placa de Vídeo</option>
+              <option value="Console">Console</option>
+              <option value="Desktop / PC">Desktop / PC</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Modelo / Placa *</label>
+            <input id="kb-model" type="text" required placeholder="Ex: Samsung NP300V4A / iPhone 13 Pro" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Sintoma *</label>
+            <input id="kb-symptom" type="text" required placeholder="Ex: Consumo 0.04A, sem imagem" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Componente / Linha</label>
+            <input id="kb-component" type="text" placeholder="Ex: MOSFET AON7410 / PPBUS_G3H" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4">
+            <label class="block text-xs text-slate-400 mb-1">Diagnóstico & Solução *</label>
+            <textarea id="kb-solution" rows="2" required placeholder="Descreva os testes, tensões e procedimento..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm"></textarea>
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+            <button id="save-kb-btn" type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar na Base de Conhecimento</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <input id="kb-search-input" oninput="renderKnowledgeList()" type="text" placeholder="🔍 Pesquisar por placa, modelo, sintoma, CI ou linha..." class="w-full sm:flex-1 px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan-400" />
+        <select id="kb-filter-category" onchange="renderKnowledgeList()" class="w-full sm:w-48 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+          <option value="">Todas as Categorias</option>
+          <option value="Notebook">Notebook</option>
+          <option value="Smartphone">Smartphone</option>
+          <option value="Placa de Vídeo">Placa de Vídeo</option>
+          <option value="Console">Console</option>
+          <option value="Desktop / PC">Desktop / PC</option>
+        </select>
+      </div>
+
+      <div id="bench-knowledge-list" class="grid md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- ============================================================
+         ABA: TECH LAB (Desbloqueios / Películas / Benchmark)
+         ============================================================ -->
+    <div id="bench-tab-techlab" class="bench-tab-content hidden space-y-6">
+      <div class="flex flex-wrap gap-2">
+        <button type="button" id="subtab-btn-unlocks"    onclick="switchTechSubTab('unlocks')"    class="tech-sub-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition">🔓 Central de Desbloqueios (FRP / Mi / BIOS)</button>
+        <button type="button" id="subtab-btn-protectors" onclick="switchTechSubTab('protectors')" class="tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">🛡️ Compatibilidade de Películas 3D</button>
+        <button type="button" id="subtab-btn-benchmark"  onclick="switchTechSubTab('benchmark')"  class="tech-sub-btn px-4 py-2 rounded-xl bg-slateDark-800 text-slate-300 font-semibold text-xs transition">⚡ Comparador de Processadores</button>
+      </div>
+
+      <!-- Sub: Desbloqueios -->
+      <div id="techlab-sub-unlocks" class="space-y-6">
+        <div class="glass-card rounded-2xl p-6 border border-amber-500/25">
+          <h3 class="font-bold text-white text-base mb-1">🔗 Atalhos Rápidos de Bancada & FRP</h3>
+          <p class="text-xs text-slate-400 mb-4">Ferramentas e portais de apoio.</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-bold">
+            <a href="https://vnrom.net/bypass/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-amber-400/50 border border-slate-800 text-amber-300 text-center transition">🌐 vnROM Bypass APK</a>
+            <a href="https://samfw.com/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-cyan-400/50 border border-slate-800 text-cyan-300 text-center transition">📱 SamFW / Firmwares</a>
+            <a href="https://www.imei.info/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-emerald-400/50 border border-slate-800 text-emerald-300 text-center transition">🔍 Consulta IMEI</a>
+            <a href="https://www.hardreset.info/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-slateDark-950 hover:border-purple-400/50 border border-slate-800 text-purple-300 text-center transition">🔄 HardReset & Modo EDL</a>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-lg mb-4">📝 Salvar Método de Desbloqueio Resolvido</h3>
+          <form onsubmit="handleUnlockSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Marca *</label>
+              <select id="ul-brand" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="Samsung">Samsung</option>
+                <option value="Motorola">Motorola</option>
+                <option value="Xiaomi / Redmi">Xiaomi / Redmi</option>
+                <option value="Apple / iPhone">Apple / iPhone</option>
+                <option value="Realme / Oppo / Infinix">Realme / Oppo / Infinix</option>
+                <option value="Notebook / BIOS">Notebook / BIOS</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Modelo & Patch / Android *</label>
+              <input id="ul-model" type="text" required placeholder="Ex: Galaxy A14 (SM-A145M) Android 14" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Tipo de Bloqueio *</label>
+              <select id="ul-type" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+                <option value="FRP / Conta Google">FRP / Conta Google</option>
+                <option value="Mi Cloud / Conta Mi">Mi Cloud / Conta Mi</option>
+                <option value="MDM / PayJoy / Knox">MDM / PayJoy / Knox</option>
+                <option value="iCloud / Passcode">iCloud / Passcode</option>
+                <option value="Senha BIOS / Computrace">Senha BIOS / Computrace</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Ferramenta / Cabo</label>
+              <input id="ul-tool" type="text" placeholder="Ex: SamFW Tool / Test Point" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-2 lg:col-span-4">
+              <label class="block text-xs text-slate-400 mb-1">Passo a Passo *</label>
+              <textarea id="ul-method" rows="2" required placeholder="Procedimento..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm"></textarea>
+            </div>
+            <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition">Salvar Procedimento</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <input id="ul-search-input" oninput="renderUnlockList()" type="text" placeholder="🔍 Filtrar desbloqueios..." class="w-full px-4 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-400" />
+        </div>
+        <div id="bench-unlocks-list" class="grid md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- Sub: Películas -->
+      <div id="techlab-sub-protectors" class="hidden space-y-6">
+        <div class="glass-card rounded-2xl p-6 border border-cyan-500/25">
+          <h3 class="font-bold text-white text-lg mb-1">🛡️ Compatibilidade de Películas 3D / Cerâmica</h3>
+          <p class="text-xs text-slate-400 mb-4">Pesquise o modelo do cliente para encontrar películas equivalentes.</p>
+          <input id="sp-search-input" oninput="renderProtectorList()" type="text" placeholder="🔍 Digite qualquer modelo (Ex: Moto G22, Redmi Note 12...)" class="w-full px-4 py-3 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white text-sm focus:outline-none" />
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-bold text-white text-base mb-4">+ Adicionar Nova Equivalência</h3>
+          <form onsubmit="handleProtectorSubmit(event)" class="grid sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Modelo Principal *</label>
+              <input id="sp-primary" type="text" required placeholder="Ex: Moto G22" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Modelos Compatíveis *</label>
+              <input id="sp-compat" type="text" required placeholder="Ex: Moto E22 / Moto E32" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Observação</label>
+              <input id="sp-notes" type="text" placeholder="Ex: Furo centralizado" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+            </div>
+            <div class="sm:col-span-3 flex justify-end">
+              <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">Salvar Compatibilidade</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="bench-protectors-list" class="grid md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- Sub: Benchmark (SELETORES A/B AQUI, no lugar certo) -->
+      <div id="techlab-sub-benchmark" class="hidden space-y-6">
+        <div class="glass-card rounded-2xl p-6 border border-purple-500/25 space-y-5">
+          <div>
+            <h3 class="font-bold text-white text-lg">⚡ Comparador de Aparelhos & Benchmark</h3>
+            <p class="text-xs text-slate-400">Compare dois chips ou aparelhos lado a lado.</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-cyan-400 mb-1.5">Equipamento / Processador A</label>
+              <select id="bench-comp-a" onchange="renderProcessorComparison()" class="w-full px-3.5 py-2.5 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white text-sm"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-purple-400 mb-1.5">Equipamento / Processador B</label>
+              <select id="bench-comp-b" onchange="renderProcessorComparison()" class="w-full px-3.5 py-2.5 rounded-xl bg-slateDark-950 border border-purple-500/40 text-white text-sm"></select>
+            </div>
+          </div>
+          <div id="processor-comparison-result" class="pt-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: FINANCEIRO
+         ============================================================ -->
+    <div id="bench-tab-finance" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border border-emerald-500/30 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-white text-lg">📊 Gráfico Financeiro: Entradas vs. Saídas</h3>
+            <p class="text-xs text-slate-400">Comparativo visual automático entre contas.</p>
+          </div>
+          <span id="fin-chart-balance-badge" class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs">Saldo Projetado: R$ 0,00</span>
+        </div>
+        <div id="fin-visual-chart" class="space-y-3 pt-2"></div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 border border-amber-500/30 space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-white text-lg">🎯 Simulador de Faturamento & Plano de Ação</h3>
+            <p class="text-xs text-slate-400">Defina sua meta e marque as ações para simular como bater o objetivo.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-xs text-slate-300 font-bold">Meta do Mês (R$):</label>
+            <input id="goal-target-input" type="number" step="100" value="5000" oninput="recalcGoalSimulator()" class="w-32 px-3 py-2 rounded-xl bg-slateDark-950 border border-amber-500/50 text-amber-300 font-extrabold text-sm text-right" />
+            <button type="button" onclick="saveGoalSimulation()" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">💾 Salvar Plano</button>
+          </div>
+        </div>
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-2">
+          <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+            <span class="text-slate-300">Simulado na Checklist: <strong id="goal-simulated-total" class="text-emerald-400 text-sm">R$ 0,00</strong></span>
+            <span id="goal-status-text" class="font-bold text-amber-300">Faltam R$ 5.000,00 (0%)</span>
+          </div>
+          <div class="w-full h-3.5 rounded-full bg-slate-800 overflow-hidden">
+            <div id="goal-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                <th class="py-2.5 px-2">Ativo</th>
+                <th class="py-2.5 px-2">Frente / Estratégia</th>
+                <th class="py-2.5 px-2">Ação Prática</th>
+                <th class="py-2.5 px-2 text-center">Qtd. Mês</th>
+                <th class="py-2.5 px-2 text-right">Ticket Médio (R$)</th>
+                <th class="py-2.5 px-2 text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="goal-checklist-tbody" class="divide-y divide-slate-800/70"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-white text-lg mb-4">Novo Lançamento Financeiro Manual</h3>
+        <form onsubmit="handleFinanceSubmit(event)" class="grid sm:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Tipo</label>
+            <select id="fin-type" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="entrada">Entrada (Receita)</option>
+              <option value="saida">Saída (Peça / Custo)</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Descrição *</label>
+            <input id="fin-desc" type="text" required placeholder="Ex: Energia / Internet / Serviço avulso" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor (R$) *</label>
+            <input id="fin-amount" type="number" step="0.01" min="0.01" required placeholder="150.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-4 flex justify-end">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">Registrar Lançamento</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="bench-finance-list" class="glass-card rounded-2xl p-6 space-y-3"></div>
+    </div>
+
+    <!-- ============================================================
+         ABA: CATÁLOGO DE SERVIÇOS
+         ============================================================ -->
+    <div id="bench-tab-catalog" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-white text-lg mb-4">Adicionar Serviço Padrão</h3>
+        <form onsubmit="handleCatalogSubmit(event)" class="grid sm:grid-cols-4 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Nome do Serviço *</label>
+            <input id="cat-name" type="text" required placeholder="Ex: Limpeza Completa + Pasta Térmica" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+            <select id="cat-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Notebook">Notebook</option>
+              <option value="Smartphone">Smartphone</option>
+              <option value="Placa de Vídeo">Placa de Vídeo</option>
+              <option value="Console">Console</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor Base (R$) *</label>
+            <input id="cat-price" type="number" step="0.01" min="0" required placeholder="120.00" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-4 flex justify-end">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar no Catálogo</button>
+          </div>
+        </form>
+      </div>
+      <div id="bench-catalog-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+
+    <!-- ============================================================
+         ABA: RETORNOS & GARANTIA
+         ============================================================ -->
+    <div id="bench-tab-returns" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-white text-lg mb-4">🔄 Registrar Retorno / Garantia (90 Dias)</h3>
+        <form onsubmit="handleReturnSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nº da OS Original *</label>
+            <input id="ret-order-id" type="text" required placeholder="Ex: OS-2026-001" onblur="autofillReturnFromOs()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 font-mono text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Cliente *</label>
+            <input id="ret-client" type="text" required placeholder="Nome do cliente" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Equipamento / Modelo *</label>
+            <input id="ret-device" type="text" required placeholder="Modelo do aparelho" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Custo Extra (R$)</label>
+            <input id="ret-extra-cost" type="number" step="0.01" min="0" value="0" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-rose-300 text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Motivo do Retorno *</label>
+            <input id="ret-reason" type="text" required placeholder="Ex: Voltou a desligar após 15 dias..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Diagnóstico Técnico</label>
+            <input id="ret-findings" type="text" placeholder="Ex: Solda fria no PWM / Peça com defeito" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition">Registrar Retorno na Garantia</button>
+          </div>
+        </form>
+      </div>
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <h3 class="font-bold text-white text-base">📋 Histórico de Retornos & Garantias</h3>
+        <div id="bench-returns-list" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: ACERVO GOOGLE DRIVE
+         ============================================================ -->
+    <div id="bench-tab-drive" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-bold text-white text-lg mb-4">☁️ Indexar Arquivo / Pasta do Google Drive (5TB)</h3>
+        <form onsubmit="handleDriveSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+            <select id="drv-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Esquema Elétrico">Esquema Elétrico</option>
+              <option value="Boardview">Boardview</option>
+              <option value="BIOS / Dump">BIOS / Dump</option>
+              <option value="Curso / Apostila">Curso / Apostila</option>
+              <option value="Ferramenta / Software">Ferramenta / Software</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Marca / Placa / Modelo *</label>
+            <input id="drv-model" type="text" required placeholder="Ex: Dell LA-B012P / iPhone 11" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Título do Arquivo / Pasta *</label>
+            <input id="drv-title" type="text" required placeholder="Ex: Esquema + Boardview Completo" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Link Direto do Google Drive *</label>
+            <input id="drv-url" type="url" required placeholder="https://drive.google.com/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Observações Técnicas</label>
+            <input id="drv-notes" type="text" placeholder="Ex: Senha do ZIP: labtech" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-4 flex justify-end">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">Salvar Link no Acervo</button>
+          </div>
+        </form>
+      </div>
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h3 class="font-bold text-white text-base">🗂️ Biblioteca Técnica LABTECH_MSI</h3>
+          <input id="drv-search" type="text" oninput="renderDriveArchive()" placeholder="Buscar placa, modelo, BIOS..." class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs w-64" />
+        </div>
+        <div id="bench-drive-list" class="grid md:grid-cols-2 gap-4"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: MEUS CURSOS
+         ============================================================ -->
+    <div id="bench-tab-courses" class="bench-tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="font-bold text-white text-lg">🎓 Central de Cursos & Aulas Online</h3>
+            <p class="text-xs text-slate-400">Salve links diretos das suas aulas (Hotmart, Kiwify, CTCASB).</p>
+          </div>
+        </div>
+        <form onsubmit="handleCourseSubmit(event)" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Plataforma *</label>
+            <select id="crs-platform" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="Hotmart">🔥 Hotmart</option>
+              <option value="Kiwify">🥝 Kiwify</option>
+              <option value="CTCASB">🛠️ CTCASB</option>
+              <option value="Google Drive / YouTube">☁️ Google Drive / YouTube</option>
+              <option value="Outra Plataforma">🌐 Outra Plataforma</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Nome do Curso *</label>
+            <input id="crs-title" type="text" required placeholder="Ex: Reparo de Placas Notebook Avançado" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Link da Área de Membros / Aula *</label>
+            <input id="crs-url" type="url" required placeholder="https://go.hotmart.com/..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-cyan-300 text-sm" />
+          </div>
+          <div class="sm:col-span-3">
+            <label class="block text-xs text-slate-400 mb-1">Módulo Atual / Anotações</label>
+            <input id="crs-notes" type="text" placeholder="Ex: Parei na Aula 12 / Login: email" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm" />
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="w-full px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition">+ Adicionar Curso</button>
+          </div>
+        </form>
+      </div>
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h3 class="font-bold text-white text-base">📚 Meus Cursos Salvos</h3>
+          <input id="crs-search" type="text" oninput="renderCoursesList()" placeholder="Filtrar curso, plataforma..." class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs w-64" />
+        </div>
+        <div id="bench-courses-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: BANCADA IA, YOUTUBE & RECIBOS
+         ============================================================ -->
+    <div id="bench-tab-ailab" class="bench-tab-content hidden space-y-6">
+
+      <!-- Bloco A: Recibo -->
+      <div class="glass-card rounded-2xl p-6 border border-emerald-500/30 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-white text-lg">🧾 Emitir Recibo & Termo de Garantia (90 Dias)</h3>
+            <p class="text-xs text-slate-400">Selecione uma OS cadastrada para gerar o comprovante em PDF.</p>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-3 items-end">
+          <div class="md:col-span-2">
+            <label class="block text-xs text-slate-400 mb-1">Selecione a Ordem de Serviço</label>
+            <select id="receipt-os-select" class="w-full px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-sm">
+              <option value="">Carregando ordens de serviço...</option>
+            </select>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" onclick="generateOSReceiptPDF()" class="flex-1 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">🖨️ Gerar Recibo / PDF</button>
+            <button type="button" onclick="sendOSReceiptWhatsApp()" class="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">📲 WhatsApp</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloco B: YouTube Library -->
+      <div class="glass-card rounded-2xl p-6 border border-rose-500/30 space-y-5">
+        <div>
+          <h3 class="font-bold text-white text-lg">📺 Biblioteca de Defeitos Solucionados (YouTube → Bancada)</h3>
+          <p class="text-xs text-slate-400">Transforme aulas longas em fichas técnicas pesquisáveis.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-white font-extrabold text-xs">PASSO 1</span>
+            <span class="text-sm font-bold text-white">Cole o link da aula e copie o comando pronto para a IA</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input id="yt-source-url" type="url" placeholder="https://www.youtube.com/watch?v=..." class="flex-1 min-w-[240px] px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-cyan-300 text-xs" />
+            <button type="button" onclick="copyYouTubeExtractionPrompt()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition">📋 Copiar Comando Pronto</button>
+          </div>
+          <p id="yt-copy-feedback" class="hidden text-[11px] text-emerald-400 font-semibold">✅ Comando copiado! Cole no Gemini/ChatGPT.</p>
+        </div>
+        <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs">PASSO 2</span>
+            <span class="text-sm font-bold text-white">Cole o resumo gerado pela IA</span>
+          </div>
+          <textarea id="yt-ai-bulk-text" rows="4" placeholder="PLACA: ... | SINTOMA: ... | MINUTO: 14:25 | SOLUCAO: ..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs font-mono"></textarea>
+          <div class="flex justify-end">
+            <button type="button" onclick="saveParsedYouTubeDefects()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">⚡ Extrair & Salvar Todos</button>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-xs">PASSO 3</span>
+              <span class="text-sm font-bold text-white">Pesquisar Solução na Bancada</span>
+            </div>
+            <input id="yt-library-search" type="text" oninput="renderYouTubeLibrary()" placeholder="Filtrar placa, consumo, PMIC..." class="px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs w-72" />
+          </div>
+          <div id="yt-library-list" class="grid md:grid-cols-2 gap-4"></div>
+        </div>
+      </div>
+
+      <!-- Bloco C: IA + PDF -->
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6 border border-cyan-500/30 space-y-4">
+          <h3 class="font-bold text-white text-lg">🤖 Copiloto & Simulador de Bancada IA</h3>
+          <p class="text-xs text-slate-400">Descreva o aparelho e consumo para gerar a árvore de medições.</p>
+          <div class="space-y-3">
+            <input id="diag-board-model" type="text" placeholder="Ex: Notebook Acer Nitro 5 / Samsung A54" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+            <select id="diag-scenario" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+              <option value="no-power">🔌 Não liga / Consumo zero (0.00A)</option>
+              <option value="short-bplus">⚡ Curto total na entrada (19V / VBAT)</option>
+              <option value="low-current">🔋 Consumo baixo travado (0.01A a 0.08A)</option>
+              <option value="no-video">🖥️ Liga, gira cooler, mas sem imagem</option>
+              <option value="no-charge">⚡ Não carrega / Falha USB-C</option>
+            </select>
+            <textarea id="diag-notes" rows="2" placeholder="Detalhes extras..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs"></textarea>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="runBenchDiagnosticSimulation()" class="flex-1 px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">🔬 Simular Sequência</button>
+              <button type="button" onclick="copyDeepAIPrompt()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">🧠 Copiar Prompt p/ IA</button>
+            </div>
+          </div>
+          <div id="diag-simulation-output" class="p-4 rounded-xl bg-slateDark-950 border border-slate-800 text-xs text-slate-300 space-y-2 whitespace-pre-line">Selecione um cenário e clique em "Simular".</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border border-purple-500/30 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="font-bold text-white text-lg">📄 Leitor de Esquemas & Datasheets (PDF)</h3>
+              <p class="text-xs text-slate-400">Abra o PDF do esquema direto na bancada.</p>
+            </div>
+            <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">
+              📂 Abrir PDF Local
+              <input type="file" accept="application/pdf" onchange="loadLocalPDFViewer(event)" class="hidden" />
+            </label>
+          </div>
+          <div class="rounded-xl overflow-hidden border border-slate-700 bg-slateDark-950 h-[430px] flex items-center justify-center">
+            <iframe id="bench-pdf-iframe" src="" class="hidden w-full h-full"></iframe>
+            <p id="bench-pdf-placeholder" class="text-xs text-slate-500 text-center px-6">Clique em <strong>📂 Abrir PDF Local</strong> para visualizar esquemas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloco D: Manual IA -->
+      <div class="glass-card rounded-2xl p-6 border border-indigo-500/30 space-y-4">
+        <div>
+          <h3 class="font-bold text-white text-lg">📚 Absorver Apostila / Manual Técnico (Base IA)</h3>
+          <p class="text-xs text-slate-400">Transforme apostilas em regras consultáveis pelo Copiloto IA.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-indigo-500 text-white font-extrabold text-xs">1º PASSO</span>
+              <span class="text-xs font-bold text-white">Copie o comando e envie junto com o PDF</span>
+            </div>
+            <input id="manual-source-name" type="text" placeholder="Nome da Apostila" class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs" />
+            <button type="button" onclick="copyManualExtractionPrompt()" class="w-full px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">📋 Copiar Comando</button>
+            <p id="manual-copy-feedback" class="hidden text-[11px] text-emerald-400 font-semibold">✅ Comando copiado!</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slateDark-950/90 border border-slate-700 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-xs">2º PASSO</span>
+              <span class="text-xs font-bold text-white">Cole o conhecimento extraído</span>
+            </div>
+            <textarea id="manual-ai-bulk-text" rows="3" placeholder="PLACA: ... | SINTOMA: ... | PASSOS: ..." class="w-full px-3 py-2 rounded-xl bg-slateDark-900 border border-slate-700 text-white text-xs font-mono"></textarea>
+            <button type="button" onclick="saveParsedManualKnowledge()" class="w-full px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">🧠 Absorver & Salvar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloco E: Benchmark externo -->
+      <div class="glass-card rounded-2xl p-6 border border-sky-500/30 space-y-4">
+        <div>
+          <h3 class="font-bold text-white text-lg">📊 Fichas Técnicas & Benchmarks</h3>
+          <p class="text-xs text-slate-400">Digite o modelo e abra diretamente a ficha técnica ou benchmark.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input id="bench-hw-query" type="text" placeholder="Ex: Poco X3 Pro, Ryzen 7 5700X, RTX 4060..." class="flex-1 px-3 py-2.5 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-xs font-bold">
+          <button type="button" onclick="openHwLookup('tudocelular')"   class="px-3 py-2.5 rounded-xl bg-sky-600/20 hover:bg-sky-600/40 border border-sky-500/40 text-sky-300 transition">📱 TudoCelular</button>
+          <button type="button" onclick="openHwLookup('antutu')"       class="px-3 py-2.5 rounded-xl bg-orange-600/20 hover:bg-orange-600/40 border border-orange-500/40 text-orange-300 transition">🔥 AnTuTu</button>
+          <button type="button" onclick="openHwLookup('geekbench')"    class="px-3 py-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/40 text-purple-300 transition">⚡ Geekbench</button>
+          <button type="button" onclick="openHwLookup('cpubenchmark')" class="px-3 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-300 transition">🧠 PassMark CPU</button>
+          <button type="button" onclick="openHwLookup('3dmark')"       class="px-3 py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/40 border border-rose-500/40 text-rose-300 transition">🎮 3DMark</button>
+          <button type="button" onclick="openHwLookup('userbenchmark')" class="px-3 py-2.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/40 border border-cyan-500/40 text-cyan-300 transition">💻 UserBench</button>
+          <button type="button" onclick="openHwLookup('corona')"       class="px-3 py-2.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/40 text-amber-300 transition">☀️ Corona Render</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: CHECKLISTS & BANCADA (agora irmã, não aninhada)
+         ============================================================ -->
+    <div id="bench-tab-checklists" class="bench-tab-content hidden space-y-6">
+      <!-- Bloco 1: Bancada integrada -->
+      <div class="bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-5 mb-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+          <div>
+            <h3 class="text-base font-bold text-white">📋 Bancada Integrada: Inspeção, Fotos & Status</h3>
+            <p class="text-xs text-slate-400">Vincule uma OS para puxar cliente, salvar fotos e notificar no WhatsApp.</p>
+          </div>
+          <span id="chk-linked-badge" class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-bold">Nenhuma OS vinculada</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-cyan-300 mb-1">🔗 Selecionar OS / Cliente:</label>
+            <select id="chk-os-select" onchange="onSelectOSForChecklist()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-semibold">
+              <option value="">-- Selecione uma OS ativa --</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-amber-300 mb-1">📌 Status Atual:</label>
+            <select id="chk-os-status" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg px-3 py-2 text-xs text-amber-300 font-bold">
+              <option value="Orçamento Pendente">⏳ Orçamento Pendente</option>
+              <option value="Orçamento Aprovado">✅ Orçamento Aprovado</option>
+              <option value="Aguardando Peça">📦 Aguardando Peça</option>
+              <option value="Em Bancada / Reparo">🔧 Em Bancada / Reparo</option>
+              <option value="Pronto para Retirada">🎉 Pronto para Retirada</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-emerald-300 mb-1">📱 WhatsApp do Cliente:</label>
+            <input id="chk-client-phone" type="text" placeholder="Ex: 84999999999" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-cyan-300">📸 Foto de Entrada</span>
+              <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold">
+                Capturar / Anexar
+                <input type="file" accept="image/*" capture="environment" onchange="handleBenchPhotoUpload(event, 'entry')" class="hidden" />
+              </label>
+            </div>
+            <div id="preview-photo-entry" class="h-40 rounded-lg bg-slate-950 border border-dashed border-slate-700 flex items-center justify-center text-xs text-slate-500 overflow-hidden">Sem foto de entrada anexada</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-emerald-300">📸 Foto de Saída</span>
+              <label class="cursor-pointer px-2.5 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold">
+                Capturar / Anexar
+                <input type="file" accept="image/*" capture="environment" onchange="handleBenchPhotoUpload(event, 'exit')" class="hidden" />
+              </label>
+            </div>
+            <div id="preview-photo-exit" class="h-40 rounded-lg bg-slate-950 border border-dashed border-slate-700 flex items-center justify-center text-xs text-slate-500 overflow-hidden">Sem foto de saída anexada</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Tipo de Equipamento:</label>
+            <select id="chk-category" onchange="renderDynamicChecklistItems()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+              <option value="Celular">📱 Celular</option>
+              <option value="Informática">💻 Informática / Notebook</option>
+              <option value="Caixa de Som">🔊 Caixa de Som</option>
+              <option value="Smartwatch">⌚ Smartwatch</option>
+              <option value="Console">🎮 Console</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Cliente:</label>
+            <input id="chk-client" type="text" placeholder="Nome do cliente" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Modelo / Aparelho:</label>
+            <input id="chk-model" type="text" placeholder="Ex: Poco X3 Pro" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          </div>
+        </div>
+
+        <div id="chk-items-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Diagnóstico / Laudo Técnico:</label>
+          <textarea id="chk-obs" rows="2" placeholder="Ex: Aparelho deu entrada com tela trincada..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white"></textarea>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-slate-800">
+          <button type="button" onclick="saveIntegratedBenchChecklist(false)" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-extrabold text-xs transition">💾 Salvar Checklist, Fotos & Status</button>
+          <button type="button" onclick="saveIntegratedBenchChecklist(true)" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition">📲 Salvar & Avisar Cliente</button>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 space-y-2">
+          <h4 class="text-xs font-bold uppercase text-slate-400">Últimos Checklists Registrados</h4>
+          <div id="chk-history-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+        </div>
+      </div>
+
+      <!-- Bloco 2: Levantamento físico (IDs com prefixo LEV-) -->
+      <div class="glass-card rounded-2xl p-6 border border-purple-500/30 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="font-bold text-white text-lg">📦 Levantamento de Bancada (Clientes, Loja & Sucatas)</h3>
+            <p class="text-xs text-slate-400">Controle físico completo do que está na bancada.</p>
+          </div>
+          <div id="bench-inv-summary" class="flex flex-wrap gap-2 text-xs font-bold"></div>
+        </div>
+
+        <form onsubmit="saveBenchInventoryItem(event)" class="grid sm:grid-cols-2 lg:grid-cols-6 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Propriedade *</label>
+            <select id="lev-ownership" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs font-bold">
+              <option value="cliente">👤 Aparelho de Cliente</option>
+              <option value="loja">🏪 Aparelho da Loja (Venda)</option>
+              <option value="sucata">♻️ Sucata / Peças</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria *</label>
+            <select id="lev-type" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+              <option value="Smartphone">📱 Smartphone</option>
+              <option value="Notebook / PC">💻 Notebook / PC</option>
+              <option value="Placa Mãe">🔌 Placa-Mãe</option>
+              <option value="Caixa de Som / Watch">🔊 Caixa Som / Watch</option>
+              <option value="Outros">📦 Outros</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Marca / Modelo *</label>
+            <input id="lev-model" type="text" required placeholder="Ex: Moto G22" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">IMEI / Serial / Caixa</label>
+            <input id="lev-box" type="text" placeholder="Ex: Gaveta 02" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Estado / Peças Boas</label>
+            <input id="lev-notes" type="text" placeholder="Ex: Placa boa, sem tela" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Valor Est. (R$)</label>
+            <input id="lev-value" type="number" step="0.01" value="0" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-6 flex justify-between items-center pt-1">
+            <div class="flex gap-1.5 text-xs">
+              <button type="button" onclick="filterBenchInventory('todos')"  class="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-bold">Todos</button>
+              <button type="button" onclick="filterBenchInventory('cliente')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 font-bold">👤 Clientes</button>
+              <button type="button" onclick="filterBenchInventory('loja')"    class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold">🏪 Loja</button>
+              <button type="button" onclick="filterBenchInventory('sucata')"  class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold">♻️ Sucatas</button>
+            </div>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">+ Registrar no Levantamento</button>
+          </div>
+        </form>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                <th class="py-2 px-2">Grupo</th>
+                <th class="py-2 px-2">Tipo</th>
+                <th class="py-2 px-2">Modelo</th>
+                <th class="py-2 px-2">Local / Caixa</th>
+                <th class="py-2 px-2">Estado / Peças</th>
+                <th class="py-2 px-2 text-right">Valor Est.</th>
+                <th class="py-2 px-2 text-right">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="bench-inv-tbody" class="divide-y divide-slate-800/70"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: INVESTIMENTOS & METAS (IDs com prefixo META-)
+         ============================================================ -->
+    <div id="bench-tab-investments" class="bench-tab-content hidden space-y-6">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white">🏪 Fornecedores & Lojas Fixas (Acesso Rápido)</h3>
+            <p class="text-xs text-slate-400">Sites salvos permanentemente.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input id="fav-store-name" type="text" placeholder="Nome da Loja" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" />
+            <input id="fav-store-url"  type="url"  placeholder="https://..." class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" />
+            <button type="button" onclick="addFavoriteStore()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg px-3 py-1.5 text-xs transition">+ Fixar Site</button>
+          </div>
+        </div>
+        <div id="favorite-stores-bar" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white">🚀 Metas de Equipamentos & Bancada</h3>
+            <p class="text-xs text-slate-400">Adicione equipamentos futuros e acompanhe quanto falta investir.</p>
+          </div>
+          <div class="flex gap-3 text-xs">
+            <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
+              <span class="text-slate-400 block">Total Planejado</span>
+              <strong id="inv-total-target" class="text-amber-400 text-sm">R$ 0,00</strong>
+            </div>
+            <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
+              <span class="text-slate-400 block">Já Reservado</span>
+              <strong id="inv-total-saved" class="text-emerald-400 text-sm">R$ 0,00</strong>
+            </div>
+            <div class="bg-slate-800/90 border border-slate-700 px-4 py-2 rounded-xl">
+              <span class="text-slate-400 block">Falta Investir</span>
+              <strong id="inv-total-remaining" class="text-cyan-400 text-sm">R$ 0,00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800 mb-6">
+          <input id="meta-name"     type="text"   placeholder="Equipamento" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <input id="meta-price"    type="number" step="0.01" placeholder="Valor Alvo (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <input id="meta-saved"    type="number" step="0.01" placeholder="Já Guardado (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <select id="meta-priority" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="Alta">🔴 Prioridade Alta</option>
+            <option value="Média">🟡 Prioridade Média</option>
+            <option value="Baixa">🟢 Prioridade Baixa</option>
+          </select>
+          <button type="button" onclick="addInvestmentPlan()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg px-4 py-2 text-xs transition">+ Adicionar Meta</button>
+          <input id="meta-url"   type="url"  placeholder="Link do anúncio (opcional)" class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <input id="meta-notes" type="text" placeholder="Observações / Modelo..." class="md:col-span-3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+        </div>
+
+        <div id="investment-plans-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABA: FORNECEDORES & COTAÇÃO
+         ============================================================ -->
+    <div id="bench-tab-suppliers" class="bench-tab-content hidden space-y-6">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white">🏪 Fornecedores & Histórico de Preços</h3>
+            <p class="text-xs text-slate-400">Pesquise uma peça para comparar <strong class="text-emerald-400">Mais em Conta</strong> vs <strong class="text-cyan-400">Melhor Qualidade</strong>.</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-[11px]">
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Tecell</span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Luan Cell</span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Ramon</span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Português</span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">Sonimar</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-4 mb-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+            <div class="md:col-span-3">
+              <label class="block text-xs font-bold text-cyan-300 mb-1.5">🔎 Pesquisa Rápida:</label>
+              <input id="sup-search-input" type="text" oninput="filterSupplierQuotes()" placeholder="Ex: Tela J7 Prime..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-amber-300 mb-1.5">🛠️ Sua Mão de Obra (R$):</label>
+              <input id="sup-labor-fee" type="number" step="0.01" value="80" oninput="filterSupplierQuotes()" class="w-full bg-slate-900 border border-amber-500/40 rounded-lg px-3 py-2 text-sm text-amber-300 font-bold" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">💲 Opção 1: Mais em Conta</span>
+              <div id="sup-best-budget" class="mt-2 text-xs text-slate-300">Digite uma peça para ver o cálculo.</div>
+            </div>
+            <div class="bg-cyan-950/30 border border-cyan-500/30 rounded-xl p-4">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400">⭐ Opção 2: Melhor Qualidade</span>
+              <div id="sup-best-quality" class="mt-2 text-xs text-slate-300">Digite uma peça para ver o cálculo.</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <button type="button" onclick="sendQuoteToWhatsApp(false)" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition">📋 Copiar Orçamento</button>
+            <button type="button" onclick="sendQuoteToWhatsApp(true)"  class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">📲 Enviar no WhatsApp</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-3 bg-slate-950/70 p-4 rounded-xl border border-slate-800 mb-6">
+          <input id="sup-part-name" type="text"   placeholder="Peça (ex: Tela J7 Prime)" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <input id="sup-name"      type="text" list="suppliers-datalist" placeholder="Fornecedor" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <datalist id="suppliers-datalist">
+            <option value="Tecell"></option>
+            <option value="Luan Cell"></option>
+            <option value="Ramon"></option>
+            <option value="Português"></option>
+            <option value="Sonimar"></option>
+          </datalist>
+          <select id="sup-quality" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+            <option value="Mais em Conta">💲 Mais em Conta</option>
+            <option value="Melhor Qualidade">⭐ Melhor Qualidade</option>
+          </select>
+          <input id="sup-price" type="number" step="0.01" placeholder="Valor (R$)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+          <button type="button" onclick="addSupplierQuote()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg px-4 py-2 text-xs transition">+ Salvar Preço</button>
+          <input id="sup-notes" type="text" placeholder="Observação..." class="md:col-span-6 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white" />
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400">
+                <th class="py-2 px-3">Peça / Modelo</th>
+                <th class="py-2 px-3">Fornecedor</th>
+                <th class="py-2 px-3">Qualidade</th>
+                <th class="py-2 px-3">Valor Peça</th>
+                <th class="py-2 px-3">Observações</th>
+                <th class="py-2 px-3 text-right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="supplier-quotes-tbody" class="divide-y divide-slate-800/70"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ==================== RODAPÉ ==================== -->
+  <footer class="border-t border-slate-800/80 py-8 px-4 text-center text-xs text-slate-400 space-y-1.5">
+    <p class="font-bold text-slate-300">LABTECH_MSI — Laboratório de Eletrônica, Manutenção & Store</p>
+    <p>Rua 8 de Dezembro, Ceará-Mirim, Rio Grande do Norte — CEP 59570-000</p>
+    <p>
+      WhatsApp: <a href="https://wa.me/5584991216849" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">(84) 99121-6849</a> •
+      Instagram: <a href="https://instagram.com/labtechmsicm" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">@labtechmsicm</a> •
+      E-mail: <a href="mailto:labtechmsicm@gmail.com" class="text-cyan-400 hover:underline">labtechmsicm@gmail.com</a>
+    </p>
+  </footer>
+
+  <!-- ==================== BARRA INFERIOR MOBILE ==================== -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 glass-card border-t border-cyan-500/20 flex justify-around py-2 text-[11px] font-semibold">
+    <a href="#inicio" onclick="switchAppMode('client')" class="flex flex-col items-center gap-0.5 text-cyan-400"><span class="text-base">🏠</span>Início</a>
+    <a href="#servicos" onclick="switchAppMode('client')" class="flex flex-col items-center gap-0.5 text-slate-300"><span class="text-base">🛠️</span>Serviços</a>
+    <a href="#loja" onclick="switchAppMode('client')" class="flex flex-col items-center gap-0.5 text-slate-300"><span class="text-base">🛍️</span>Store</a>
+    <a href="#rastrear-os" onclick="switchAppMode('client')" class="flex flex-col items-center gap-0.5 text-slate-300"><span class="text-base">🔍</span>OS</a>
+    <a href="#orcamento" onclick="switchAppMode('client')" class="flex flex-col items-center gap-0.5 text-slate-300"><span class="text-base">💬</span>Orçamento</a>
+  </nav>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <!-- ⚠️ Todos os handlers usados no HTML estão em app.js -->
+  <script src="app.js"></script>
+</body>
+</html>
