@@ -354,21 +354,20 @@
           Adicionar Peças & Mão de Obra
         </h3>
 
-        <div class="grid sm:grid-cols-2 gap-3">
-          <div class="flex gap-1.5">
-            <select id="pdv-part-select" class="flex-1 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
-              <option value="">-- Peça do Estoque --</option>
-            </select>
-            <button type="button" onclick="pdvAddStockPart()" class="px-3 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">+ Peça</button>
-          </div>
-
-          <div class="flex gap-1.5">
-            <select id="pdv-service-select" class="flex-1 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
-              <option value="">-- Serviço do Catálogo --</option>
-            </select>
-            <button type="button" onclick="pdvAddCatalogService()" class="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition">+ Serviço</button>
-          </div>
-        </div>
+       <div class="space-y-2.5">
+  <div class="flex gap-2">
+    <select id="pdv-part-select" class="flex-1 min-w-0 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+      <option value="">-- Peça do Estoque --</option>
+    </select>
+    <button type="button" onclick="pdvAddStockPart()" class="shrink-0 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">+ Peça</button>
+  </div>
+  <div class="flex gap-2">
+    <select id="pdv-service-select" class="flex-1 min-w-0 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+      <option value="">-- Serviço do Catálogo --</option>
+    </select>
+    <button type="button" onclick="pdvAddCatalogService()" class="shrink-0 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition">+ Serviço</button>
+  </div>
+</div>
 
         <div class="p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 space-y-2">
           <p class="text-[11px] font-semibold text-slate-400">⚡ Ou adicione uma peça/item avulso na hora:</p>
