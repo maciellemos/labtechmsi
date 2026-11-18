@@ -4105,23 +4105,31 @@ refreshAllBenchData = async function() {
   await _origRefreshPdvHook();
   initPdvDropdowns();
 };
-    const _origSwitchBenchTabPdv = switchBenchTab;
-switchBenchTab = function(tab) {
-  _origSwitchBenchTabPdv(tab);
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.bench-tab-btn');
+  if (!btn) return;
   const pdvEl = document.getElementById('bench-tab-pdv');
   const pdvBtn = document.getElementById('tab-btn-pdv');
-  if (pdvEl) {
-    if (tab === 'pdv') {
-      document.querySelectorAll('.bench-tab-content').forEach(el => el.classList.add('hidden'));
-      pdvEl.classList.remove('hidden');
-      initPdvDropdowns();
-      if (pdvBtn) pdvBtn.classList.add('ring-2', 'ring-amber-400');
-    } else {
-      pdvEl.classList.add('hidden');
-      if (pdvBtn) pdvBtn.classList.remove('ring-2', 'ring-amber-400');
-    }
+  if (!pdvEl) return;
+
+  if (btn.id === 'tab-btn-pdv') {
+    document.querySelectorAll('.bench-tab-content').forEach(el => {
+      el.classList.add('hidden');
+      el.style.display = 'none';
+    });
+    pdvEl.classList.remove('hidden');
+    pdvEl.style.display = 'block';
+    if (typeof initPdvDropdowns === 'function') initPdvDropdowns();
+    if (pdvBtn) pdvBtn.classList.add('ring-2', 'ring-amber-400');
+  } else {
+    pdvEl.classList.add('hidden');
+    pdvEl.style.display = 'none';
+    document.querySelectorAll('.bench-tab-content').forEach(el => {
+      if (el.id !== 'bench-tab-pdv') el.style.display = '';
+    });
+    if (pdvBtn) pdvBtn.classList.remove('ring-2', 'ring-amber-400');
   }
-};
+});    
             
   </script>
 </body>
