@@ -439,6 +439,17 @@
         <button type="button" id="pdv-submit-btn" onclick="submitPdvOrder()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:opacity-95 text-slate-950 font-extrabold text-sm shadow-lg transition">
           💾 Gerar OS & Salvar na Nuvem
         </button>
+        <div id="pdv-post-actions" class="hidden pt-3 border-t border-slate-800 space-y-2">
+  <p class="text-[11px] font-bold text-emerald-400 text-center">✅ Última OS gerada: <span id="pdv-last-os-label" class="text-white"></span></p>
+  <div class="grid grid-cols-2 gap-2">
+    <button type="button" onclick="printLastPdvReceipt()" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+      🖨️ Cupom Térmico
+    </button>
+    <button type="button" onclick="sendLastPdvWhatsApp()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+      📲 Enviar WhatsApp
+    </button>
+  </div>
+</div>
       </div>
     </div>
 
@@ -4035,6 +4046,8 @@ function resetPdvForm() {
   document.getElementById('pdv-extra-labor').value = '0';
   recalcPdvTotals();
 }
+let lastPdvOrderData = null;
+
 async function submitPdvOrder() {
   const client = document.getElementById('pdv-client').value.trim();
   const model = document.getElementById('pdv-model').value.trim();
@@ -4087,6 +4100,28 @@ async function submitPdvOrder() {
       }]);
     }
 
+    lastPdvOrderData = {
+      osId,
+      client,
+      phone,
+      category,
+      model,
+      status,
+      issue,
+      solution,
+      items: [...pdvCart],
+      extraLabor,
+      grandTotal,
+      date: new Date().toLocaleString('pt-BR')
+    };
+
+    const postBox = document.getElementById('pdv-post-actions');
+    const postLabel = document.getElementById('pdv-last-os-label');
+    if (postBox && postLabel) {
+      postLabel.textContent = `${osId} — ${client}`;
+      postBox.classList.remove('hidden');
+    }
+
     alert(`✅ Ordem ${osId} criada com sucesso!\nCliente: ${client}\nTotal: ${formatCurrency(grandTotal)}\nLucro Líquido: ${formatCurrency(netProfit)}`);
     resetPdvForm();
     await refreshAllBenchData();
@@ -4097,6 +4132,86 @@ async function submitPdvOrder() {
     btn.disabled = false;
     btn.textContent = '💾 Gerar OS & Salvar na Nuvem';
   }
+}
+
+function printLastPdvReceipt() {
+  if (!lastPdvOrderData) return alert('Gere uma Ordem de Serviço primeiro.');
+  const d = lastPdvOrderData;
+  const itemsRows = d.items.map(it =>
+    `<tr><td style="padding:3px 0;">${escapeHTML(it.name)}</td><td style="text-align:right;padding:3px 0;">${formatCurrency(it.sell)}</td></tr>`
+  ).join('');
+  const laborRow = d.extraLabor > 0
+    ? `<tr><td style="padding:3px 0;">Mão de Obra Técnica</td><td style="text-align:right;padding:3px 0;">${formatCurrency(d.extraLabor)}</td></tr>`
+    : '';
+
+  const win = window.open('', '_blank', 'width=340,height=600');
+  win.document.write(`
+    <html>
+      <head>
+        <title>Cupom ${d.osId}</title>
+        <style>
+          body { font-family: 'Courier New', monospace; width: 270px; margin: 0 auto; padding: 10px; color: #000; font-size: 12px; }
+          .center { text-align: center; }
+          .bold { font-weight: bold; }
+          .line { border-top: 1px dashed #000; margin: 8px 0; }
+          table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        </style>
+      </head>
+      <body onload="window.print(); setTimeout(() => window.close(), 500);">
+        <div class="center bold" style="font-size:15px;">LABTECH_MSI</div>
+        <div class="center" style="font-size:10px;">Assistência Técnica Especializada</div>
+        <div class="center" style="font-size:10px;">Rua 8 de Dezembro - Ceará-Mirim/RN</div>
+        <div class="center" style="font-size:10px;">WhatsApp: (84) 99121-6849</div>
+        <div class="line"></div>
+        <div class="center bold" style="font-size:13px;">COMPROVANTE DE OS: ${d.osId}</div>
+        <div class="center" style="font-size:10px;">${d.date}</div>
+        <div class="line"></div>
+        <div><span class="bold">Cliente:</span> ${escapeHTML(d.client)}</div>
+        <div><span class="bold">Fone:</span> ${escapeHTML(d.phone)}</div>
+        <div><span class="bold">Aparelho:</span> ${escapeHTML(d.model)}</div>
+        <div><span class="bold">Status:</span> ${escapeHTML(d.status)}</div>
+        <div><span class="bold">Defeito:</span> ${escapeHTML(d.issue)}</div>
+        ${d.solution ? `<div><span class="bold">Serviço:</span> ${escapeHTML(d.solution)}</div>` : ''}
+        <div class="line"></div>
+        <table>
+          <thead><tr><th style="text-align:left;">Descrição</th><th style="text-align:right;">Valor</th></tr></thead>
+          <tbody>
+            ${itemsRows || '<tr><td colspan="2">Avaliação / Serviço Técnico</td></tr>'}
+            ${laborRow}
+          </tbody>
+        </table>
+        <div class="line"></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;" class="bold">
+          <span>TOTAL:</span>
+          <span>${formatCurrency(d.grandTotal)}</span>
+        </div>
+        <div class="line"></div>
+        <div class="center" style="font-size:10px;">Garantia de 90 dias sobre o serviço executado.</div>
+        <div class="center" style="font-size:10px;margin-top:4px;">Acompanhe online em nosso portal!</div>
+        <br><br>
+        <div class="center">___________________________</div>
+        <div class="center" style="font-size:10px;">Assinatura do Cliente</div>
+      </body>
+    </html>
+  `);
+  win.document.close();
+}
+
+function sendLastPdvWhatsApp() {
+  if (!lastPdvOrderData) return alert('Gere uma Ordem de Serviço primeiro.');
+  const d = lastPdvOrderData;
+  const cleanPhone = d.phone.replace(/\D/g, '');
+  const fullPhone = cleanPhone.startsWith('55') ? cleanPhone : '55' + cleanPhone;
+  const msg = `Olá, *${d.client}*! 👋\n\nSegue o comprovante da sua Ordem de Serviço na *LABTECH_MSI*:\n\n` +
+    `📋 *OS:* ${d.osId}\n` +
+    `📱 *Equipamento:* ${d.model}\n` +
+    `⚠️ *Defeito:* ${d.issue}\n` +
+    (d.solution ? `🛠️ *Serviço/Peças:* ${d.solution}\n` : '') +
+    `📌 *Status:* ${d.status}\n` +
+    `💰 *Valor Total:* ${formatCurrency(d.grandTotal)}\n\n` +
+    `Você pode consultar o andamento e PIX a qualquer momento pelo nosso portal oficial:\n${window.location.origin + window.location.pathname}`;
+  window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
 }
 
 const _origRefreshPdvHook = refreshAllBenchData;
