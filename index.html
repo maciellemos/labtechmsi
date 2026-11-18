@@ -271,9 +271,7 @@
       <button type="button" id="tab-btn-checklists"  onclick="switchBenchTab('checklists')"  class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">✅ Checklists & Bancada</button>
       <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🚀 Investimentos & Metas</button>
       <button type="button" id="tab-btn-suppliers"   onclick="switchBenchTab('suppliers')"   class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🏪 Fornecedores & Cotação</button>
-    <button type="button" onclick="switchBenchTab('pdv')" id="btn-tab-pdv" class="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 font-extrabold text-xs transition flex items-center gap-1.5">
-  ⚡ PDV Express
-</button>
+    <button type="button" id="tab-btn-pdv" onclick="switchBenchTab('pdv')" class="bench-tab-btn px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 font-extrabold text-xs transition">⚡ PDV Express</button>
     </div>
 
     <!-- BARRA DE SETORES -->
@@ -3997,7 +3995,116 @@ function recalcPdvTotals() {
           <div class="min-w-0 pr-2">
             <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 mr-1">${it.kind}</span>
             <span class="text-white font-semibold">${escapeHTML(it.name)}</span>
-            <div class="text-[10px] text-slate-400 mt-0.5">Custo
+            <div class="text-[10px] text-slate-400 mt-0.5">Custo: ${formatCurrency(it.cost)}</div>
+          </div>
+          <div class="flex items-center gap-2.5 shrink-0">
+            <span class="text-emerald-400 font-bold">${formatCurrency(it.sell)}</span>
+            <button type="button" onclick="pdvRemoveItem(${idx})" class="text-rose-400 hover:text-rose-300 font-bold px-1">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  const totalCost = pdvCart.reduce((s, i) => s + i.cost, 0);
+  const itemsSell = pdvCart.reduce((s, i) => s + i.sell, 0);
+  const extraLabor = parseFloat(document.getElementById('pdv-extra-labor')?.value) || 0;
+  const grandTotal = itemsSell + extraLabor;
+  const netProfit = grandTotal - totalCost;
+
+  document.getElementById('pdv-total-cost').textContent = formatCurrency(totalCost);
+  document.getElementById('pdv-subtotal-items').textContent = formatCurrency(itemsSell);
+  document.getElementById('pdv-display-labor').textContent = formatCurrency(extraLabor);
+  document.getElementById('pdv-net-profit').textContent = formatCurrency(netProfit);
+  document.getElementById('pdv-grand-total').textContent = formatCurrency(grandTotal);
+
+  const solInput = document.getElementById('pdv-solution');
+  if (solInput && pdvCart.length) {
+    solInput.value = pdvCart.map(i => i.name).join(' + ');
+  }
+}
+
+function resetPdvForm() {
+  pdvCart = [];
+  ['pdv-client', 'pdv-model', 'pdv-issue', 'pdv-solution', 'pdv-custom-name', 'pdv-custom-cost', 'pdv-custom-sell'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('pdv-phone').value = '84999990000';
+  document.getElementById('pdv-extra-labor').value = '0';
+  recalcPdvTotals();
+}
+async function submitPdvOrder() {
+  const client = document.getElementById('pdv-client').value.trim();
+  const model = document.getElementById('pdv-model').value.trim();
+  const issue = document.getElementById('pdv-issue').value.trim();
+  if (!client || !model || !issue) {
+    return alert('Preencha pelo menos Cliente, Modelo do Aparelho e Defeito.');
+  }
+
+  const phone = document.getElementById('pdv-phone').value.trim() || '84999990000';
+  const category = document.getElementById('pdv-category').value;
+  const status = document.getElementById('pdv-status').value;
+  const solution = document.getElementById('pdv-solution').value.trim() || pdvCart.map(i => i.name).join(' + ');
+
+  const totalCost = pdvCart.reduce((s, i) => s + i.cost, 0);
+  const itemsSell = pdvCart.reduce((s, i) => s + i.sell, 0);
+  const extraLabor = parseFloat(document.getElementById('pdv-extra-labor')?.value) || 0;
+  const grandTotal = itemsSell + extraLabor;
+  const netProfit = grandTotal - totalCost;
+
+  const osId = 'OS-' + Math.floor(1000 + Math.random() * 9000);
+  const isPaid = status === 'Entregue';
+
+  const btn = document.getElementById('pdv-submit-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Salvando na nuvem...';
+
+  try {
+    const { error } = await supabaseClient.from('orders').insert([{
+      id: osId,
+      client,
+      phone,
+      category,
+      model,
+      status,
+      price: grandTotal,
+      part_cost: totalCost,
+      net_profit: netProfit,
+      issue,
+      diagnosis: solution,
+      paid_in_finance: isPaid
+    }]);
+    if (error) throw error;
+
+    if (isPaid && grandTotal > 0) {
+      await supabaseClient.from('finance').insert([{
+        type: 'entrada',
+        description: `[${osId}] PDV ${client} (${model}): ${solution}`,
+        amount: grandTotal,
+        date: new Date().toLocaleDateString('pt-BR')
+      }]);
+    }
+
+    alert(`✅ Ordem ${osId} criada com sucesso!\nCliente: ${client}\nTotal: ${formatCurrency(grandTotal)}\nLucro Líquido: ${formatCurrency(netProfit)}`);
+    resetPdvForm();
+    await refreshAllBenchData();
+    initPdvDropdowns();
+  } catch (err) {
+    alert('Erro ao salvar OS no PDV: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Gerar OS & Salvar na Nuvem';
+  }
+}
+
+const _origRefreshPdvHook = refreshAllBenchData;
+refreshAllBenchData = async function() {
+  await _origRefreshPdvHook();
+  initPdvDropdowns();
+};
+    
+            
   </script>
 </body>
 </html>
