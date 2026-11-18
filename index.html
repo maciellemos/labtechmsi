@@ -3923,8 +3923,8 @@ function initPdvDropdowns() {
       }
     });
     cliSel.innerHTML = `<option value="">⚡ Puxar Cliente Recente...</option>` +
-      uniqueClients.map(o => `<option value="${escapeHTML(o.client)}" data-phone="${escapeHTML(o.phone \vert{}\vert{} '')}" data-model="${escapeHTML(o.model || '')}">${escapeHTML(o.client)} (${escapeHTML(o.model || '')})</option>`).join('');
-  }
+      uniqueClients.map(o => `<option value="${escapeHTML(o.client)}" data-phone="${escapeHTML(o.phone || '')}" data-model="${escapeHTML(o.model || '')}">${escapeHTML(o.client)} (${escapeHTML(o.model || '')})</option>`).join('');
+      }
 }
 
 function fillPdvClientFromHistory() {
