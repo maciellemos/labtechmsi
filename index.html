@@ -271,6 +271,9 @@
       <button type="button" id="tab-btn-checklists"  onclick="switchBenchTab('checklists')"  class="bench-tab-btn px-4 py-2 rounded-xl bg-slateDark-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition">✅ Checklists & Bancada</button>
       <button type="button" id="tab-btn-investments" onclick="switchBenchTab('investments')" class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🚀 Investimentos & Metas</button>
       <button type="button" id="tab-btn-suppliers"   onclick="switchBenchTab('suppliers')"   class="bench-tab-btn px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">🏪 Fornecedores & Cotação</button>
+    <button type="button" onclick="switchBenchTab('pdv')" id="btn-tab-pdv" class="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 font-extrabold text-xs transition flex items-center gap-1.5">
+  ⚡ PDV Express
+</button>
     </div>
 
     <!-- BARRA DE SETORES -->
@@ -283,7 +286,167 @@
       <button type="button" onclick="selectSector('reparos')"     class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">🔧 Reparos & Checklists</button>
       <button type="button" onclick="selectSector('gestao')"      class="sector-pill px-3 py-1.5 rounded-lg bg-slateDark-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold text-xs">💼 Gestão & Financeiro</button>
     </div>
+<!-- ==================== ABA PDV EXPRESS (BALCÃO UNIFICADO) ==================== -->
+<div id="bench-tab-pdv" class="bench-tab-content hidden space-y-6">
+  <div class="grid lg:grid-cols-12 gap-6">
+    
+    <!-- COLUNA ESQUERDA (7 cols): DADOS + COMPOSITOR -->
+    <div class="lg:col-span-7 space-y-4">
+      
+      <!-- 1. CLIENTE & APARELHO -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-extrabold">1</span>
+            Cliente & Equipamento
+          </h3>
+          <select id="pdv-quick-client" onchange="fillPdvClientFromHistory()" class="px-2.5 py-1 rounded-lg bg-slateDark-900 border border-slate-700 text-slate-300 text-xs max-w-[200px]">
+            <option value="">⚡ Puxar Cliente Recente...</option>
+          </select>
+        </div>
 
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Nome do Cliente *</label>
+            <input id="pdv-client" type="text" placeholder="Ex: João Silva" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">WhatsApp</label>
+            <input id="pdv-phone" type="text" placeholder="84999990000" value="84999990000" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Categoria</label>
+            <select id="pdv-category" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+              <option value="Smartphone">Smartphone</option>
+              <option value="Notebook">Notebook</option>
+              <option value="Desktop / PC">Desktop / PC</option>
+              <option value="Console / Outros">Console / Outros</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] text-slate-400 mb-1">Modelo do Aparelho *</label>
+          <input id="pdv-model" type="text" placeholder="Ex: iPhone XR / Moto G53 / Samsung A02s" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+        </div>
+      </div>
+
+      <!-- 2. DEFEITO & SOLUÇÃO -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-3">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2 border-b border-slate-800 pb-2.5">
+          <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-extrabold">2</span>
+          Defeito Relatado & Solução Técnica
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Defeito / Sintoma *</label>
+            <input id="pdv-issue" type="text" placeholder="Ex: Áudio baixo e tampa trincada" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Solução / Serviço Executado</label>
+            <input id="pdv-solution" type="text" placeholder="Preenchido auto ao somar itens ou digite..." class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. LANÇAMENTO RÁPIDO DE PEÇAS, SERVIÇOS E MÃO DE OBRA -->
+      <div class="glass-card rounded-2xl p-5 border border-purple-500/30 space-y-4">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2 border-b border-slate-800 pb-2.5">
+          <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 text-xs flex items-center justify-center font-extrabold">3</span>
+          Adicionar Peças & Mão de Obra
+        </h3>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="flex gap-1.5">
+            <select id="pdv-part-select" class="flex-1 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+              <option value="">-- Peça do Estoque --</option>
+            </select>
+            <button type="button" onclick="pdvAddStockPart()" class="px-3 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition">+ Peça</button>
+          </div>
+
+          <div class="flex gap-1.5">
+            <select id="pdv-service-select" class="flex-1 px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+              <option value="">-- Serviço do Catálogo --</option>
+            </select>
+            <button type="button" onclick="pdvAddCatalogService()" class="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition">+ Serviço</button>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 space-y-2">
+          <p class="text-[11px] font-semibold text-slate-400">⚡ Ou adicione uma peça/item avulso na hora:</p>
+          <div class="grid grid-cols-12 gap-2">
+            <input id="pdv-custom-name" type="text" placeholder="Nome (ex: Auricular)" class="col-span-5 px-2.5 py-1.5 rounded-lg bg-slateDark-900 border border-slate-700 text-white text-xs" />
+            <input id="pdv-custom-cost" type="number" step="0.01" placeholder="Custo (R$)" class="col-span-3 px-2.5 py-1.5 rounded-lg bg-slateDark-900 border border-slate-700 text-rose-300 text-xs" />
+            <input id="pdv-custom-sell" type="number" step="0.01" placeholder="Venda (R$)" class="col-span-2 px-2.5 py-1.5 rounded-lg bg-slateDark-900 border border-slate-700 text-emerald-300 text-xs" />
+            <button type="button" onclick="pdvAddCustomItem()" class="col-span-2 px-2 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">+ Add</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block text-[11px] text-cyan-300 font-semibold mb-1">Mão de Obra Extra (R$)</label>
+            <input id="pdv-extra-labor" type="number" step="0.01" min="0" value="0" oninput="recalcPdvTotals()" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-cyan-500/40 text-white font-bold text-xs" />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Status Inicial da OS</label>
+            <select id="pdv-status" class="w-full px-3 py-2 rounded-xl bg-slateDark-950 border border-slate-700 text-white text-xs">
+              <option value="Em Reparo">🔧 Em Reparo (Bancada)</option>
+              <option value="Pronto">✅ Pronto p/ Retirada</option>
+              <option value="Entregue">💰 Entregue & Pago (Lança no Caixa)</option>
+              <option value="Em Análise">🔍 Em Análise / Orçamento</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLUNA DIREITA (5 cols): CUPOM / CARRINHO DA OS -->
+    <div class="lg:col-span-5">
+      <div class="glass-card rounded-2xl p-5 border border-amber-500/40 sticky top-4 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Resumo do Atendimento</span>
+            <h3 class="font-extrabold text-white text-base">🧾 Cupom da Ordem de Serviço</h3>
+          </div>
+          <button type="button" onclick="resetPdvForm()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">Limpar Tudo</button>
+        </div>
+
+        <div id="pdv-cart-items" class="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+          <p class="text-xs text-slate-500 text-center py-6">Nenhuma peça ou serviço adicionado ainda.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slateDark-950 border border-slate-800 space-y-2 text-xs">
+          <div class="flex justify-between text-slate-400">
+            <span>Custo Total Peças:</span>
+            <span id="pdv-total-cost" class="text-rose-400 font-semibold">R$ 0,00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>Peças (Venda) + Serviços:</span>
+            <span id="pdv-subtotal-items" class="text-slate-200 font-semibold">R$ 0,00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>Mão de Obra Extra:</span>
+            <span id="pdv-display-labor" class="text-cyan-300 font-semibold">R$ 0,00</span>
+          </div>
+          <div class="flex justify-between text-emerald-400 font-bold pt-2 border-t border-slate-800">
+            <span>Lucro Líquido Estimado:</span>
+            <span id="pdv-net-profit">R$ 0,00</span>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-slate-800">
+            <span class="text-sm font-bold text-white">TOTAL CLIENTE:</span>
+            <span id="pdv-grand-total" class="text-xl font-extrabold text-amber-400">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button type="button" id="pdv-submit-btn" onclick="submitPdvOrder()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:opacity-95 text-slate-950 font-extrabold text-sm shadow-lg transition">
+          💾 Gerar OS & Salvar na Nuvem
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
     <!-- ABA: VISÃO GERAL & BI -->
     <div id="bench-tab-overview" class="bench-tab-content space-y-6">
       <div id="bench-kpi-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-4"></div>
@@ -3737,6 +3900,104 @@
       _origPopulateOsParts();
       populateOsCatalogSelect();
     };
+    // ==================== MOTOR DO PDV EXPRESS (BALCÃO UNIFICADO) ====================
+let pdvCart = [];
+
+function initPdvDropdowns() {
+  const partSel = document.getElementById('pdv-part-select');
+  if (partSel && typeof cachedInventory !== 'undefined') {
+    partSel.innerHTML = `<option value="">-- Peça do Estoque --</option>` +
+      cachedInventory.map(i => `<option value="${i.id}">${escapeHTML(i.name)} (${formatCurrency(i.sell_price || i.cost_price)})</option>`).join('');
+  }
+  const srvSel = document.getElementById('pdv-service-select');
+  if (srvSel && typeof cachedCatalog !== 'undefined') {
+    srvSel.innerHTML = `<option value="">-- Serviço do Catálogo --</option>` +
+      cachedCatalog.map(c => `<option value="${c.id}">${escapeHTML(c.name)} (${formatCurrency(c.price)})</option>`).join('');
+  }
+  const cliSel = document.getElementById('pdv-quick-client');
+  if (cliSel && typeof cachedOrders !== 'undefined') {
+    const uniqueClients = [];
+    const seen = new Set();
+    cachedOrders.forEach(o => {
+      if (o.client && !seen.has(o.client.toLowerCase())) {
+        seen.add(o.client.toLowerCase());
+        uniqueClients.push(o);
+      }
+    });
+    cliSel.innerHTML = `<option value="">⚡ Puxar Cliente Recente...</option>` +
+      uniqueClients.map(o => `<option value="${escapeHTML(o.client)}" data-phone="${escapeHTML(o.phone \vert{}\vert{} '')}" data-model="${escapeHTML(o.model || '')}">${escapeHTML(o.client)} (${escapeHTML(o.model || '')})</option>`).join('');
+  }
+}
+
+function fillPdvClientFromHistory() {
+  const sel = document.getElementById('pdv-quick-client');
+  const opt = sel?.options[sel.selectedIndex];
+  if (!opt || !opt.value) return;
+  document.getElementById('pdv-client').value = opt.value;
+  if (opt.dataset.phone) document.getElementById('pdv-phone').value = opt.dataset.phone;
+  if (opt.dataset.model) document.getElementById('pdv-model').value = opt.dataset.model;
+}
+
+function pdvAddStockPart() {
+  const sel = document.getElementById('pdv-part-select');
+  const item = cachedInventory.find(i => String(i.id) === String(sel?.value));
+  if (!item) return alert('Selecione uma peça do estoque primeiro.');
+  pdvCart.push({
+    kind: 'Peça',
+    name: item.name,
+    cost: Number(item.cost_price || 0),
+    sell: Number(item.sell_price || item.cost_price || 0)
+  });
+  sel.value = '';
+  recalcPdvTotals();
+}
+
+function pdvAddCatalogService() {
+  const sel = document.getElementById('pdv-service-select');
+  const srv = cachedCatalog.find(c => String(c.id) === String(sel?.value));
+  if (!srv) return alert('Selecione um serviço do catálogo.');
+  pdvCart.push({
+    kind: 'Serviço',
+    name: srv.name,
+    cost: 0,
+    sell: Number(srv.price || 0)
+  });
+  sel.value = '';
+  recalcPdvTotals();
+}
+
+function pdvAddCustomItem() {
+  const nameEl = document.getElementById('pdv-custom-name');
+  const costEl = document.getElementById('pdv-custom-cost');
+  const sellEl = document.getElementById('pdv-custom-sell');
+  const name = nameEl.value.trim();
+  if (!name) return alert('Digite o nome da peça ou item.');
+  const cost = parseFloat(costEl.value) || 0;
+  const sell = parseFloat(sellEl.value) || cost;
+  pdvCart.push({ kind: 'Avulso', name, cost, sell });
+  nameEl.value = '';
+  costEl.value = '';
+  sellEl.value = '';
+  recalcPdvTotals();
+}
+
+function pdvRemoveItem(idx) {
+  pdvCart.splice(idx, 1);
+  recalcPdvTotals();
+}
+
+function recalcPdvTotals() {
+  const listEl = document.getElementById('pdv-cart-items');
+  if (listEl) {
+    if (!pdvCart.length) {
+      listEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Nenhuma peça ou serviço adicionado ainda.</p>`;
+    } else {
+      listEl.innerHTML = pdvCart.map((it, idx) => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slateDark-950 border border-slate-800 text-xs">
+          <div class="min-w-0 pr-2">
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 mr-1">${it.kind}</span>
+            <span class="text-white font-semibold">${escapeHTML(it.name)}</span>
+            <div class="text-[10px] text-slate-400 mt-0.5">Custo
   </script>
 </body>
 </html>
