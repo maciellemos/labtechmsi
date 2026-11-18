@@ -4105,7 +4105,23 @@ refreshAllBenchData = async function() {
   await _origRefreshPdvHook();
   initPdvDropdowns();
 };
-    
+    const _origSwitchBenchTabPdv = switchBenchTab;
+switchBenchTab = function(tab) {
+  _origSwitchBenchTabPdv(tab);
+  const pdvEl = document.getElementById('bench-tab-pdv');
+  const pdvBtn = document.getElementById('tab-btn-pdv');
+  if (pdvEl) {
+    if (tab === 'pdv') {
+      document.querySelectorAll('.bench-tab-content').forEach(el => el.classList.add('hidden'));
+      pdvEl.classList.remove('hidden');
+      initPdvDropdowns();
+      if (pdvBtn) pdvBtn.classList.add('ring-2', 'ring-amber-400');
+    } else {
+      pdvEl.classList.add('hidden');
+      if (pdvBtn) pdvBtn.classList.remove('ring-2', 'ring-amber-400');
+    }
+  }
+};
             
   </script>
 </body>
