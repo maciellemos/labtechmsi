@@ -4212,7 +4212,7 @@ function sendLastPdvWhatsApp() {
     `Você pode consultar o andamento e PIX a qualquer momento pelo nosso portal oficial:\n${window.location.origin + window.location.pathname}`;
   window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
 }
-}
+
 
 const _origRefreshPdvHook = refreshAllBenchData;
 refreshAllBenchData = async function() {
