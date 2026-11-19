@@ -367,6 +367,18 @@
     </select>
     <button type="button" onclick="pdvAddCatalogService()" class="shrink-0 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition">+ Serviço</button>
   </div>
+  <div class="flex gap-2">
+    <select id="pdv-gsm-select" class="flex-1 min-w-0 px-3 py-2 rounded-xl bg-slateDark-950 border border-amber-500/40 text-amber-200 text-xs">
+      <option value="">-- 🔓 Aluguel GSM (Bancada Unlock) --</option>
+      <option value="Aluguel UnlockTool (6h-24h)|6.00">🔓 UnlockTool (Aluguel 6h-24h) — Custo R$ 6,00</option>
+      <option value="Aluguel AMT - Android Multi Tool (2h)|3.50">🔓 AMT Multi Tool (2h) — Custo R$ 3,50</option>
+      <option value="Aluguel Moto M / Alien Tool (Motorola)|8.50">🔓 Moto M / Alien Tool (Motorola) — Custo R$ 8,50</option>
+      <option value="Aluguel KG Pro / KG Killer (Samsung)|7.15">🔓 KG Pro / KG Killer (Samsung) — Custo R$ 7,15</option>
+      <option value="Aluguel DFT Pro Tool (47h)|16.00">🔓 DFT Pro Tool (47h) — Custo R$ 16,00</option>
+      <option value="Aluguel Pandora Tool (47h)|60.00">🔓 Pandora Tool (47h) — Custo R$ 60,00</option>
+    </select>
+    <button type="button" onclick="pdvAddGsmRent()" class="shrink-0 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs transition">+ Custo GSM</button>
+  </div>       
 </div>
 
         <div class="p-3 rounded-xl bg-slateDark-950/80 border border-slate-800 space-y-2">
@@ -787,6 +799,44 @@
       </div>
 
       <div id="techlab-sub-unlocks" class="space-y-6">
+        <div class="glass-card rounded-2xl p-5 border border-amber-500/30 bg-gradient-to-br from-slate-900/90 to-amber-950/20 space-y-4">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+    <div>
+      <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Servidor GSM Integrado</span>
+      <h3 class="text-base font-extrabold text-white mt-1">🔓 Central GSM & Aluguel de Ferramentas (Bancada Unlock)</h3>
+      <p class="text-xs text-slate-400">Alugue licenças por hora com PIX imediato e lance o custo direto no PDV Express.</p>
+    </div>
+    <a href="https://www.bancadaunlock.com.br/" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
+      🚀 Abrir Bancada Unlock ↗
+    </a>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+    <div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-1.5">
+      <div class="font-bold text-cyan-400">📱 Samsung (FRP / KG / MDM)</div>
+      <p class="text-[11px] text-slate-400">UnlockTool, KG Pro Tool, Galaxy MultiTool, Samsung Tool.</p>
+      <button type="button" onclick="sendGsmToolToPdv('Desbloqueio Samsung (Aluguel GSM)', 7.15)" class="w-full mt-1 py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-amber-600 hover:text-slate-950 text-amber-300 font-bold text-[11px] transition">+ Lançar no PDV (Custo R$ 7,15)</button>
+    </div>
+
+    <div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-1.5">
+      <div class="font-bold text-emerald-400">📱 Motorola (FRP / MDM)</div>
+      <p class="text-[11px] text-slate-400">Moto M Tool, Alien Tool, MultiUnlock, MotoKing Pro.</p>
+      <button type="button" onclick="sendGsmToolToPdv('Desbloqueio Motorola (Aluguel GSM)', 8.50)" class="w-full mt-1 py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-amber-600 hover:text-slate-950 text-amber-300 font-bold text-[11px] transition">+ Lançar no PDV (Custo R$ 8,50)</button>
+    </div>
+
+    <div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-1.5">
+      <div class="font-bold text-purple-400">📱 Xiaomi / HyperOS / MTK</div>
+      <p class="text-[11px] text-slate-400">UnlockTool, AMT (Multi Tool), DFT Pro, Pandora Tool.</p>
+      <button type="button" onclick="sendGsmToolToPdv('Desbloqueio Xiaomi/MTK (Aluguel GSM)', 6.00)" class="w-full mt-1 py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-amber-600 hover:text-slate-950 text-amber-300 font-bold text-[11px] transition">+ Lançar no PDV (Custo R$ 6,00)</button>
+    </div>
+
+    <div class="p-3 rounded-xl bg-slateDark-950/90 border border-slate-800 space-y-1.5">
+      <div class="font-bold text-rose-400">🍎 Apple & Reparo Avançado</div>
+      <p class="text-[11px] text-slate-400">UnlockTool, EFT (Bypass XR/11), Pandora (47h), Cheetah.</p>
+      <button type="button" onclick="sendGsmToolToPdv('Software Avançado / Bypass (Aluguel GSM)', 12.00)" class="w-full mt-1 py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-amber-600 hover:text-slate-950 text-amber-300 font-bold text-[11px] transition">+ Lançar no PDV (Custo R$ 12,00)</button>
+    </div>
+  </div>
+</div>
         <div class="glass-card rounded-2xl p-6 border border-amber-500/25">
           <h3 class="font-bold text-white text-base mb-1">🔗 Atalhos Rápidos de Bancada & FRP</h3>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-bold mt-3">
@@ -3990,6 +4040,32 @@ function pdvAddCustomItem() {
   sellEl.value = '';
   recalcPdvTotals();
 }
+  function pdvAddGsmRent() {
+  const sel = document.getElementById('pdv-gsm-select');
+  if (!sel || !sel.value) return alert('Selecione uma ferramenta GSM para lançar o custo.');
+  const [name, costStr] = sel.value.split('|');
+  const cost = parseFloat(costStr) || 0;
+  pdvCart.push({
+    kind: 'GSM',
+    name,
+    cost,
+    sell: 0
+  });
+  sel.value = '';
+  recalcPdvTotals();
+}
+
+function sendGsmToolToPdv(serviceName, rentCost) {
+  pdvCart.push({
+    kind: 'GSM',
+    name: serviceName,
+    cost: parseFloat(rentCost) || 0,
+    sell: 0
+  });
+  const pdvTabBtn = document.getElementById('tab-btn-pdv');
+  if (pdvTabBtn) pdvTabBtn.click();
+  recalcPdvTotals();
+}  
 
 function pdvRemoveItem(idx) {
   pdvCart.splice(idx, 1);
