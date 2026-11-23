@@ -233,6 +233,204 @@
         </form>
       </div>
     </section>
+    <!-- SEÇÃO CATÁLOGO INTERATIVO, COMO FUNCIONA & FAQ (INSPIRAÇÃO CONVERSÃO) -->
+<section id="servicos-catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+
+  <!-- 1. FAIXA DE MARCAS ATENDIDAS -->
+  <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 bg-slate-900/70 flex flex-wrap items-center justify-between gap-4">
+    <span class="text-[11px] font-extrabold uppercase tracking-wider text-cyan-400">Especialistas Multimarca:</span>
+    <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-bold text-slate-300">
+      <span class="px-3 py-1 rounded-lg bg-slateDark-950 border border-slate-800"> Apple iPhone</span>
+      <span class="px-3 py-1 rounded-lg bg-slateDark-950 border border-slate-800">Samsung Galaxy</span>
+      <span class="px-3 py-1 rounded-lg bg-slateDark-950 border border-slate-800">Motorola</span>
+      <span class="px-3 py-1 rounded-lg bg-slateDark-950 border border-slate-800">Xiaomi / Poco</span>
+      <span class="px-3 py-1 rounded-lg bg-slateDark-950 border border-slate-800">Realme / Asus</span>
+      <span class="px-3 py-1 rounded-lg bg-slateDark-950 border border-amber-500/30 text-amber-300">💻 Notebooks & PCs</span>
+    </div>
+  </div>
+
+  <!-- 2. GRADE INTERATIVA DE SERVIÇOS POR SINTOMA -->
+  <div class="space-y-6">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <span class="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Soluções de Bancada</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">🔧 Qual o problema do seu aparelho?</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">Selecione o sintoma abaixo para preencher o pré-orçamento automaticamente.</p>
+      </div>
+      <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-xl">✔ Garantia de 90 dias em serviços</span>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Card 1: Tela -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 transition flex flex-col justify-between space-y-4 bg-slate-900/60">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl">📱</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300">Troca Rápida</span>
+          </div>
+          <h3 class="text-base font-extrabold text-white">Tela Quebrada ou Sem Touch</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Substituição de módulos frontais (OLED, AMOLED e IPS) com acabamento de fábrica, vedação e brilho original.</p>
+        </div>
+        <button type="button" onclick="selectServiceToQuote('Troca de Tela / Display Frontal')" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 font-extrabold text-xs transition border border-cyan-500/30">
+          Orçar Troca de Tela →
+        </button>
+      </div>
+
+      <!-- Card 2: Bateria e Carga -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 transition flex flex-col justify-between space-y-4 bg-slate-900/60">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl">🔋</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300">Alta Durabilidade</span>
+          </div>
+          <h3 class="text-base font-extrabold text-white">Bateria Viciada ou Não Carrega</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Troca de bateria homologada, reparo de conector de carga (Tipo-C / Lightning) e circuitos de carregamento.</p>
+        </div>
+        <button type="button" onclick="selectServiceToQuote('Troca de Bateria / Conector de Carga')" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 font-extrabold text-xs transition border border-cyan-500/30">
+          Orçar Bateria / Carga →
+        </button>
+      </div>
+
+      <!-- Card 3: Reparo em Placa -->
+      <div class="glass-card rounded-2xl p-5 border border-amber-500/30 hover:border-amber-400 transition flex flex-col justify-between space-y-4 bg-gradient-to-b from-slate-900/80 to-amber-950/15">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl">🔬</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300">Especialidade Lab</span>
+          </div>
+          <h3 class="text-base font-extrabold text-white">Não Liga / Reparo em Placa</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Microsoldagem avançada sob microscópio: diagnóstico de curto-circuito, PMIC, CPU/Memória, sinal e backlight.</p>
+        </div>
+        <button type="button" onclick="selectServiceToQuote('Diagnóstico & Microsoldagem em Placa-Mãe')" class="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition">
+          Orçar Reparo em Placa →
+        </button>
+      </div>
+
+      <!-- Card 4: Molhado -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 transition flex flex-col justify-between space-y-4 bg-slate-900/60">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl">💧</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300">Urgência</span>
+          </div>
+          <h3 class="text-base font-extrabold text-white">Aparelho Molhado (Desoxidação)</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Banho químico ultrassônico, remoção de oxidação e recuperação de trilhas danificadas por água ou maresia.</p>
+        </div>
+        <button type="button" onclick="selectServiceToQuote('Banho Químico & Desoxidação de Aparelho Molhado')" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 font-extrabold text-xs transition border border-cyan-500/30">
+          Orçar Desoxidação →
+        </button>
+      </div>
+
+      <!-- Card 5: Software e Desbloqueio -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 transition flex flex-col justify-between space-y-4 bg-slate-900/60">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl">🔓</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300">Software GSM</span>
+          </div>
+          <h3 class="text-base font-extrabold text-white">Software, Sistema & Desbloqueios</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Reinstalação de firmware original, correção de loop infinito, conta Google/Mi Account e otimização de sistema.</p>
+        </div>
+        <button type="button" onclick="selectServiceToQuote('Serviço de Software / Sistema / Desbloqueio')" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 font-extrabold text-xs transition border border-cyan-500/30">
+          Orçar Software →
+        </button>
+      </div>
+
+      <!-- Card 6: Notebooks & Lojistas -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 hover:border-cyan-500/40 transition flex flex-col justify-between space-y-4 bg-slate-900/60">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl">💻</span>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300">PCs & Lojistas</span>
+          </div>
+          <h3 class="text-base font-extrabold text-white">Notebooks, PCs & Terceirização</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">Upgrade de SSD/RAM, limpeza térmica, formatação e atendimento B2B especializado para lojistas da região.</p>
+        </div>
+        <button type="button" onclick="selectServiceToQuote('Manutenção de Notebook/PC ou Parceria Lojista')" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-300 font-extrabold text-xs transition border border-cyan-500/30">
+          Orçar Informática / B2B →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. COMO FUNCIONA NA BANCADA (4 ETAPAS) -->
+  <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 bg-slateDark-950/90 space-y-6">
+    <div class="text-center max-w-2xl mx-auto space-y-1">
+      <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-400">Transparência Total</span>
+      <h2 class="text-xl sm:text-2xl font-extrabold text-white">⚡ Como funciona o atendimento na LABTECH_MSI</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+        <span class="inline-block text-xs font-black px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300">01. Triagem</span>
+        <h3 class="text-sm font-bold text-white">Diagnóstico Técnico</h3>
+        <p class="text-xs text-slate-400">Análise completa do aparelho em bancada com geração de Ordem de Serviço digital.</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+        <span class="inline-block text-xs font-black px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300">02. Aprovação</span>
+        <h3 class="text-sm font-bold text-white">Orçamento Transparente</h3>
+        <p class="text-xs text-slate-400">Você recebe o valor exato e o prazo pelo WhatsApp antes de qualquer intervenção.</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+        <span class="inline-block text-xs font-black px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300">03. Bancada</span>
+        <h3 class="text-sm font-bold text-white">Execução & Testes</h3>
+        <p class="text-xs text-slate-400">Reparo com ferramentas profissionais, peças testadas e checklist completo de funções.</p>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30 space-y-1.5">
+        <span class="inline-block text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300">04. Entrega</span>
+        <h3 class="text-sm font-bold text-white">Garantia de 90 Dias</h3>
+        <p class="text-xs text-slate-400">Retirada rápida em Ceará-Mirim com comprovante digital e suporte pós-reparo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. PERGUNTAS FREQUENTES (FAQ) -->
+  <div class="max-w-4xl mx-auto space-y-4">
+    <div class="text-center space-y-1 mb-6">
+      <span class="text-[10px] font-extrabold uppercase tracking-wider text-cyan-400">Tire suas dúvidas</span>
+      <h2 class="text-xl sm:text-2xl font-extrabold text-white">❓ Perguntas Frequentes</h2>
+    </div>
+
+    <details class="group glass-card rounded-2xl border border-slate-800 bg-slate-900/70 p-4 open:border-cyan-500/40">
+      <summary class="flex cursor-pointer items-center justify-between font-bold text-sm text-white list-none">
+        <span>Vou perder minhas fotos, conversas e arquivos durante o conserto?</span>
+        <span class="text-cyan-400 transition group-open:rotate-180">▼</span>
+      </summary>
+      <p class="mt-3 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">
+        Na grande maioria dos reparos físicos (troca de tela, bateria, conector de carga e reparos em placa), <strong class="text-slate-200">seus dados são mantidos intactos</strong>. Caso seja necessário formatar ou reinstalar o sistema em casos de software, avisamos previamente antes de iniciar.
+      </p>
+    </details>
+
+    <details class="group glass-card rounded-2xl border border-slate-800 bg-slate-900/70 p-4 open:border-cyan-500/40">
+      <summary class="flex cursor-pointer items-center justify-between font-bold text-sm text-white list-none">
+        <span>Qual é o prazo médio para troca de tela ou bateria?</span>
+        <span class="text-cyan-400 transition group-open:rotate-180">▼</span>
+      </summary>
+      <p class="mt-3 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">
+        Para modelos com peça a pronta-entrega em nosso laboratório, o serviço costuma ser concluído <strong class="text-slate-200">no mesmo dia (entre 1h e 3h)</strong>, respeitando o tempo de cura da colagem para evitar descolamento futuro.
+      </p>
+    </details>
+
+    <details class="group glass-card rounded-2xl border border-slate-800 bg-slate-900/70 p-4 open:border-cyan-500/40">
+      <summary class="flex cursor-pointer items-center justify-between font-bold text-sm text-white list-none">
+        <span>Como funciona a garantia dos serviços realizados?</span>
+        <span class="text-cyan-400 transition group-open:rotate-180">▼</span>
+      </summary>
+      <p class="mt-3 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">
+        Todos os serviços contam com <strong class="text-emerald-400">garantia legal de 90 dias</strong> contra defeitos de fabricação da peça substituída ou do reparo executado (não cobrindo novas quedas, trincos, pressão excessiva ou contato com líquidos).
+      </p>
+    </details>
+
+    <details class="group glass-card rounded-2xl border border-slate-800 bg-slate-900/70 p-4 open:border-cyan-500/40">
+      <summary class="flex cursor-pointer items-center justify-between font-bold text-sm text-white list-none">
+        <span>Vocês atendem lojistas e outras assistências técnicas (terceirização)?</span>
+        <span class="text-cyan-400 transition group-open:rotate-180">▼</span>
+      </summary>
+      <p class="mt-3 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">
+        Sim! A <strong class="text-cyan-300">LABTECH_MSI</strong> possui tabela diferenciada e prioridade de bancada para lojistas de Ceará-Mirim e região em serviços de microsoldagem em placa, troca de vidro/display e desbloqueios avançados.
+      </p>
+    </details>
+  </div>
+</section>
 <!-- SEÇÃO LOCALIZAÇÃO & AVALIAÇÕES GOOGLE MAPS -->
 <section id="localizacao-avaliacoes" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="glass-card rounded-3xl p-6 sm:p-8 border border-cyan-500/25 bg-gradient-to-br from-slate-900/95 to-cyan-950/20 space-y-6">
@@ -4145,6 +4343,17 @@ function pdvSendReviewWhatsApp() {
   const msg = `Olá, *${clientName}*! 👋 Aqui é da *LABTECH_MSI*.\n\nAgradecemos pela confiança em nosso laboratório técnico! 🙏\n\nSe ficou satisfeito(a) com o atendimento e o serviço realizado, poderia nos deixar uma avaliação ⭐ *5 estrelas* no Google? Leva menos de 30 segundos e ajuda muito nosso trabalho:\n👉 ${GOOGLE_REVIEW_URL}`;
   window.open(`https://api.whatsapp.com/send/?phone=${phone}&text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
 }
+ function selectServiceToQuote(serviceLabel) {
+  const issueField = document.getElementById('quote-issue') || document.querySelector('textarea[name*="issue"], textarea');
+  if (issueField) {
+    issueField.value = `Solicitação de orçamento: ${serviceLabel}. `;
+    issueField.focus();
+  }
+  const quoteSection = issueField ? issueField.closest('section') : document.querySelector('form');
+  if (quoteSection) {
+    quoteSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}   
 function pdvRemoveItem(idx) {
   pdvCart.splice(idx, 1);
   recalcPdvTotals();
