@@ -233,7 +233,69 @@
         </form>
       </div>
     </section>
+<!-- SEÇÃO LOCALIZAÇÃO & AVALIAÇÕES GOOGLE MAPS -->
+<section id="localizacao-avaliacoes" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="glass-card rounded-3xl p-6 sm:p-8 border border-cyan-500/25 bg-gradient-to-br from-slate-900/95 to-cyan-950/20 space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div>
+        <span class="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Atendimento Presencial & Online</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">📍 Onde Estamos & Avaliações de Clientes</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">Rua 8 de Dezembro — Ceará-Mirim/RN • Seg a Sex (08h–18h) | Sáb (08h–12h)</p>
+      </div>
+      <div class="flex flex-wrap gap-2.5">
+        <a href="https://www.google.com/maps/search/?api=1&query=Rua+8+de+Dezembro+Ceara-Mirim+RN" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 font-bold text-xs transition flex items-center gap-2">
+          🧭 Traçar Rota no GPS
+        </a>
+        <button type="button" onclick="openGoogleReview()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
+          ⭐ Avaliar LABTECH_MSI no Google
+        </button>
+      </div>
+    </div>
 
+    <div class="grid lg:grid-cols-12 gap-6 items-stretch">
+      <!-- Mapa Interativo Google Maps -->
+      <div class="lg:col-span-7 rounded-2xl overflow-hidden border border-slate-700/80 min-h-[280px] bg-slateDark-950">
+        <iframe
+          title="Localização LABTECH_MSI - Ceará-Mirim/RN"
+          src="https://maps.google.com/maps?q=Rua%208%20de%20Dezembro,%20Cear%C3%A1-Mirim%20-%20RN&t=&z=16&ie=UTF8&iwloc=&output=embed"
+          width="100%"
+          height="100%"
+          style="border:0; min-height: 290px;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <!-- Cartão de Prova Social / Feedback -->
+      <div class="lg:col-span-5 flex flex-col justify-between p-5 rounded-2xl bg-slateDark-950/90 border border-slate-800 space-y-4">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold text-amber-400 tracking-wider">★★★★★ 5.0 GOOGLE</span>
+            <span class="text-[11px] text-emerald-400 font-semibold">✔ Laboratório Verificado</span>
+          </div>
+          <h3 class="text-base font-bold text-white">Sua opinião fortalece nossa bancada!</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Realizou algum reparo em smartphone, notebook, PC ou desbloqueio conosco? Deixe sua avaliação 5 estrelas no Google Maps para ajudar outros clientes em Ceará-Mirim a encontrarem um serviço técnico transparente e com garantia.
+          </p>
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800/90 space-y-1">
+            <div class="text-[11px] font-bold text-cyan-300">🔬 Padrão LABTECH_MSI</div>
+            <p class="text-[11px] text-slate-400">Diagnóstico técnico em bancada, peças testadas, acompanhamento online da OS e garantia de 90 dias.</p>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+          <button type="button" onclick="openGoogleReview()" class="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition text-center">
+            ⭐ Deixar Feedback 5 Estrelas
+          </button>
+          <a href="https://api.whatsapp.com/send/?phone=5584991216849&text=Ol%C3%A1%20LABTECH_MSI!%20Gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener noreferrer" class="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition text-center">
+            💬 WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
   </main>
 
   <!-- ==================== MODO BANCADA ==================== -->
@@ -461,7 +523,10 @@
       📲 Enviar WhatsApp
     </button>
   </div>
-</div>
+<button type="button" onclick="pdvSendReviewWhatsApp()" class="w-full py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition flex items-center justify-center gap-1.5">
+  ⭐ Pedir Avaliação 5 Estrelas no Google
+</button>
+        </div>
       </div>
     </div>
 
@@ -4066,7 +4131,20 @@ function sendGsmToolToPdv(serviceName, rentCost) {
   if (pdvTabBtn) pdvTabBtn.click();
   recalcPdvTotals();
 }  
+// LINK OFICIAL DE AVALIAÇÃO GOOGLE MAPS (Cole aqui o link https://g.page/r/.../review após verificação)
+const GOOGLE_REVIEW_URL = 'https://www.google.com/maps/search/?api=1&query=LABTECH_MSI+Rua+8+de+Dezembro+Ceara-Mirim+RN';
 
+function openGoogleReview() {
+  window.open(GOOGLE_REVIEW_URL, '_blank', 'noopener,noreferrer');
+}
+
+function pdvSendReviewWhatsApp() {
+  const clientName = (document.getElementById('pdv-client-name')?.value || 'Cliente').trim();
+  const rawPhone = (document.getElementById('pdv-client-phone')?.value || '').replace(/\D/g, '');
+  const phone = rawPhone ? (rawPhone.startsWith('55') ? rawPhone : '55' + rawPhone) : '5584991216849';
+  const msg = `Olá, *${clientName}*! 👋 Aqui é da *LABTECH_MSI*.\n\nAgradecemos pela confiança em nosso laboratório técnico! 🙏\n\nSe ficou satisfeito(a) com o atendimento e o serviço realizado, poderia nos deixar uma avaliação ⭐ *5 estrelas* no Google? Leva menos de 30 segundos e ajuda muito nosso trabalho:\n👉 ${GOOGLE_REVIEW_URL}`;
+  window.open(`https://api.whatsapp.com/send/?phone=${phone}&text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+}
 function pdvRemoveItem(idx) {
   pdvCart.splice(idx, 1);
   recalcPdvTotals();
