@@ -3400,7 +3400,42 @@ const BENCH_FLOW_NODES = [
   { id: 'pmic', label: '4. PMIC / Bucks' },
   { id: 'cpu', label: '5. CPU / Imagem' }
 ];
+const LABTECH_19_PROTOCOLOS = [
+  { placa: "Xiaomi Redmi Note 13 4G", sintoma: "Não liga (pós-líquido): pico 32mA-58mA caindo a 0A", malhas: "VREG_S8A (1.1V) ~22mV; PS_HOLD 0V", solucao: "Curto na memória RAM separada. Remover RAM (ferro máx. 300°C), confirmar 355mV na 1.1V e PS_HOLD 1.8V, soldar RAM de sucata." },
+  { placa: "Xiaomi Redmi Note 12 4G", sintoma: "Pulso 370mA caindo a 0A; após curto, reinicia nos 3 pontinhos", malhas: "PS_HOLD 0V; NAND 2.9V em curto; BAT_ID em OL", solucao: "1. Remover capacitor em curto na 2.9V da NAND. 2. Repor resistor em série da malha BAT_ID (volta ~159mV)." },
+  { placa: "Motorola Moto G34 5G", sintoma: "Não liga: pico 180mA-190mA caindo a 0A; sem porta USB", malhas: "SM_PS_HOLD (TP5604) 1.8V OK", solucao: "Memória flash corrompida travando CPU. Ao levantar a memória, reconhece QDLoader 9008 imediatamente." },
+  { placa: "Xiaomi Poco X3 Pro", sintoma: "Não liga (Data Recovery): CPU retrabalhada com pads rompidos", malhas: "Pad interno CPU ~780mV sob luz UV", solucao: "Reconstruir pad na CPU com fio 0.007-0.009mm + máscara UV, rebalar CPU (390°C/ar 50) e SDRAM PoP (380°C/ar 50) em 2 etapas sem trocar UFS." },
+  { placa: "Xiaomi Redmi Note 10S", sintoma: "0A pós-Power; após CPU, 147mA e 500mA no Charger ciclando porta MTK", malhas: "VDD_PROC_L/MODEM 0.000V; SYS_RSTB 1.8V", solucao: "1. Rebalar CPU MT6785 (380°C/ar 50) eliminando curto. 2. Reprogramar ou trocar memória UFS corrompida." },
+  { placa: "Xiaomi Redmi 14C / A3 Pro", sintoma: "Pulso 9mA-10mA caindo a 0A; chave Power caída de 4.4V para 3.3V", malhas: "VSYS 0.000V na saída do IF-PMIC", solucao: "Levantar bobina de saída do IF-PMIC para isolar o lado em curto e substituir IF-PMIC (390°C/ar 50)." },
+  { placa: "Samsung Galaxy A12 (SM-A125)", sintoma: "Não liga e não carrega: 0A antes e após Power", malhas: "VBAT 4.2V OK; VS1_PMU (L503) caída em ~500mV (esperado 2.0V)", solucao: "Substituir e rebalar PMIC principal defeituoso (não sustenta retroalimentação VS1_PMU)." },
+  { placa: "Samsung Galaxy A14 4G", sintoma: "Não liga / não carrega: travado em 100mA-110mA pós-Power", malhas: "Desgaste MLC 40-50% na box + pads rompidos", solucao: "Reconstruir pads na placa, fazer backup de RF na box, rebalar/trocar memória e reativar bateria (estava em 2.5V)." },
+  { placa: "Motorola Moto G54 5G", sintoma: "Não liga (Guia 3 Etapas MediaTek MT6375P/MT6363)", malhas: "VSYS 4.4V; 8 Bucks + 12 LDOs; SYS_RSTB 1.8V no C213", solucao: "Medir 1.8V no C213 (SYS_RSTB) com USB sem bateria: se presente, PMIC e CPU estão vivos; focar na memória." },
+  { placa: "Motorola Moto G22", sintoma: "Liga, vibra e carrega (9V), mas sem imagem pós-queda", malhas: "Pino 11 LCM_AVEE (-5V) em OL (ponteira preta no GND); C5026 ~634mV", solucao: "Jumper do capacitor C5026/C5032 até pino 11 do FPC (420°C) + máscara UV." },
+  { placa: "Samsung Galaxy A04s", sintoma: "Tela preta / sem iluminação (imagem de fundo sem luz)", malhas: "LED_A ~463mV diodo, mas 0V DCV (depois 1.1V com fuga)", solucao: "1. Trocar bobina booster aberta por sucata 24V (G532). 2. Substituir capacitor de filtro 50V escurecido com fuga." },
+  { placa: "Samsung Galaxy A12 / M12 / A02", sintoma: "Tela preta / sem backlight (liga com som normal)", malhas: "LCD_LIGHT / LED_A sem elevação para 20V-24V", solucao: "Testar bobina L6001, diodo Schottky e capacitores de saída do CI U6000 com tela conectada." },
+  { placa: "Motorola Moto G52", sintoma: "Baseband off (desconhecida) e sem Wi-Fi / dados móveis", malhas: "Tensões RF normais; Baseband integrada na CPU SM6225", solucao: "Extrair CPU SM6225, reconstruir trilha rompida, rebalar e ressoldar; aguardar boot completo para Baseband subir." },
+  { placa: "Motorola Moto G53 5G", sintoma: "Wi-Fi não ativa (MAC Wi-Fi sumiu; Bluetooth e IMEI OK)", malhas: "1.3V, 1.8V, 3.3V (C4919) e clock 38.4MHz (R1811) presentes", solucao: "Ressolda / reballing no CI WCN3988 (U4901) para corrigir solda fria BGA." },
+  { placa: "Samsung Galaxy A14 5G", sintoma: "Sem rede / sem serviço (IMEI OK, 0 ASU, MIPI Fail no *#0011#)", malhas: "VDD_1P8_AP alterada (~339mV) por oxidação no DRX LNA", solucao: "Remover CI DRX LNA, limpar pad oxidado da linha 1.8V, rebalar e ressoldar (~163mV em diodo)." },
+  { placa: "Samsung Galaxy A06 / A56 5G", sintoma: "Sem serviço / falhas de RF (MT6177)", malhas: "VX/VLDO, APT Modulator e barramento MIPI RFFE (DATA/CLK/1.8V)", solucao: "Validar alimentações e pacotes RFFE antes de substituir Transceiver MT6177 ou PA." },
+  { placa: "Samsung Galaxy A03 Core", sintoma: "Não reconhece % da bateria (ícone ?) por trilha interna rompida", malhas: "BAT_ID / BAT_SENSE / Fuel Gauge íntegros externamente", solucao: "Transplante (Swap) de CPU e memória Unisoc para placa doadora (limpar chips fora a máx. 330°C)." },
+  { placa: "Motorola Moto G32", sintoma: "Não liga / Loop no carregamento ciclando 100mA a 600mA com raio", malhas: "Solda fria na CPU + resistor periférico deslocado", solucao: "Repor resistor periférico arrancado e executar reballing na CPU principal." },
+  { placa: "Xiaomi Redmi Note 9", sintoma: "Touch screen não funciona (TP_INT e TP_RST em OL no FPC)", malhas: "Pads 4 e 7 sob CPU MT6769 dando OL mesmo com tela conectada", solucao: "Puxar 2 jumpers sob a CPU com fio 0.007mm sem esmalte + máscara UV até pinos INT/RST do FPC (CPU 380°C/ar 55)." },
+  { placa: "Xiaomi Poco X6 5G", sintoma: "Não liga: travado na etapa de inicialização da CPU", malhas: "CPU Qualcomm + Memória UMCP (UFS+RAM acopladas)", solucao: "Reballing da CPU com pasta 183°C aplicando nivelamento das esferas com lâmina 11 (360°C/ar 30)." },
+  { placa: "Apple iPhone 14 Pro Max", sintoma: "Boot loop automático ao conectar na fonte (~140mA-200mA sozinho)", malhas: "BUTTON_SIDE em fuga (0.039V vs 0.805V normal)", solucao: "Separar faces A/B e limpar excesso de estanho na borda do interposer que colocava o botão Power em fuga." },
+  { placa: "Apple iPhone 14 Pro Max", sintoma: "Curto total 3A-4A imediato na fonte; 0A no Charger", malhas: "PP_VDD_MAIN / PP_NFC_P_VDD_BOOST em curto (0.000V) na Cara B", solucao: "Separar placas a 200°C, trocar capacitor, bobina L7200 e CI NFC da Cara B (exige restauração iOS)." },
+  { placa: "Apple iPhone 12 Pro Max", sintoma: "Consumo inicial de 1.0A a 1.8A imediato antes de pressionar Power", malhas: "Fuga na malha PP_VDD_BOOST na Cara A", solucao: "Dessoldar antena inferior (300°C), separar placas (210-220°C por 6 min) e trocar capacitor cerâmico em fuga." },
+  { placa: "Apple iPhone 14 Pro Max", sintoma: "Liga sozinho na fonte (~300mA) e não carrega (VBUS cai de 5V para 2.2V)", malhas: "BUTTON_SIDE 0.800V OK; VBUS 2.2V no Rubicon; fuga 40-50mA no PMIC", solucao: "Separar placas a 220°C, substituir CI Rubicon/Tigris (Cara B) e PMIC Principal com fuga residual (Cara A)." }
+];
 
+function buscarNosProtocolosLABTECH(query) {
+  const q = (query || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  if (!q) return [];
+  const termos = q.split(/\s+/).filter(t => t.length >= 2);
+  return LABTECH_19_PROTOCOLOS.filter(item => {
+    const texto = `${item.placa} ${item.sintoma} ${item.malhas} ${item.solucao}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return termos.every(t => texto.includes(t));
+  });
+}
 const BENCH_CHAT_TREES = {
   'quick-triage': {
     start: 'qt_menu',
@@ -3983,6 +4018,15 @@ function sendCustomBenchQuestion() {
   input.value = '';
   appendBenchChatBubble('user', userText);
 
+  const encontrados = buscarNosProtocolosLABTECH(userText);
+  if (encontrados.length > 0) {
+    const resposta = encontrados.slice(0, 3).map(c =>
+      `🔧 **${c.placa}**\n• **Sintoma:** ${c.sintoma}\n• **Medições:** \`${c.malhas}\`\n• **Solução:** ${c.solucao}`
+    ).join('\n\n');
+    appendBenchChatBubble('bot', `📚 **Encontrei ${encontrados.length} protocolo(s) na Base LABTECH_MSI:**\n\n${resposta}`);
+    return;
+  }
+
   const lower = userText.toLowerCase();
   const extra = searchSavedKnowledgeForBench(lower);
 
@@ -3992,10 +4036,10 @@ function sendCustomBenchQuestion() {
     renderBenchChatStep('smart-no-power', 'diag_no_trigger');
   } else if (lower.includes('0.08') || lower.includes('0.06') || lower.includes('zera') || lower.includes('pmic')) {
     renderBenchChatStep('smart-no-power', 'diag_pmic_buck');
-  } else if (lower.includes('bateria') || lower.includes('2.') || lower.includes('3.1') || lower.includes('3.2')) {
+  } else if (lower.includes('bateria') || lower.includes('3.1') || lower.includes('3.2')) {
     renderBenchChatStep('smart-no-power', 'bat_low');
   } else {
-    appendBenchChatBubble('bot', `📝 Medição anotada: **"${userText}"**.\nContinue selecionando uma das opções de bancada abaixo ou clique em **🧠 Prompt IA** para copiar todo o contexto técnico desta placa.${extra}`);
+    appendBenchChatBubble('bot', `📝 Medição anotada: **"${userText}"**.\nTente digitar o modelo da placa (ex: \`A14\`, \`G53\`, \`Poco X6\`, \`14 Pro Max\`) ou o consumo (ex: \`100mA\`, \`300mA\`) para puxar o protocolo exato.${extra}`);
   }
 }
 
