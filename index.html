@@ -3402,6 +3402,226 @@ const BENCH_FLOW_NODES = [
 ];
 
 const BENCH_CHAT_TREES = {
+  'quick-triage': {
+    start: 'qt_menu',
+    steps: {
+      qt_menu: {
+        stage: 'Triagem Básica: Escolha o Sintoma',
+        activeNode: 'bat',
+        passed: [],
+        failed: [],
+        bot: '⚡ **Triagem Rápida de Bancada (Básico — Apostila 5.0):**\nQual é o sintoma principal do aparelho?',
+        options: [
+          { label: '📵 Não liga', next: 'qt_nopower_1' },
+          { label: '🖥️ Liga, mas está sem imagem', next: 'qt_noimg_1' },
+          { label: '🔌 Não carrega', next: 'qt_nocharge_1' }
+        ]
+      },
+      qt_nopower_1: {
+        stage: 'Não Liga → Bateria (3.7V a 4.2V)',
+        activeNode: 'bat',
+        passed: [],
+        failed: [],
+        bot: '🔋 **Passo 1 (Não Liga):**\n1. Tente reinício forçado (**Vol- + Power por 40s**).\n2. Meça a bateria na escala **20V DC** (normal: **3.7V a 4.2V**).\n⚠️ *Nunca dê choque se a bateria estiver inchada ou oxidada.*\n\n**Com bateria carregada/nova, o aparelho ligou?**',
+        options: [
+          { label: '✅ Sim! Ligou com bateria nova/ativada', next: 'qt_nopower_ok' },
+          { label: '❌ Não ligou mesmo com bateria boa', next: 'qt_nopower_board' }
+        ]
+      },
+      qt_nopower_ok: {
+        stage: 'Concluído: Troca de Bateria',
+        activeNode: 'bat',
+        passed: ['bat', 'fpc', 'pri', 'pmic', 'cpu'],
+        failed: [],
+        bot: '🎉 **Diagnóstico Concluído: Troca de Bateria!**\nSubstitua a bateria e confira se carrega normalmente antes de fechar.',
+        options: [{ label: '🔄 Nova Triagem Rápida', next: 'qt_menu' }]
+      },
+      qt_nopower_board: {
+        stage: 'Defeito na Placa-Mãe',
+        activeNode: 'pri',
+        passed: ['bat', 'fpc'],
+        failed: ['pri'],
+        bot: '🔬 **Bateria descartada — defeito na Placa!**\nLigue na **Fonte de Bancada (4.2V / 2A)** para testar consumo antes/depois do Power.',
+        options: [{ label: '🔄 Nova Triagem Rápida', next: 'qt_menu' }]
+      },
+      qt_noimg_1: {
+        stage: 'Sem Imagem → Conector FPC & Tela',
+        activeNode: 'cpu',
+        passed: ['bat', 'fpc', 'pri', 'pmic'],
+        failed: [],
+        bot: '📱 **Passo 1 (Sem Imagem):**\nInspecione o conector FPC na placa e teste uma **tela/frontal nova**.\n\n**Deu imagem?**',
+        options: [
+          { label: '✅ Sim! Deu imagem com a tela nova', next: 'qt_noimg_ok' },
+          { label: '❌ Não, continua sem imagem', next: 'qt_noimg_board' }
+        ]
+      },
+      qt_noimg_ok: {
+        stage: 'Concluído: Troca de Tela',
+        activeNode: 'cpu',
+        passed: ['bat', 'fpc', 'pri', 'pmic', 'cpu'],
+        failed: [],
+        bot: '🎉 **Diagnóstico Concluído: Troca de Tela / Frontal!**\nTeste touch, brilho e câmeras antes de colar.',
+        options: [{ label: '🔄 Nova Triagem Rápida', next: 'qt_menu' }]
+      },
+      qt_noimg_board: {
+        stage: 'Falha de Backlight ou Placa',
+        activeNode: 'cpu',
+        passed: ['bat', 'fpc', 'pri', 'pmic'],
+        failed: ['cpu'],
+        bot: '💡 **Tela descartada — defeito na Placa (Backlight ou Imagem)!**\nIlumine com lanterna para ver se há imagem fraca no fundo.',
+        options: [{ label: '🔄 Nova Triagem Rápida', next: 'qt_menu' }]
+      },
+      qt_nocharge_1: {
+        stage: 'Não Carrega → Conector ou Bateria',
+        activeNode: 'fpc',
+        passed: [],
+        failed: [],
+        bot: '🔌 **Passo 1 (Não Carrega):**\nCom o carregador plugado, meça se chega **5.1V** no conector/sub-placa e **~4.2V** no conector da bateria.\n\n**O que encontrou?**',
+        options: [
+          { label: '❌ Não chega tensão / conector folgado', next: 'qt_nocharge_conn' },
+          { label: '✅ Chega tensão, mas não sobe % ou dá erro', next: 'qt_nocharge_bat' }
+        ]
+      },
+      qt_nocharge_conn: {
+        stage: 'Concluído: Conector / Sub-Placa',
+        activeNode: 'fpc',
+        passed: ['bat'],
+        failed: ['fpc'],
+        bot: '🔧 **Diagnóstico: Troca de Conector de Carga ou Sub-Placa!**',
+        options: [{ label: '🔄 Nova Triagem Rápida', next: 'qt_menu' }]
+      },
+      qt_nocharge_bat: {
+        stage: 'Concluído: Bateria ou Termistor',
+        activeNode: 'bat',
+        passed: ['fpc'],
+        failed: ['bat'],
+        bot: '🔋 **Diagnóstico: Teste outra Bateria ou verifique a malha de temperatura (`BAT_THERM`).**',
+        options: [{ label: '🔄 Nova Triagem Rápida', next: 'qt_menu' }]
+      }
+    }
+  },
+  'apostila-quiz': {
+    start: 'q1',
+    steps: {
+      q1: {
+        stage: 'Simulado Apostila 5.0 (1/4)',
+        activeNode: 'fpc',
+        passed: [],
+        failed: [],
+        bot: '📖 **Questão 1/4 (Condução Reversa):**\nNa escala de diodo, como posicionar as ponteiras para medir queda de tensão (mV) nos pinos FPC?',
+        options: [
+          { label: 'A) Ponta VERMELHA no GND e PRETA no pino', next: 'q1_ok' },
+          { label: 'B) Ponta PRETA no GND e VERMELHA no pino', next: 'q1_err' }
+        ]
+      },
+      q1_ok: {
+        stage: 'Simulado Apostila 5.0 (2/4)',
+        activeNode: 'pri',
+        passed: ['bat', 'fpc'],
+        failed: [],
+        bot: '✅ **Correto!** Ponta vermelha no terra (GND) e preta na malha.\n\n📖 **Questão 2/4 (Pulso de Boot):**\nCom a fonte em 4.2V / 2A, ao dar um toque rápido no Power, qual consumo indica placa boa?',
+        options: [
+          { label: 'A) ~0.120A (120mA) por 1s e zera', next: 'q2_ok' },
+          { label: 'B) Sobe direto para 2.000A', next: 'q2_err' }
+        ]
+      },
+      q1_err: {
+        stage: 'Simulado Apostila 5.0 (2/4)',
+        activeNode: 'pri',
+        passed: [],
+        failed: ['fpc'],
+        bot: '❌ **Revisão:** Na condução reversa a ponta **VERMELHA** vai no GND e a **PRETA** no pino.\n\n📖 **Questão 2/4 (Pulso de Boot):**\nQual o consumo normal ao dar um leve toque no Power com fonte em 4.2V?',
+        options: [
+          { label: 'A) ~0.120A (120mA) por 1s e zera', next: 'q2_ok' },
+          { label: 'B) Fica em 0.000A', next: 'q2_err' }
+        ]
+      },
+      q2_ok: {
+        stage: 'Simulado Apostila 5.0 (3/4)',
+        activeNode: 'pmic',
+        passed: ['bat', 'fpc', 'pri'],
+        failed: [],
+        bot: '✅ **Isso mesmo!**\n\n📖 **Questão 3/4 (Cristais):**\nQuais as frequências dos cristais do **PMIC** e do **Processador**?',
+        options: [
+          { label: 'A) 32.768 kHz (PMIC) e 19.2 MHz (CPU)', next: 'q3_ok' },
+          { label: 'B) 60 Hz e 100 MHz', next: 'q3_err' }
+        ]
+      },
+      q2_err: {
+        stage: 'Simulado Apostila 5.0 (3/4)',
+        activeNode: 'pmic',
+        passed: ['bat', 'fpc'],
+        failed: ['pri'],
+        bot: '❌ **Revisão:** O pulso normal é **~0.120A** por 1s.\n\n📖 **Questão 3/4 (Cristais):**\nQuais as frequências dos cristais do **PMIC** e do **Processador**?',
+        options: [
+          { label: 'A) 32.768 kHz (PMIC) e 19.2 MHz (CPU)', next: 'q3_ok' },
+          { label: 'B) 10 kHz e 1 MHz', next: 'q3_err' }
+        ]
+      },
+      q3_ok: {
+        stage: 'Simulado Apostila 5.0 (4/4)',
+        activeNode: 'cpu',
+        passed: ['bat', 'fpc', 'pri', 'pmic'],
+        failed: [],
+        bot: '✅ **Na mosca!**\n\n📖 **Questão 4/4 (Tensões):**\nNos esquemas, quais são as tensões **Primária**, **Secundária** e **Terciária**?',
+        options: [
+          { label: 'A) V_BATT (Primária) | V_REG (Secundária) | V_BUS (Terciária)', next: 'q_end' },
+          { label: 'B) V_BUS | GND | V_BATT', next: 'q_end' }
+        ]
+      },
+      q3_err: {
+        stage: 'Simulado Apostila 5.0 (4/4)',
+        activeNode: 'cpu',
+        passed: ['bat', 'fpc', 'pri'],
+        failed: ['pmic'],
+        bot: '❌ **Revisão:** **32.768 kHz** (PMIC) e **19.2 MHz** (CPU).\n\n📖 **Questão 4/4 (Tensões):**\nQuais são as tensões **Primária**, **Secundária** e **Terciária**?',
+        options: [
+          { label: 'A) V_BATT (Primária) | V_REG (Secundária) | V_BUS (Terciária)', next: 'q_end' },
+          { label: 'B) V_REG | V_BUS | V_BATT', next: 'q_end' }
+        ]
+      },
+      q_end: {
+        stage: 'Simulado Concluído! 🏆',
+        activeNode: 'cpu',
+        passed: ['bat', 'fpc', 'pri', 'pmic', 'cpu'],
+        failed: [],
+        bot: '🏆 **Simulado Concluído!**\n• **Primária:** `V_BATT` / `VPH_PWR`\n• **Secundária:** `V_REG`\n• **Terciária:** `V_BUS` (5V USB)',
+        options: [{ label: '🔄 Refazer Simulado', next: 'q1' }]
+      }
+    }
+  },
+  'apostila-loop': {
+    start: 'lp1',
+    steps: {
+      lp1: {
+        stage: 'Loop / Reiniciando → Fonte 4.2V',
+        activeNode: 'bat',
+        passed: [],
+        failed: [],
+        bot: '🔄 **Aparelho Reiniciando / Loop (Apostila 5.0):**\nLigue a placa direto na **Fonte de Bancada (4.2V / 2A)** sem a bateria. Continua reiniciando?',
+        options: [
+          { label: '✅ Não! Na fonte ligou estável', next: 'lp_bat' },
+          { label: '❌ Sim, continua reiniciando', next: 'lp_hw' }
+        ]
+      },
+      lp_bat: {
+        stage: 'Concluído: Bateria Defeituosa',
+        activeNode: 'bat',
+        passed: ['bat', 'fpc', 'pri', 'pmic', 'cpu'],
+        failed: [],
+        bot: '🎉 **Diagnóstico: Bateria com queda de tensão no boot!** Substitua a bateria.',
+        options: [{ label: '🔄 Reiniciar', next: 'lp1' }]
+      },
+      lp_hw: {
+        stage: 'Software vs. Periféricos / Botão Power',
+        activeNode: 'pmic',
+        passed: ['bat', 'fpc'],
+        failed: ['pmic'],
+        bot: '🔬 **Teste:**\n1. Tente entrar em **Modo Download/Recovery** (se parar de reiniciar, é **Software/ROM**).\n2. Teste continuidade no **Botão Power** e ligue a placa desconectando câmeras e sub-placa.',
+        options: [{ label: '🔄 Reiniciar', next: 'lp1' }]
+      }
+    }
+  },
   'smart-no-power': {
     start: 'step1',
     steps: {
@@ -3809,7 +4029,16 @@ function runBenchDiagnosticSimulation() {
 
 // Inicia automaticamente o Chatbot Mentor ao abrir a página
 document.addEventListener('DOMContentLoaded', () => {
-  startBenchChatScenario('smart-no-power');
+  const sel = document.getElementById('diag-scenario');
+  if (sel && !sel.querySelector('option[value="quick-triage"]')) {
+    sel.insertAdjacentHTML('afterbegin', `
+      <option value="quick-triage">⚡ Triagem Rápida (Bateria / Tela / Carga)</option>
+      <option value="apostila-quiz">📖 Simulado Prático (Apostila 5.0 CISP)</option>
+      <option value="apostila-loop">🔄 Reiniciando / Loop Infinito (Apostila 5.0)</option>
+    `);
+    sel.value = 'quick-triage';
+  }
+  startBenchChatScenario('quick-triage');
 });
 
     function copyDeepAIPrompt() {
